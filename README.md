@@ -34,5 +34,3 @@ There are commands you can type in command line.
 |help       |Displays a list of commands|
 |startv     |Start visual gui, not implemented|
 |stop       |Stops the server|
-
-## Usage
