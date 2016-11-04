@@ -1,0 +1,35 @@
+{
+  "name": "ProjectN",
+  "version": "1.0.0",
+  "description": "Shh",
+  "main": "index.js",
+  "engines": {
+    "node": "5.9.0"
+  },
+  "dependencies": {
+    "cli-gui": "latest",
+    "quickmap": "latest",
+    "SmartConfig": "latest",
+    "rson": "latest",
+    "hashbounds": "latest",
+    "styleme": "latest",
+    "socket.io": "latest",
+    "node-cryptojs-aes":"latest",
+    "minirequest": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node build.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AJS-development/Project-Nehemiah"
+  },
+  "author": "AJS-development",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/AJS-development/Project-Nehemiah/issues"
+  },
+  "homepage": "https://github.com/AJS-development/Project-Nehemiah"
+}
