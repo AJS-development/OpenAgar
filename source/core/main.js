@@ -23,7 +23,7 @@ const FoodService = require('./foodService.js');
 const Bot = require('../ai/Bot.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
-const async = require("async");
+// const async = require("async");
 
 module.exports = class Main {
     constructor(isMain,id,name,scname,globalData,config) {
@@ -241,10 +241,11 @@ module.exports = class Main {
       //  if (this.timer.passed <= 0) return
           // 0.05 seconds
             if (this.timer.updatePN >= 50) { 
+                
                 this.updatePlayerNodes();
-                this.timer.updatePN = 0;
+               
                 this.updateBots()
-              
+               this.timer.updatePN = 0;
             }
           
          
