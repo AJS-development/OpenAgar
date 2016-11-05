@@ -328,10 +328,7 @@ module.exports = class Main {
       node.nearby = hashnodes;
         
         hashnodes.forEach((check)=>{
-            if (check == node || check.dead) return;
-              var distx = Math.abs(node.position.x - check.position.x)
-      var disty = Math.abs(node.position.y - check.position.y)
-           if (distx > check.size + node.size + 10 || disty > check.size + node.size + 10) return;
+            
            if (check.moveEngine.collision == "circle") {
                 if (!node.collisionCheckCircle(check)) return
                     
