@@ -256,7 +256,16 @@ setPos(x,y) {
            
             var angle = Math.atan2(deltaY,deltaX)
         var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
-         m.deltaT += (speed) ? 1 : 2; 
+        if (speed == 0) {
+             m.deltaT += 1 
+        } else if (speed == 1) {
+            Velocity *= 2
+             m.deltaT += 2
+        } else if (speed == 2) {
+             m.deltaT += 4
+             Velocity *= 4
+        } 
+        
         if (m.maxDeltaT || m.maxDeltaT === 0) {
             if (m.maxDeltaT <= m.deltaT ) {
                 m.useEngine = false;
@@ -280,12 +289,18 @@ setPos(x,y) {
      
           var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
              var dx = 0;
-        if (speed) {
-            dx = m.velocityInit + (1/2 * m.acceleration) 
-        } else {
+          if (speed == 0) {
+              this.moveEngine.deltaT += 1
+             dx = m.velocityInit + (1/2 * m.acceleration) 
+        } else if (speed == 1) {
+            this.moveEngine.deltaT += 2
             dx = m.velocityInit * 2 + (1/2 * m.acceleration * 4)
-        }
-         this.moveEngine.deltaT += (speed) ? 1 : 2; 
+        } else if (speed == 2) {
+            this.moveEngine.deltaT += 4
+             dx = m.velocityInit * 2 + (1/2 * m.acceleration * 16)
+        } 
+        
+    
         this.moveEngine.deltaX += dx
         if (m.maxDeltaT || m.maxDeltaT === 0) {
             if (m.maxDeltaT <= m.deltaT ) {
@@ -314,6 +329,11 @@ setPos(x,y) {
         m.deltaCurve += curve
         m.angle += curve * Math.PI / 180;
            var angle = m.angle * (180 / Math.PI);
+        if (speed == 1) {
+            angle *= 2
+        } else if (speed == 2) {
+            angle *= 4
+        }
         if (angle >= 360)
             m.angle = (angle - 360) * (Math.PI / 180)
             m.sin = Math.sin(m.angle)
@@ -327,7 +347,7 @@ setPos(x,y) {
     }
  
     
-  move(main,speed) {
+  move(main,speed) { // Speed code: 0 = 0.05, 1 = 0.1, 2 = 0.2
       if (this.moveEngine2.useEngine) this.calcMove2(main,speed)
     if (this.moveEngine.useEngine) this.calcMove(main,speed)
     

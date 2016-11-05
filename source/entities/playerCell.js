@@ -40,8 +40,17 @@ module.exports = class cell extends template {
     
     
     moveToMouse(main,sp) {
+  
+        var speed = 0;
+         if (sp == 0) {
+         speed = this.speed
+     } else if (sp == 1) {
+         speed = this.speed * 2
+     } else if (sp == 2) {
+         speed = this.speed * 4
+     }
           var mouse = this.owner.mouse,
-        speed = (sp) ? this.speed * 2 : this.speed,
+    
         distx = mouse.x - this.position.x,
         disty = mouse.y - this.position.y,
         // y^2 = x^2 + b^2 -> y = sq(x^2 + b^2)
@@ -51,13 +60,15 @@ module.exports = class cell extends template {
         // want cell to slow down as it gets closer to mouse
         var k = Math.min(Math.abs(dist),25) / 25, // max is 1
         // simplify and make x,y either be -1 or 1 or 0
-        x = Math.cos(angle) * this.speed * k * main.getConfig().playerSpeed,
-        y = Math.sin(angle) * this.speed * k * main.getConfig().playerSpeed;
+        x = Math.cos(angle) * speed * k * main.getConfig().playerSpeed,
+        y = Math.sin(angle) * speed * k * main.getConfig().playerSpeed;
        
         this.position.x += Math.round(x);
         this.position.y += Math.round(y);
+       
     }
     move(main, sp) {
+       
           if (this.moveEngine2.useEngine) this.calcMove2(main,sp)
           if (this.moveEngine.useEngine) this.calcMove(main,sp); this.moveToMouse(main,sp)
     

@@ -16,7 +16,6 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 const RSON = require('rson')
 const DataService = require('./dataService.js');
 const Entities = require('../entities/');
@@ -66,7 +65,9 @@ module.exports = class Main {
             slow: 0,
             updatePN: false,
             rslow: 0,
-            bot: false
+            bot: false,
+            pn: false,
+            passed: 0
         };
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
@@ -150,7 +151,7 @@ module.exports = class Main {
         var len = player.cells.length
         var cells = player.cells;
         for (var i = 0; i < len; i ++) {
-             if (i >= maxSplit) break;
+                if (i >= maxSplit) break;
             var cell = cells[i],
          deltaX = player.mouse.x - cell.position.x,
         deltaY = player.mouse.y - cell.position.y;  
@@ -166,12 +167,12 @@ module.exports = class Main {
             var angle = Math.atan2(deltaY,deltaX)
             this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay)
                            
-           
+        
                    
         }
     }
     execCommand(str) {
-        return false
+        
     }
     splitCell(cell,angle,speed,decay) {
         var pos = {
@@ -215,11 +216,15 @@ module.exports = class Main {
     }
     
     mloop() {
-        let l = new Date();
-        let local = l.getTime();
+       
+        let local = Date.now();
         this.timer.tick += (local - this.timer.time);
+        this.timer.passed = local - this.timer.time
+        
+        
           this.timer.updatePN += local - this.timer.time;
         this.timer.time = local;
+      //  if (this.timer.passed <= 0) return
           // 0.05 seconds
             if (this.timer.updatePN >= 50) { 
                 this.updatePlayerNodes();
@@ -281,16 +286,25 @@ module.exports = class Main {
     
     // update nodes quickly (0)
     updatePlayerNodes() { 
+        var shift = 0;
+     
+        if (this.timer.passed > 50) { // lag detection
+           console.log(this.timer.passed)
+            shift = 1
+            this.timer.pn = !this.timer.pn
+            if (this.timer.pn) return
+        }
         this.getWorld().getNodes("player").forEach((player)=>{
+           
             if (player.owner.isBot) {
                 if (!this.timer.bot) return // bots update slower
-             player.move(this,1)
+             player.move(this,1 + shift)
              this.collisionHandler.collidePlayer(player)
               player.checkGameBorders(this);
                 this.updateHash(player)
                 player.movCode()
             } else {
-            player.move(this,0);
+            player.move(this,0+ shift);
              this.collisionHandler.collidePlayer(player)
               player.checkGameBorders(this);
                 this.updateHash(player)
@@ -367,6 +381,8 @@ module.exports = class Main {
     }
    
     playerCollision() { // rel slow (1)
+        
+        
         this.getWorld().getNodes("player").forEach((node)=>{
             this.collide(node);
         });
