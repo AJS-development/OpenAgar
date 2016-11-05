@@ -23,6 +23,8 @@ const FoodService = require('./foodService.js');
 const Bot = require('../ai/Bot.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
+const async = require("async");
+
 module.exports = class Main {
     constructor(isMain,id,name,scname,globalData,config) {
         this.isMain = isMain;
@@ -82,7 +84,16 @@ module.exports = class Main {
     }
     addBot() {
         var id = this.botid ++;
-        this.bots.push(new Bot(this,id,"Bot: " + id))
+        var bot = new Bot(this,id,"Bot: " + id)
+        this.bots.push(bot)
+   
+    }
+    removeBot(ids) {
+        ids.forEach((id)=>{
+            
+            this.bots[id] = null
+        })
+        
     }
     addClient(client) {
         if (this.clients.indexOf(client) == -1) {
@@ -191,13 +202,16 @@ module.exports = class Main {
        // if (this.toBeDeleted.length == 1) this.toBeDeleted.push({id:0,killer:0})
         this.deleteR = JSON.stringify(this.toBeDeleted)
         this.clients.forEach((client)=>{
+            if (client)
             client.update(this);
         });
         this.toBeDeleted = [];
         this.deleteR = ";"
     }
     updateBots() {
+        
         this.bots.forEach((bot)=>{
+            if (bot)
             bot.update()
         })
     }
@@ -298,7 +312,7 @@ module.exports = class Main {
            
             if (player.owner.isBot) {
                 if (!this.timer.bot) return // bots update slower
-             player.move(this,1 + shift)
+             setImmediate(function() {player.move(this,1 + shift)}.bind(this))
              this.collisionHandler.collidePlayer(player)
               player.checkGameBorders(this);
                 this.updateHash(player)
@@ -382,7 +396,7 @@ module.exports = class Main {
         
         
         this.getWorld().getNodes("player").forEach((node)=>{
-           if (!node.dead) this.collide(node);
+           if (!node.dead) setTimeout(function() {this.collide(node)}.bind(this),1); // async
         });
     }
    
