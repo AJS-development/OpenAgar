@@ -216,7 +216,7 @@ module.exports = class Main {
     }
     
     mloop() {
-       
+       setTimeout(function() {this.loop()}.bind(this),1);
         let local = Date.now();
         this.timer.tick += (local - this.timer.time);
         this.timer.passed = local - this.timer.time
@@ -259,9 +259,9 @@ module.exports = class Main {
             } else {
                 this.timer.rslow ++;
             }
-            setImmediate(this.loop);
+           
         }
-        setTimeout(function() {this.loop()}.bind(this),1);
+        
     }
     
     getConfig() {
@@ -382,7 +382,7 @@ module.exports = class Main {
         
         
         this.getWorld().getNodes("player").forEach((node)=>{
-            this.collide(node);
+           if (!node.dead) this.collide(node);
         });
     }
    

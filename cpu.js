@@ -19,7 +19,7 @@ var _datadir = null;
  */
 module.exports.init = function (datadir) {
     _datadir = datadir;
-    setInterval(startProfiling, 30 * 1000);
+    setInterval(startProfiling, 10 * 1000);
 };
 
 /**
@@ -39,7 +39,7 @@ function startProfiling() {
     // Schedule stop of profiling in x seconds
     setTimeout(function () {
         stopProfiling(id)
-    }, 15000);
+    }, 5000);
 }
 
 /**
