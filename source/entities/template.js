@@ -104,7 +104,7 @@ setPos(x,y) {
       var distx = x1 - x2
       var disty = y1 - y2
         var angle = Math.atan2(disty,distx)
-        return disty / Math.sin(angle);
+        return Math.abs(disty / Math.sin(angle));
     }
    getDistance(x1,y1,x2,y2) {
        if (!x2) x2 = this.position.x;

@@ -41,7 +41,7 @@ module.exports = class ServerService {
         ejectedMass: 10,
         ejectedSpeed: 200,
         ejectedDecay: 5,
-        serverBots: 100
+        serverBots: 1000
     }
         var serv = new Main(true,0,"Main","Main",globalData,config);
         this.servers = [];
@@ -61,7 +61,7 @@ module.exports = class ServerService {
     execCommand(str) {
         if (!str) return;
         
-        var cmd = str.split("");
+        var cmd = str.split(" ");
         
         if (this.prsCommand(str)) return
         if (!this.selected) return;

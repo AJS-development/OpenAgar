@@ -63,6 +63,7 @@ console.log("       |_|                      |___/            ")
         }
         if (key == '\u007F' && this.text.length > 0) {
             this.text = this.text.substr(0,this.text.length - 1)
+            process.stdout.write('\r                                   ');
             process.stdout.write('\r>' + this.text);
             return
         }

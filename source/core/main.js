@@ -326,9 +326,22 @@ module.exports = class Main {
         var list = [];
         var hashnodes = this.getWorld().getNodes('hash').getNodes(node.bounds);
       node.nearby = hashnodes;
+        
         hashnodes.forEach((check)=>{
-            if (check == node) return;
-          
+            if (check == node || check.dead) return;
+              var distx = Math.abs(node.position.x - check.position.x)
+      var disty = Math.abs(node.position.y - check.position.y)
+           if (distx > check.size + node.size + 10 || disty > check.size + node.size + 10) return;
+           if (check.moveEngine.collision == "circle") {
+                if (!node.collisionCheckCircle(check)) return
+                    
+                
+                
+            } else if (item.moveEngine.collision == "square") {
+                if (!node.collisionCheckSquare(check)) return
+            } else {
+                return;  
+            }
             // check for collisions
             
             switch (check.type) {
@@ -364,19 +377,7 @@ module.exports = class Main {
         
         list.forEach((item)=>{
            
-            if (item.moveEngine.collision == "circle") {
-                if (node.collisionCheckCircle(item)) {
-                    // console.log(node.collisionCheckCircle(item))
-                    item.eat(node,this);
-                }
-                
-            } else if (item.moveEngine.collision == "square") {
-                if (node.collisionCheckSquare(item)) {
-                    item.eat(node,this);  
-                }
-            } else {
-                return;  
-            }
+           item.eat(node,this)
         });
     }
    
