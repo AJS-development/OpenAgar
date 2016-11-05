@@ -289,7 +289,7 @@ module.exports = class Main {
         var shift = 0;
      
         if (this.timer.passed > 50) { // lag detection
-           console.log(this.timer.passed)
+         //  console.log(this.timer.passed)
             shift = 1
             this.timer.pn = !this.timer.pn
             if (this.timer.pn) return
