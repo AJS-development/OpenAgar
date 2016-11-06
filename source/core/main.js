@@ -176,10 +176,10 @@ module.exports = class Main {
             */
             if (!cell) continue;
             var angle = Math.atan2(deltaY,deltaX)
-            this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay)
+           var splitted = this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay)
                            
-        
-                   
+        splitted.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
+                   cell.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
         }
     }
     execCommand(str) {
@@ -194,6 +194,7 @@ module.exports = class Main {
         var node = this.addNode(pos,cell.mass/2,cell.type,cell.owner,[],a)
         cell.updateMass(cell.mass/2)
         node.setEngine1(angle,speed,decay)
+        return node
     }
     removeFlags(node,flag) {
         this.getWorld().removeFlags(node,flag)
@@ -267,6 +268,7 @@ module.exports = class Main {
                     this.timer.slow = 0;
                     this.checkFood();
                     this.checkMass();
+                    this.updateMerge();
                 } else {
                     this.timer.slow ++;
                 }
@@ -278,7 +280,15 @@ module.exports = class Main {
         }
         
     }
-    
+    updateMerge() {
+        var nodes = this.getWorld().getNodes('merge')
+        if (nodes.length == 0) return;
+            nodes.forEach((node)=>{
+                node.calcMerge(this)
+            }) 
+            
+        
+    }
     getConfig() {
         return this.dataService.config;
     }
@@ -338,12 +348,13 @@ module.exports = class Main {
     } 
     
     collide(node) {
+      
         var list = [];
         var hashnodes = this.getWorld().getNodes('hash').getNodes(node.bounds);
       node.nearby = hashnodes;
         
         hashnodes.forEach((check)=>{
-            
+               
            if (check.moveEngine.collision == "circle") {
                 if (!node.collisionCheckCircle(check)) return
                     

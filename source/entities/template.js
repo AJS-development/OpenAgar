@@ -28,6 +28,7 @@ module.exports = class template {
       this.dead = false;
       this.updateCode = 1;
       this.moveCode = 1;
+
  this.name = "";
     this.color = {
      r: 0,  
@@ -145,16 +146,14 @@ setPos(x,y) {
       
       
    }
-   checkObstructions(main) {
-      
-   }
+
    eat(node,main) {
        
     this.killer = node
     this.killer.addMass(this.mass)
     main.removeNode(this)
    }
-    doesCollide(node) {
+    doesCollide(node,main) {
         return false;
     }
   getSize() {
@@ -273,9 +272,9 @@ setPos(x,y) {
              this.moveDone(main,1)   
             }
         }
-        this.position.x += Velocity * Math.cos(angle)
+        this.position.x += Math.abs(Velocity) * Math.cos(angle)
         
-     this.position.y += Velocity * Math.sin(angle)
+     this.position.y += Math.abs(Velocity) * Math.sin(angle)
     }
     calcMove(main,speed) { // if speed = 0, 0.05 sec, if speed = 1, 0.1 sec
          /*
@@ -316,8 +315,8 @@ setPos(x,y) {
              this.moveDone(main,0)   
             }
         }
-    this.position.x += Velocity * m.cos
-     this.position.y += Velocity * m.sin
+    this.position.x += Math.abs(Velocity) * m.cos
+     this.position.y += Math.abs(Velocity) * m.sin
      // console.log(this.position,m.angle)
      if (!m.useCurve) return;
         

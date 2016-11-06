@@ -27,6 +27,7 @@ module.exports = class WorldModel {
         this.virusNodes = new QuickMap();
         this.ejectedNodes = new QuickMap();
         this.movingNodes = new QuickMap();
+        this.mergeNodes = new QuickMap()
         this.lastID = 2;
        this.rainbowNodes = new QuickMap()
     }
@@ -52,9 +53,13 @@ module.exports = class WorldModel {
                return this.virusNodes;
            case "ejected":
                return this.ejectedNodes;
+           case "merge":
+               return this.mergeNodes;
+               break;
            default:
                return this.nodes.allnodes;
                break;
+               
        }
     }
     
@@ -107,6 +112,9 @@ module.exports = class WorldModel {
                  case "r": // rainbow
                     this.rainbowNodes.set(node.id,node)
                     break;
+                case "merge": // merge
+                    this.mergeNodes.set(node.id,node)
+                    break;
                 default:
                     return;
                     break;
@@ -130,6 +138,9 @@ module.exports = class WorldModel {
                 case "r": // rainbow
                     this.rainbowNodes.delete(node.id)
                     break;
+                case "merge":
+                     this.mergeNodes.delete(node.id)
+                    break;
                     default:
                     return;
                     break;
@@ -144,6 +155,7 @@ module.exports = class WorldModel {
       this.rainbowNodes.delete(node.id)
         this.mapnodes.delete(node.id);
      this.movingNodes.delete(node.id);
+         this.mergeNodes.delete(node.id)
         node.moving = false
         this.ejectedNodes.delete(node.id);
         if (this.playerNodes.delete(node.id)) return;

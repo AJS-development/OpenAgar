@@ -18,17 +18,20 @@
 */
 var template = require('./template.js');
 module.exports = class cell extends template {
-    constructor(position, mass, type, owner, name,mergeage) {
+    constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
         this.name = owner.gameData.name;
         this.color = owner.gameData.color;
-        this.mergeage = mergeage
+        this.mergeage = 0;
         this.canMerge = false;
+        this.mergeMult = 0;
+        this.mergeStatus = 1
         this.type = 0;
-       
+
         this.moving = true;
         this.nearby = [];
     }
+    
     onCreation(main) {}
     onAdd(id) {
         this.id = id;
@@ -37,8 +40,40 @@ module.exports = class cell extends template {
     onDeletion(main) {
         this.owner.removeCell(this);
     }
-    
-    
+    doesCollide(node,main) {
+        return true;
+        
+    }
+    mergeDone(main) {
+        
+    }
+    setMerge(main,num,mult) {
+        this.mergeage = num
+        this.canMerge = false;
+        this.mergeMult = mult || 0
+        main.getWorld().setFlags(this,'merge')
+    }
+    calcMerge(main) { // once every 0.5 sec
+    if (this.mergeStatus == 3) return; // 0 = instant merge, 3 = never merge
+        if (this.mergeStatus == 0) {
+            this.canMerge = true;
+              main.getWorld().removeFlags(this,'merge')
+              
+            this.mergeDone(main)
+            return;
+        }
+        if (this.mergeage <= this.mass * this.mergeMult) {
+            this.canMerge = true;
+              main.getWorld().removeFlags(this,'merge')
+              
+            this.mergeDone(main)
+            return;
+        }
+        this.mergeage --;
+      
+        // console.log(this.mergeage,this.mass * this.mergeMult,this.canMerge)
+        
+    }
     moveToMouse(main,sp) {
   
         var speed = 0;

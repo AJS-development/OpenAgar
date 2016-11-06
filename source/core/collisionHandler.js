@@ -22,7 +22,9 @@ module.exports = class CollisionHandler {
         this.timer = 0;
     }
     collidePlayer(cell) {
+       
         cell.nearby.forEach((node)=>{
+           
             if (!node || node.dead) return;
             
             // relative collision
@@ -32,7 +34,7 @@ module.exports = class CollisionHandler {
                  //this.relativeCollision2(cell,node);
             
             // rigid collision
-            } else if (node.doesCollide(cell)) { 
+            } else if (node.doesCollide(cell,this.main)) { 
                 this.rigidCollision(cell,node);
             } 
         });
