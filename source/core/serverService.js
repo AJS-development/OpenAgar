@@ -41,7 +41,7 @@ module.exports = class ServerService {
         ejectedMass: 10,
         ejectedSpeed: 200,
         ejectedDecay: 5,
-        serverBots: 1000
+        serverBots: 0
     }
         var serv = new Main(true,0,"Main","Main",globalData,config);
         this.servers = [];
