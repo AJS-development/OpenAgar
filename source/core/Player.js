@@ -371,7 +371,12 @@ if (node.dead) return;
         */
         var splist = [];
         this.moveView.forEach((node,id)=>{
-            if (!node.dead && node.moving && this.doesFit(node)) {
+            if (node.dead || !node.moving) { 
+              splist.push(id)
+                this.moveHash[node.id] = false;
+            this.upmoveHash[node.id] = false;
+         this.nodeHash[node.id] = false;
+            } else if(this.doesFit(node)) {
                 
                 
             } else {

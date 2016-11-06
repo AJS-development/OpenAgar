@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = function(node, main) {
+    
     var a = {
         id: node.id,
         owId: (node.owner) ? node.owner.id : false,
