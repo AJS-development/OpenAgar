@@ -152,6 +152,8 @@ setPos(x,y) {
     this.killer = node
     this.killer.addMass(this.mass)
     main.removeNode(this)
+  node.uptCode()
+  
    }
     doesCollide(node,main) {
         return false;
