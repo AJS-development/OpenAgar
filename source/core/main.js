@@ -218,7 +218,7 @@ module.exports = class Main {
           
        })
        var lb = [];
-        var amount = 10;
+        var amount = this.getConfig().leaderBoardLen;
       for (var i = hash.length; i > 0; i--) {
           if (!hash[i]) continue;
            hash[i].every((client)=>{
