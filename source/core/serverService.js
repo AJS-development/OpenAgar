@@ -41,7 +41,7 @@ module.exports = class ServerService {
         ejectedMass: 10,
         ejectedSpeed: 200,
         ejectedDecay: 5,
-        serverBots: 0,
+        serverBots: 500,
         playerMergeMult: -0.05,
         playerMerge: 8,
         leaderBoardLen: 10

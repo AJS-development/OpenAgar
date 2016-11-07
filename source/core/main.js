@@ -214,22 +214,22 @@ module.exports = class Main {
            
            var score = bot.getScore()
              if (!hash[score]) hash[score] = [];
-           hash[score].push(client)
+           hash[score].push(bot)
           
        })
        var lb = [];
         var amount = this.getConfig().leaderBoardLen;
       for (var i = hash.length; i > 0; i--) {
           if (!hash[i]) continue;
-           hash[i].every((client)=>{
+           if (!hash[i].every((client)=>{
          lb.push({
-             name: client.name,
+             name: client.gameData.name,
              id: client.id
          })
          amount --;
            if (amount <= 0) return false;
            return true;
-           })
+           })) break;
        }
        this.clients.forEach((client)=>{
      
@@ -245,8 +245,8 @@ module.exports = class Main {
             y: cell.position.y
         }
         var a = (cell.type == 0) ? "" : "m"
-        var node = this.addNode(pos,cell.mass/2,cell.type,cell.owner,[],a)
-        cell.updateMass(cell.mass/2)
+        var node = this.addNode(pos,~~(cell.mass/2),cell.type,cell.owner,[],a)
+        cell.updateMass(~~(cell.mass/2))
         node.setEngine1(angle,speed,decay)
         return node
     }

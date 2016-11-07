@@ -30,7 +30,7 @@ module.exports = class Bot {
      x: 0,
         y: 0
     }
-    
+    this.mass = 0;
     this.timer = {
         changeDir: 0,
     }
@@ -41,6 +41,7 @@ module.exports = class Bot {
             reservedChatNames: [],
            chkDeath: false
         }
+     this.score = 0;
      var t = new Date()
         this.alive = t.getTime()
     this.cells = [];
@@ -52,7 +53,8 @@ module.exports = class Bot {
     }
   
    onDeath() {
-     
+      this.mass = 0;
+       this.score =0;
       this.alive = this.server.timer.time;
        this.playing = false;
        this.spawn()
@@ -67,15 +69,17 @@ module.exports = class Bot {
                 this.playing = true;   
     }
  getScore(re) {
+      
         if (re) {
         var l = 0;
         this.cells.forEach((n)=>{
            l+= n.mass; 
         })
-        this.score = l
+        this.mass = l;
+        this.score = Math.max(this.score,l)
         return l
         }
-        
+        this.score = Math.max(this.score,this.mass)
         return this.score
     }
     calcView() {

@@ -28,7 +28,7 @@ module.exports = class Player {
             x: 0,
             y: 0
         }
-        this.score = 0;
+        this.mass = 0;
         this.keys = {
             w: false,
             space: false,
@@ -37,6 +37,7 @@ module.exports = class Player {
             t: false,
             q: false
         }
+        this.score = 0;
         this.nodeHash = {};
         this.hashnodes = [];
         this.moveView = [];
@@ -290,7 +291,8 @@ module.exports = class Player {
     }
    onDeath(main,killer) {
        this.killer = (killer && killer.owner) ? killer.owner : false;
-       
+       this.mass = 0;
+       this.score =0;
       this.socket.emit('rip',{alive: main.timer.time - this.alive, killerId: (killer && killer.owner) ? killer.owner.id : -1})
       this.alive = main.timer.time;
        
@@ -298,7 +300,8 @@ module.exports = class Player {
 setTimeout(function() { // let the player see who killed them
     if (this.playing) return
     this.sendData = false;
-}.bind(this),900)
+
+}.bind(this),10000)
    }
     send() {
     
@@ -330,7 +333,7 @@ setTimeout(function() { // let the player see who killed them
         this.toSend = [];
         
        if (main.toBeDeleted.length > 0) this.deleteNodes(main);
-         if (this.cells.length == 0) return;
+         if (this.cells.length == 0 && this.playing) return;
        
     var hashtable = {};
         this.hashnodes.forEach((node)=>{
@@ -410,15 +413,17 @@ if (node.dead) return;
         
     }
     getScore(re) {
+      
         if (re) {
         var l = 0;
         this.cells.forEach((n)=>{
            l+= n.mass; 
         })
-        this.score = l
+        this.mass = l;
+        this.score = Math.max(this.score,l)
         return l
         }
-        
+        this.score = Math.max(this.score,this.mass)
         return this.score
     }
    deleteNodes(main) {
