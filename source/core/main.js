@@ -202,24 +202,24 @@ module.exports = class Main {
     updateLB() {
      if (this.clients.length == 0) return;
         var hash = [];
-        var min = 1000
+  
        this.clients.forEach((client)=>{
         
            var score = client.getScore()
            if (!hash[score]) hash[score] = [];
            hash[score].push(client)
-           if (score < min) min = score
+
        }) 
        this.bots.forEach((bot)=>{
            
            var score = bot.getScore()
              if (!hash[score]) hash[score] = [];
            hash[score].push(client)
-            if (score < min) min = score
+          
        })
        var lb = [];
         var amount = 10;
-      for (var i = hash.length; i > min - 1; i--) {
+      for (var i = hash.length; i > 0; i--) {
           if (!hash[i]) continue;
            hash[i].every((client)=>{
          lb.push({
