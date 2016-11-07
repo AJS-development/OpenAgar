@@ -35,7 +35,7 @@ module.exports = class CollisionHandler {
             
             // rigid collision
             } else if (node.doesCollide(cell,this.main)) { 
-                this.rigidCollision(cell,node);
+              //  this.rigidCollision(cell,node);
             } 
         });
     }

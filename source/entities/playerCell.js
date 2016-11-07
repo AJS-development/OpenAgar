@@ -30,6 +30,7 @@ module.exports = class cell extends template {
 
         this.moving = true;
         this.nearby = [];
+        this.owner.score += mass
     }
     
     onCreation(main) {}
@@ -38,6 +39,7 @@ module.exports = class cell extends template {
         this.owner.addCell(this);
     }
     onDeletion(main) {
+        this.owner.score -= this.mass
         this.owner.removeCell(this);
     }
     doesCollide(node,main) {
@@ -73,6 +75,16 @@ module.exports = class cell extends template {
       
         // console.log(this.mergeage,this.mass * this.mergeMult,this.canMerge)
         
+    }
+     updateMass(mass) {
+         var add = Math.max(mass,10)
+         var dif = add - this.mass
+         this.owner.score += dif
+        this.mass = add
+        this.getSize()
+        
+        this.speed = Math.pow(this.mass, -1.0 / 4.5) * 50 / 40;
+        this.updCode()
     }
     moveToMouse(main,sp) {
   

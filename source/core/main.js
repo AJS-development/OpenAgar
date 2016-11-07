@@ -32,6 +32,7 @@ module.exports = class Main {
         this.name = name;
         this.scname = scname;
         this.minfood = 500;
+        this.clientLen = 0;
         this.toBeDeleted = [];
         this.food = 0;
         this.updateCode = 0;
@@ -82,23 +83,39 @@ module.exports = class Main {
             
         }
     }
+    getGlobal() {
+        return this.dataService.globalData
+    }
     addBot() {
-        var id = this.botid ++;
-        var bot = new Bot(this,id,"Bot: " + id)
+        var id = this.getGlobal().getNextId()
+        var botid = this.botid ++;
+        var bot = new Bot(this,id,"Bot: " + botid,botid)
         this.bots.push(bot)
    
     }
     removeBot(ids) {
-        ids.forEach((id)=>{
+        var hash = {}
+     ids.forEach((id)=>{
+         hash[id] = true;
+     })
             
-            this.bots[id] = null
-        })
+            for (var i = 0; i < this.bots.length; i ++) {
+                var bot = this.bots[i]
+                if (hash[bot.id]) {
+                    this.bots.splice(i,1)
+                    i --;
+                }
+                
+            }
+        
         
     }
     addClient(client) {
         if (this.clients.indexOf(client) == -1) {
             this.clients.push(client);
+            
         }
+        
     }
     
     removeClient(client) {
@@ -182,6 +199,43 @@ module.exports = class Main {
                    cell.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
         }
     }
+    updateLB() {
+     if (this.clients.length == 0) return;
+        var hash = [];
+        var min = 1000
+       this.clients.forEach((client)=>{
+        
+           var score = client.getScore()
+           if (!hash[score]) hash[score] = [];
+           hash[score].push(client)
+           if (score < min) min = score
+       }) 
+       this.bots.forEach((bot)=>{
+           
+           var score = bot.getScore()
+             if (!hash[score]) hash[score] = [];
+           hash[score].push(client)
+            if (score < min) min = score
+       })
+       var lb = [];
+        var amount = 10;
+      for (var i = hash.length; i > min - 1; i--) {
+          if (!hash[i]) continue;
+           hash[i].every((client)=>{
+         lb.push({
+             name: client.name,
+             id: client.id
+         })
+         amount --;
+           if (amount <= 0) return false;
+           return true;
+           })
+       }
+       this.clients.forEach((client)=>{
+     
+           client.socket.emit('lb',{lb:lb})
+       })
+    }
     execCommand(str) {
         
     }
@@ -203,7 +257,7 @@ module.exports = class Main {
        // if (this.toBeDeleted.length == 1) this.toBeDeleted.push({id:0,killer:0})
         this.deleteR = JSON.stringify(this.toBeDeleted)
         this.clients.forEach((client)=>{
-            if (client)
+          
             client.update(this);
         });
         this.toBeDeleted = [];
@@ -269,6 +323,7 @@ module.exports = class Main {
                     this.checkFood();
                     this.checkMass();
                     this.updateMerge();
+                    this.updateLB()
                 } else {
                     this.timer.slow ++;
                 }

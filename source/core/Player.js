@@ -28,7 +28,7 @@ module.exports = class Player {
             x: 0,
             y: 0
         }
-        
+        this.score = 0;
         this.keys = {
             w: false,
             space: false,
@@ -409,12 +409,17 @@ if (node.dead) return;
         this.send();
         
     }
-    getScore() {
+    getScore(re) {
+        if (re) {
         var l = 0;
         this.cells.forEach((n)=>{
            l+= n.mass; 
         })
+        this.score = l
         return l
+        }
+        
+        return this.score
     }
    deleteNodes(main) {
  

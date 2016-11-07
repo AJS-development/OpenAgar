@@ -17,8 +17,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = class Bot {
-  constructor(server,id,name) {
+  constructor(server,id,name,botid) {
     this.id = id
+    this.botid = botid
    this.server = server;
       this.isBot = true;
     this.mouse = {
@@ -65,12 +66,17 @@ module.exports = class Bot {
                 this.setRandom()
                 this.playing = true;   
     }
-  getScore() {
+ getScore(re) {
+        if (re) {
         var l = 0;
         this.cells.forEach((n)=>{
            l+= n.mass; 
         })
+        this.score = l
         return l
+        }
+        
+        return this.score
     }
     calcView() {
  if (this.cells.length == 0) return

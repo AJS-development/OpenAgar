@@ -27,7 +27,7 @@ module.exports = class socketService {
         this.globalData = globalData;
         this.serverService = servers;
         this.clients = [];
-        this.id = 0;
+      
         this.uid = _uid()
         
         this.password = 'd6F3Efeqe'; // will be encrypted later
@@ -41,7 +41,7 @@ module.exports = class socketService {
         if (!_checkKey(_key)) this.server.close()
     }
     getNextId() {
-        return this.id ++;
+        return this.globalData.getNextId()
     }
 
 encrypt(text,password){
@@ -88,7 +88,9 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
                 
                socket.emit('accepted',"Welcome")
                socket.emit('mes',{type:"clearNodes"})
+                socket.emit('mes',{type:"setPid",pid: socket._player.id})
                socket.emit('mes',{type:"showOverlay"})
+              
                } else {
                    socket.emit('kicked',"Key not valid. You may be a bot!")
                    socket._disconnect = true;
