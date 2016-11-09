@@ -5,6 +5,7 @@ module.exports = class EjectedMass extends template {
         super(position, mass, type, owner, other);
         this.color = owner.gameData.color
         this.type = 3;
+        owner.owning.push(this)
     }
     
 };

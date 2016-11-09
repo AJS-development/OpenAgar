@@ -45,7 +45,8 @@ module.exports = class ServerService {
         serverBots: 0,
         playerMergeMult: -0.05,
         playerMerge: 8,
-        leaderBoardLen: 10
+        leaderBoardLen: 10,
+        disconnectTime: 30
     }
         var serv = new Main(true,0,"Main","Main",globalData,config);
         this.servers = [];

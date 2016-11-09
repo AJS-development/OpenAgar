@@ -17,8 +17,9 @@ module.exports = function(str,main,log) {
         
 
             var name = client.gameData.name
+            var chatname = client.gameData.chatName
             name = name || "An Unamed Cell";
-          log("|" + fill(client.id.toString(),5) + "|" + fill(client.socket.remoteAddress,10) + "|" + fill(name,15) + "|")  
+          log("|" + fill(client.id.toString(),5) + "|" + fill(client.socket.remoteAddress,10) + "|" + fill(name,15) + "|" + fill(chatname,17) + "|")  
         })
         
     } else if (str[1] == "bots") {

@@ -28,6 +28,7 @@ module.exports = class Player {
             x: 0,
             y: 0
         }
+        this.owning = [];
         this.mass = 0;
         this.keys = {
             w: false,
@@ -54,7 +55,9 @@ module.exports = class Player {
             color: server.getRandomColor(),
             chatname: "",
             reservedChatNames: [],
-           chkDeath: false
+            chatName: "",
+           chkDeath: false,
+            reservedNamesMap: []
         }
         
         this.killer = false;
@@ -102,9 +105,26 @@ module.exports = class Player {
         return;
     }
         if (this.server) this.server.removeClient(this)
+        this.reset()
         this.server = server;
         this.server.addClient(this)
         this.init()
+    }
+    reset() {
+        this.resetView()
+        this.minions = [];
+        this.cells = [];
+        this.visible = [];
+      this.gameData = {
+            name: "",
+            color: server.getRandomColor(),
+            chatname: "",
+            reservedChatNames: [],
+            chatName: "",
+           chkDeath: false,
+            reservedNamesMap: []
+        }
+        this.owning = []
     }
     init() {
         this.socket.emit('mes',{type: "setBorder",bounds: this.server.bounds})

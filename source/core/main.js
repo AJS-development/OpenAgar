@@ -40,6 +40,7 @@ module.exports = class Main {
         this.updateCode = 0;
         this.bots = [];
         this.deleteR = "";
+        this.chatNames = [];
         this.botid = 0;
         this.colors  = [
             {'r':235, 'g': 75, 'b':  0},
@@ -147,10 +148,28 @@ module.exports = class Main {
     }
     
     removeClient(client) {
-        client.cells.forEach((cell)=>{
+        setTimeout(function() {
+             client.cells.forEach((cell)=>{
             this.removeNode(cell);
         });
-        client.cells = [];
+        client.owning.forEach((cell)=>{
+            this.removeNode(cell)
+        })
+             client.cells = [];
+        }.bind(this),this.getConfig().disconnectTime * 1000)
+       
+       
+        var names = client.gameData.reservedNamesMap;
+        for (var i in names) {
+         var name = names[i];
+         for (var j in name) {
+           this.chatNames[i].splice(j,1);
+         }
+         
+       }
+        client.minions.forEach((minion)=>{
+            this.removeMinion(minion)
+        })
         var a = this.clients.indexOf(client);
         if (a != -1) this.clients.splice(a,1);
     }
@@ -165,7 +184,31 @@ module.exports = class Main {
         });
         this.dataService.world.removeNode(cell);
     }
-    
+    getChatName(player) {
+        var name = player.gameData.name || "An Unamed Cell"
+       var reservedNamesMap = player.gameData.reservedNamesMap
+        var reserved = player.gameData.reservedChatNames
+       name = name.split(' ').join('_');
+         var chatname = name;
+         if (reserved.indexOf(chatname) != -1) {
+    return name
+  }
+            if (!this.chatNames[name]) this.chatNames[name] = [];
+             var cn = this.chatNames[name];
+        for (var i = 0;0==0;i++){
+        var newname = (i==0) ? chatname : chatname + "_" + i;
+        if (cn.indexOf(i) == -1 || reserved.indexOf(newname) != -1) {
+          this.chatNames[name][i] = i;
+          if (reserved.indexOf(newname) == -1) reserved.push(newname);
+         if (!reservedNamesMap[name]) reservedNamesMap[name] = [];
+         reservedNamesMap[name][i] = i;
+          return newname;
+        }
+         
+        
+      }
+        return false;
+    }
     checkFood() {
         return this.foodService.checkFood();
     }
@@ -175,6 +218,8 @@ module.exports = class Main {
     }
     
     spawn(player) {
+        if (!player.isBot) player.gameData.chatname = this.getChatName(player)
+    
         var pos = this.foodService.getRandomPos();
        if (player.name == "") player.name = "An Unamed Cell"; this.addNode(pos,this.getConfig().startMass,0,player);
     }
