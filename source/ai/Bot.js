@@ -47,6 +47,9 @@ module.exports = class Bot {
     this.cells = [];
       this.spawn()
   }
+     onRemove(main) {
+        
+    }
   addCell(cell) {
         if (this.cells.indexOf(cell) != -1) return; this.cells.push(cell)
        

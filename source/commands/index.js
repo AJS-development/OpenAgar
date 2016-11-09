@@ -1,8 +1,8 @@
 module.exports = {
 
         list: {
-         
-            
+         addbot: require('./lib/addBot.js'),
+        list: require('./lib/list.js')
         },
         serverService: {
             create: function(serverService,str) {

@@ -87,7 +87,7 @@ module.exports = class cell extends template {
         this.updCode()
     }
     moveToMouse(main,sp) {
-  
+  if (this.owner.isMinion) return;
         var speed = 0;
          if (sp == 0) {
          speed = this.speed

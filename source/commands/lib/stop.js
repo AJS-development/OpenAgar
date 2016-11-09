@@ -1,4 +1,4 @@
-module.exports = function(serverService,str) {
+module.exports = function(str,serverService) {
 console.log("Closing Server")
 process.exit(0)
 

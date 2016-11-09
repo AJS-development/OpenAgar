@@ -16,17 +16,20 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-module.exports = class Bot {
-  constructor(server,id,name,owner) {
+module.exports = class Minion {
+  constructor(server,id,name,botid,parent) {
     this.id = id
+    this.parent = parent
+    this.botid = botid
    this.server = server;
-    this.mouse = owner.mouse;
-    this.owner = owner;
+      this.isBot = true;
+      this.isMinion = true;
+  this.mouse = this.parent.mouse
     this.center = {
      x: 0,
         y: 0
     }
-    
+    this.mass = 0;
     this.timer = {
         changeDir: 0,
     }
@@ -37,18 +40,24 @@ module.exports = class Bot {
             reservedChatNames: [],
            chkDeath: false
         }
+     this.score = 0;
      var t = new Date()
         this.alive = t.getTime()
     this.cells = [];
       this.spawn()
   }
+    onRemove(main) {
+        this.parent.removeMinion(this)
+    }
+ 
   addCell(cell) {
         if (this.cells.indexOf(cell) != -1) return; this.cells.push(cell)
        
     }
   
    onDeath() {
-     
+      this.mass = 0;
+       this.score =0;
       this.alive = this.server.timer.time;
        this.playing = false;
        this.spawn()
@@ -58,47 +67,32 @@ module.exports = class Bot {
                 
                
                 this.server.spawn(this)
-                
+                this.calcView()
+                this.setRandom()
                 this.playing = true;   
     }
-  getScore() {
+ getScore(re) {
+      
+        if (re) {
         var l = 0;
         this.cells.forEach((n)=>{
            l+= n.mass; 
         })
+        this.mass = l;
+        this.score = Math.max(this.score,l)
         return l
+        }
+        this.score = Math.max(this.score,this.mass)
+        return this.score
     }
-    calcView() {
- if (this.cells.length == 0) return
-        var totalSize = 1.0;
-        var x = 0, y = 0;
-        this.cells.forEach((cell)=>{
-            if (!cell) return
-            x += cell.position.x
-            y += cell.position.y
-            totalSize += cell.getSize();
-        })
-        this.center.x = x / this.cells.length
-        this.center.y = y / this.cells.length
-         var factor = Math.pow(Math.min(64.0 / totalSize, 1), 0.4);
-    this.sightRangeX = this.server.getConfig().serverViewBaseX / factor;
-    this.sightRangeY = this.server.getConfig().serverViewBaseY / factor;
-    this.a = {
-        x:  this.center.x - this.sightRangeX,
-        y: this.center.y - this.sightRangeY,
-        height: 2 * this.sightRangeY, 
-        width: 2 * this.sightRangeX        
-    }
-    }
+    
 setRandom() {
     if (!this.a) return;
     var a = this.a
         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y   
 }
-  update() { // 0.5 sec
-   
-  }
+  
     changeColor(color) {
         this.gameData.color = color
         this.cells.forEach((cell)=>{

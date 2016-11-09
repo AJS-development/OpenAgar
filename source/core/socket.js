@@ -22,6 +22,11 @@ module.exports = class Socket {
     constructor(socket,player) {
         this.player = player;
         this.socket = socket
+        
+                    var idx = socket._remoteAddress.lastIndexOf(':');
+if (~idx && ~socket._remoteAddress.indexOf('.'))
+  this.remoteAddress = socket._remoteAddress.slice(idx + 1);
+        this.IPv6 = socket._remoteAddress
     }
     sendNodes(obj) {
         

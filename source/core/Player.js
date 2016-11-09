@@ -73,7 +73,7 @@ module.exports = class Player {
         this.toSend = []
         this.visSimple = []
         this.visible = []
-       
+       this.minions = []
         this.cells = [];
         this.playing = false;
         this.socket = new Socket(socket,this)
@@ -83,7 +83,18 @@ module.exports = class Player {
         this.alive = t.getTime()
         
     }
-    
+    addMinion(minion) {
+        this.minions.push(minion)
+   
+    }
+    removeMinion(minion) {
+    var ind = this.minions.indexOf(minion)
+    if (ind != -1) this.minions.splice(ind,1)
+    }
+    updateMinions() {
+        
+        
+    }
     changeServers(msg,servers) {
     if (!msg || !msg.id) return
     if (!servers.servers[msg.id]) {
@@ -287,7 +298,10 @@ module.exports = class Player {
         this.playing = false;
         this.sendData = false;
         this.server.removeClient(this)
-        
+        this.minions.forEach((minion)=>{
+            this.server.removeMinion(minion)
+        })
+        this.minions = []
     }
    onDeath(main,killer) {
        this.killer = (killer && killer.owner) ? killer.owner : false;
@@ -339,6 +353,7 @@ setTimeout(function() { // let the player see who killed them
         this.hashnodes.forEach((node)=>{
 if (node.dead) return;
             if (!this.doesFit(node)) return;
+          
            hashtable[node.id] = true;
       if (node.moving && !this.moveHash[node.id] && !this.cellHash[node.id]) {
           this.moveView.push(node)

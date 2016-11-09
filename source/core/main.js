@@ -23,6 +23,8 @@ const FoodService = require('./foodService.js');
 const Bot = require('../ai/Bot.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
+const Minion = require('../ai/Minion.js')
+const Commands = require('../commands')
 // const async = require("async");
 
 module.exports = class Main {
@@ -60,6 +62,7 @@ module.exports = class Main {
             width:config.boundWidth,
             height: config.boundHeight
         };
+        this.minions = []
         this.dataService = new DataService(this,globalData,config);
         this.timer = {
             tick: 0,
@@ -77,6 +80,19 @@ module.exports = class Main {
         this.collisionHandler = new CollisionHandler(this)
        this.addBots(config.serverBots)
     }
+    addMinions(player,num) {
+        for (var i = 0; i < num; i ++) {
+            this.addMinion(player)
+        }
+     }
+    addMinion(player) {
+         var id = this.getGlobal().getNextId()
+        var botid = this.botid ++;
+         var bot = new Minion(this,id,"Bot: " + botid,botid,player)
+          this.minions.push(bot)
+          player.addMinion(bot)
+     
+    }
     addBots(num) {
         for (var i = 0; i <num; i ++) {
             this.addBot()
@@ -93,6 +109,16 @@ module.exports = class Main {
         this.bots.push(bot)
    
     }
+    removeMinion(bot) {
+        bot.onRemove()
+        var ind = this.minions.indexOf(bot)
+        if (ind != -1) this.minions.splice(ind,1)
+    }
+    removeBot(bot) {
+        bot.onRemove()
+        var ind = this.bots.indexOf(bot)
+        if (ind != -1) this.bots.splice(ind,1)
+    }
     removeBot(ids) {
         var hash = {}
      ids.forEach((id)=>{
@@ -102,6 +128,7 @@ module.exports = class Main {
             for (var i = 0; i < this.bots.length; i ++) {
                 var bot = this.bots[i]
                 if (hash[bot.id]) {
+                    bot.onRemove(this)
                     this.bots.splice(i,1)
                     i --;
                 }
@@ -110,6 +137,7 @@ module.exports = class Main {
         
         
     }
+    
     addClient(client) {
         if (this.clients.indexOf(client) == -1) {
             this.clients.push(client);
@@ -217,11 +245,18 @@ module.exports = class Main {
            hash[score].push(bot)
           
        })
+       this.minions.forEach((minion)=>{
+           var score = minion.getScore()
+             if (!hash[score]) hash[score] = [];
+           hash[score].push(minion)
+       })
        var lb = [];
         var amount = this.getConfig().leaderBoardLen;
+        var rank = 1;
       for (var i = hash.length; i > 0; i--) {
           if (!hash[i]) continue;
            if (!hash[i].every((client)=>{
+               client.rank = rank ++;
          lb.push({
              name: client.gameData.name,
              id: client.id
@@ -236,8 +271,18 @@ module.exports = class Main {
            client.socket.emit('lb',{lb:lb})
        })
     }
+    log(a) {
+        console.log(a)
+    }
     execCommand(str) {
-        
+          var cmd = str.split(" ")
+        var command = Commands.list[cmd[0]]
+        if (command) {
+            command(str,this,this.log.bind(this))
+            return true;
+        }
+        return false;
+   
     }
     splitCell(cell,angle,speed,decay) {
         var pos = {
@@ -377,6 +422,7 @@ module.exports = class Main {
         this.getWorld().getNodes("player").forEach((player)=>{
            
             if (player.owner.isBot) {
+                
                 if (!this.timer.bot) return // bots update slower
              setImmediate(function() {player.move(this,1 + shift)}.bind(this))
              this.collisionHandler.collidePlayer(player)

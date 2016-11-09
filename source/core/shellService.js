@@ -20,7 +20,9 @@ module.exports = class ShellService {
     constructor(controlservice) {
         this.controller = controlservice;
         this.text = ""
+        this.commands = [];
         this.stdin = process.stdin;
+        this.ind = 0;
 this.stdin.setRawMode(true);
 this.stdin.resume();
 this.stdin.setEncoding('utf8');
@@ -56,22 +58,42 @@ console.log("       |_|                      |___/            ")
     prompt(key) {
         if (key == '\u000D') { //enter
              process.stdout.write('\n')
-        if (this.text) this.parseCommands(this.text.toLowerCase())
+        if (this.text) {this.parseCommands(this.text.toLowerCase())
+        this.commands.push(this.text)
+                       }
+       
         this.text = ""
+        this.ind = this.commands.length
         process.stdout.write('>')
+        
             return;
-        }
-        if (key == '\u007F' && this.text.length > 0) {
+        } else if (key == '\u001B\u005B\u0041') { // up
+      
+            if (this.ind > 0) this.ind --;
+                this.text = this.commands[this.ind] || ""
+                 process.stdout.write('\r                                   ');
+                    process.stdout.write('\r>' + this.text);
+            return
+               } else if (key == '\u001B\u005B\u0042') { // down
+              
+                   if (this.ind < this.commands.length) this.ind ++;
+                   this.text = this.commands[this.ind] || ""
+                   process.stdout.write('\r                                   ');
+                    process.stdout.write('\r>' + this.text);
+                   return;
+        } else if (key == '\u007F' && this.text.length > 0) {
+            this.ind = this.commands.length
             this.text = this.text.substr(0,this.text.length - 1)
             process.stdout.write('\r                                   ');
             process.stdout.write('\r>' + this.text);
             return
-        }
+        } else {
        if (!this.escapeChar(key)) return
-       
+       this.ind = this.commands.length
        this.text += key
        
        process.stdout.write(key.toString())
+        }
     }
 
     parseCommands(str) {

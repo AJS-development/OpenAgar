@@ -42,7 +42,7 @@ module.exports = class ServerService {
         ejectedMass: 10,
         ejectedSpeed: 200,
         ejectedDecay: 5,
-        serverBots: 500,
+        serverBots: 0,
         playerMergeMult: -0.05,
         playerMerge: 8,
         leaderBoardLen: 10
@@ -73,12 +73,15 @@ module.exports = class ServerService {
         if (!this.selected) return;
         if (!this.selected.execCommand(str)) console.log("The command " + cmd[0] + " was not found! Type 'help' to view a list of commands.")
     }
+    log(a) {
+      console.log(a)  
+    }
     prsCommand(str) {
       
         var cmd = str.split(" ")
         var command = Commands.serverService[cmd[0]]
         if (command) {
-            command(this,str)
+            command(str,this,this.log.bind(this))
             return true;
         }
         return false;

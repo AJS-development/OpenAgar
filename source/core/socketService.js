@@ -55,7 +55,7 @@ decrypt(text,password){
 return CryptoJS.enc.Utf8.stringify(decrypted);
 }
     connection(socket) {
-        
+        socket._remoteAddress = socket.request.connection.remoteAddress
         
          socket._activated = false;
         socket._disconnect = false;
@@ -114,6 +114,9 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
                 console.log(e);
             }
         });
+        socket.on('pong',function(data) {
+            
+        })
         socket.on('mes',function(data) {
             if (!socket._activated) return;
        
