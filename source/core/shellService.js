@@ -50,7 +50,7 @@ this.stdin.setEncoding('utf8');
                    clearInterval(interval)
                 callback()   
                }
-           }.bind(this),2)
+           }.bind(this),1)
     }
     interval(num,func,call,time) {
         var int = setInterval(function() {
@@ -74,7 +74,7 @@ this.stdin.setEncoding('utf8');
       this.clearAnim(height * width,function() {
           process.stdout.write("\x1b[K")
           
-               this.interval(height + 2,function() {process.stdout.write("\x1b[1A")},function() {
+               this.interval(height,function() {process.stdout.write("\x1b[1A")},function() {
                   this.interval(width, function() {process.stdout.write("\x1b[1D")},function() {
                         process.stdout.write('\u001B[0r')
                       var sel = Math.max(logs.length - height,0);
@@ -97,7 +97,7 @@ this.stdin.setEncoding('utf8');
                               clearInterval(int)
                              if (cbk) cbk()
                           }
-                      },7)
+                      },5)
                       }
                     
                       set()
