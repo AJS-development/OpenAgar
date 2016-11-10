@@ -36,6 +36,7 @@ module.exports = class Main {
    this.log = log;
         this.minfood = 500;
         this.clientLen = 0;
+        this.updLb = true;
         this.toBeDeleted = [];
         this.selected = false;
         this.food = 0;
@@ -276,6 +277,9 @@ module.exports = class Main {
     }
     updateLB() {
      if (this.clients.length == 0) return;
+        this.updLb = !this.updLb
+        if (this.updLb) return
+        
         var hash = [];
   
        this.clients.forEach((client)=>{
