@@ -76,6 +76,14 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
             socket.disconnect()
         }
         },700)
+        function setup(socket) {
+            socket._activated = true;
+             socket.emit('accepted',"Welcome")
+             socket.emit('mes',{type:"clearNodes"})
+             socket.emit('mes',{type:"setPid",pid: socket._player.id})
+               socket.emit('mes',{type:"showOverlay"})
+                socket.emit('mes',{type:"setFPS",fps: 6})
+        }
         socket.on('key',function(data) {
             if (!data) return;
                var uid = socket._uidp
@@ -84,12 +92,8 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
                var a = _socketOkay(socket)
               
                if (a) {
-            socket._activated = true;
-                
-               socket.emit('accepted',"Welcome")
-               socket.emit('mes',{type:"clearNodes"})
-                socket.emit('mes',{type:"setPid",pid: socket._player.id})
-               socket.emit('mes',{type:"showOverlay"})
+           
+            setup(socket)
               
                } else {
                    socket.emit('kicked',"Key not valid. You may be a bot!")
@@ -99,10 +103,7 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
                }
         }.bind(this));
         } else {
-            socket._activated = true;
-             socket.emit('accepted',"Welcome")
-             socket.emit('mes',{type:"clearNodes"})
-               socket.emit('mes',{type:"showOverlay"})
+            setup(socket)
         }
         socket.on('cha',function(data) {
             if (!socket._activated) return;

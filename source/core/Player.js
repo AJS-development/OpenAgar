@@ -350,7 +350,10 @@ setTimeout(function() { // let the player see who killed them
     }
     update(main) { // every 0.02 sec
         if (!this.sendData) return;
-        if (this.timer.view >= 5) { // 0.1 sec update viewframe
+           if (this.cells.length == 0 && this.playing) return;
+        if (main.toBeDeleted.length > 0) this.deleteNodes(main);
+      
+        if (this.timer.view >= 5) { // 0.1 sec update clients (6 fps)
             this.checkKeys(main)
            this.calcView()
             var hash = this.server.getWorld().getNodes('hash');
@@ -359,15 +362,12 @@ setTimeout(function() { // let the player see who killed them
      
          this.timer.view = 0;
            
-        } else {
-         this.timer.view ++;  
-        }
+       
        if (!this.view) return;
         this.visible = [];
         this.toSend = [];
         
-       if (main.toBeDeleted.length > 0) this.deleteNodes(main);
-         if (this.cells.length == 0 && this.playing) return;
+       
        
     var hashtable = {};
         this.hashnodes.forEach((node)=>{
@@ -446,7 +446,9 @@ if (node.dead) return;
         this.visSimple = [];
         
         this.send();
-        
+         } else {
+         this.timer.view ++;  
+        }
     }
     getScore(re) {
       

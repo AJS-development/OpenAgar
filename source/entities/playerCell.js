@@ -109,7 +109,7 @@ module.exports = class cell extends template {
         // simplify and make x,y either be -1 or 1 or 0
         x = Math.cos(angle) * speed * k * main.getConfig().playerSpeed,
         y = Math.sin(angle) * speed * k * main.getConfig().playerSpeed;
-       
+     //  console.log((speed * k * main.getConfig().playerSpeed)/50)
         this.position.x += Math.round(x);
         this.position.y += Math.round(y);
        
