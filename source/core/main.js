@@ -244,8 +244,8 @@ module.exports = class Main {
                 cell.addMass(-this.getConfig().ejectedMass)
                 
                 var ejected = this.addNode(startPos,this.getConfig().ejectedMass,3,player,[],"m")
-                ejected.setEngine1(angle,this.getConfig().ejectedSpeed,this.getConfig().ejectedDecay)
-                // ejected.setCurve(10)
+                ejected.setEngine1(angle,this.getConfig().ejectedSpeed) //this.getConfig().ejectedDecay
+            ejected.setCurve(30)
                 }
         
     }

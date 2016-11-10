@@ -413,17 +413,18 @@ if (node.dead) return;
               splist.push(id)
                 this.moveHash[node.id] = false;
             this.upmoveHash[node.id] = false;
-         this.nodeHash[node.id] = false;
+       //  this.nodeHash[node.id] = node.updateCode;
             } else if(this.doesFit(node)) {
-                
+                         
                 
             } else {
                 
                 splist.push(id)
                 this.moveHash[node.id] = false;
                 this.sendDelNode(node)
+     //  console.log("del",node.id)
       this.upmoveHash[node.id] = false;
-         this.nodeHash[node.id] = false;
+   //      this.nodeHash[node.id] = false;
             }
             
         })

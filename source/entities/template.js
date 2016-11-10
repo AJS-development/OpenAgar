@@ -327,15 +327,16 @@ setPos(x,y) {
     var curve = m.deltaT * m.curveM + m.curveB;
         
         if (!curve) return;
+        if (speed == 1) {
+            curve *= 2
+        } else if (speed == 2) {
+            curve *= 4
+        }
         m.deltaCurve += curve
         m.angle += curve * Math.PI / 180;
            var angle = m.angle * (180 / Math.PI);
-        if (speed == 1) {
-            angle *= 2
-        } else if (speed == 2) {
-            angle *= 4
-        }
-        if (angle >= 360)
+        
+        if (angle >= 360) 
             m.angle = (angle - 360) * (Math.PI / 180)
             m.sin = Math.sin(m.angle)
             m.cos = Math.cos(m.angle)
