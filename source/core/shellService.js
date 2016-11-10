@@ -21,6 +21,7 @@ module.exports = class ShellService {
         this.controller = controlservice;
         this.text = ""
         this.commands = [];
+        this.redrawing = false
         this.stdin = process.stdin;
         this.ind = 0;
         this.console = []
@@ -64,13 +65,14 @@ this.stdin.setEncoding('utf8');
     }
     writeLog(cbk) { // CALLBACK HELL! (Yet too cool)
         var eol = require('os').EOL;
+        
                 var logs = this.console[this.selected]
                 if (!logs) return
        var height = process.stdout.rows
        var width = process.stdout.columns
        
         process.stdout.write('\u001B[H\u001B[2r')
-      
+      this.redrawing = true;
       this.clearAnim(height * width,function() {
           process.stdout.write("\x1b[K")
           
@@ -78,7 +80,7 @@ this.stdin.setEncoding('utf8');
                   this.interval(width, function() {process.stdout.write("\x1b[1D")},function() {
                         process.stdout.write('\u001B[0r')
                       var sel = Math.max(logs.length - height,0);
-                      
+                      var self = this;
                       function set() {
                         var ind = 0;  
                       var int = setInterval(function() {
@@ -96,6 +98,7 @@ this.stdin.setEncoding('utf8');
                           } else {
                               clearInterval(int)
                              if (cbk) cbk()
+                             self.redrawing = false
                           }
                       },5)
                       }
@@ -144,6 +147,7 @@ this.log(0,"       |_|                      |___/            ")
  return true;
 }
     prompt(key) {
+         if (this.redrawing) return;
         if (key == '\u000D') { //enter
              process.stdout.write('\n')
         if (this.text) {this.parseCommands(this.text.toLowerCase())
@@ -152,14 +156,14 @@ this.log(0,"       |_|                      |___/            ")
        
         this.text = ""
         this.ind = this.commands.length
-        process.stdout.write('>')
+        if (!this.redrawing) process.stdout.write('>')
         
             return;
         } else if (key == '\u001B\u005B\u0041') { // up
       
             if (this.ind > 0) this.ind --;
                 this.text = this.commands[this.ind] || ""
-                 process.stdout.write('\r                                   ');
+                process.stdout.write('\r                                   ');
                     process.stdout.write('\r>' + this.text);
             return
                } else if (key == '\u001B\u005B\u0042') { // down
