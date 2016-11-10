@@ -50,7 +50,7 @@ this.stdin.setEncoding('utf8');
                    clearInterval(interval)
                 callback()   
                }
-           }.bind(this),3)
+           }.bind(this),2)
     }
     interval(num,func,call,time) {
         var int = setInterval(function() {
@@ -62,7 +62,7 @@ this.stdin.setEncoding('utf8');
             }
         }.bind(this),time)
     }
-    writeLog() { // CALLBACK HELL! (Yet too cool)
+    writeLog(cbk) { // CALLBACK HELL! (Yet too cool)
         var eol = require('os').EOL;
                 var logs = this.console[this.selected]
                 if (!logs) return
@@ -73,7 +73,8 @@ this.stdin.setEncoding('utf8');
       
       this.clearAnim(height * width,function() {
           process.stdout.write("\x1b[K")
-               this.interval(height,function() {process.stdout.write("\x1b[1A")},function() {
+          
+               this.interval(height + 2,function() {process.stdout.write("\x1b[1A")},function() {
                   this.interval(width, function() {process.stdout.write("\x1b[1D")},function() {
                         process.stdout.write('\u001B[0r')
                       var sel = Math.max(logs.length - height,0);
@@ -94,10 +95,11 @@ this.stdin.setEncoding('utf8');
                               ind ++;
                           } else {
                               clearInterval(int)
-                             
+                             if (cbk) cbk()
                           }
-                      },15)
+                      },7)
                       }
+                    
                       set()
                   }.bind(this),15)
                }.bind(this),20)

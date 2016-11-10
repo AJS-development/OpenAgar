@@ -10,6 +10,7 @@ module.exports = {
             },
             startv: require('./lib/startv.js'),
             stop: require('./lib/stop.js'),
+            redraw: require('./lib/redraw.js'),
             help: function(str,ss,log) {
             log("|-----------------Available Commands------------------|")
             log("| Help                     | Shows help for commands  |")
