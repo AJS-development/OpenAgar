@@ -28,7 +28,7 @@ module.exports = class template {
       this.dead = false;
       this.updateCode = 1;
       this.moveCode = 1;
-
+this.velocity = 0;
  this.name = "";
     this.color = {
      r: 0,  
