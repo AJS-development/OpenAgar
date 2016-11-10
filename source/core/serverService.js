@@ -48,7 +48,10 @@ module.exports = class ServerService {
         leaderBoardLen: 10,
         disconnectTime: 30
     }
-        var serv = new Main(true,0,"Main","Main",globalData,config);
+        var serv = new Main(true,0,"Main","Main",globalData,config,function(a) {
+            this.controller.shellService.log(0,a)
+        }.bind(this));
+        serv.selected = true
         this.servers = [];
         this.ids = 0;
         this.servers[0] = serv;
@@ -72,10 +75,15 @@ module.exports = class ServerService {
         
         if (this.prsCommand(str)) return
         if (!this.selected) return;
-        if (!this.selected.execCommand(str)) console.log("The command " + cmd[0] + " was not found! Type 'help' to view a list of commands.")
+        if (!this.selected.execCommand(str)) this.log("The command " + cmd[0] + " was not found! Type 'help' to view a list of commands.")
     }
     log(a) {
-      console.log(a)  
+      this.controller.shellService.log(0,a) 
+    }
+    select(a) {
+        this.selected.selected = false;
+        this.selected = this.servers[a]
+        this.servers[a].selected = true
     }
     prsCommand(str) {
       

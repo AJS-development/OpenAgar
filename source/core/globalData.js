@@ -21,10 +21,12 @@ module.exports = class GlobalData {
         this.data = {};
         this.config = config;
           this.id = 0;
+
     }
     getNextId() {
         return this.id ++;
     }
+   
     getData() {
         return this.data;
     }

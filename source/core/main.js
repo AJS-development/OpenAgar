@@ -28,14 +28,16 @@ const Commands = require('../commands')
 // const async = require("async");
 
 module.exports = class Main {
-    constructor(isMain,id,name,scname,globalData,config) {
+    constructor(isMain,id,name,scname,globalData,config,log) {
         this.isMain = isMain;
         this.id = id;
         this.name = name;
         this.scname = scname;
+   this.log = log;
         this.minfood = 500;
         this.clientLen = 0;
         this.toBeDeleted = [];
+        this.selected = false;
         this.food = 0;
         this.updateCode = 0;
         this.bots = [];
@@ -316,14 +318,12 @@ module.exports = class Main {
            client.socket.emit('lb',{lb:lb})
        })
     }
-    log(a) {
-        console.log(a)
-    }
+   
     execCommand(str) {
           var cmd = str.split(" ")
         var command = Commands.list[cmd[0]]
         if (command) {
-            command(str,this,this.log.bind(this))
+            command(str,this,this.log)
             return true;
         }
         return false;
@@ -574,7 +574,7 @@ module.exports = class Main {
         
     }
 })
-        console.log("Project N - An open source game")
+       
         setImmediate(this.loop);
     }
     setFlags(node,flags) {

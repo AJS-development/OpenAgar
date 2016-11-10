@@ -23,7 +23,9 @@ module.exports = class ShellService {
         this.commands = [];
         this.stdin = process.stdin;
         this.ind = 0;
+        this.console = []
 this.stdin.setRawMode(true);
+        this.selected = 0;
 this.stdin.resume();
 this.stdin.setEncoding('utf8');
         this.stdin.on('data', function(key){
@@ -31,18 +33,102 @@ this.stdin.setEncoding('utf8');
    this.prompt(key)
    
 
-
-    
+  
 }.bind(this));
 
     }
+    select(id) {
+        this.selected = id
+        this.writeLog()
+    }
+    clearAnim(amount,callback) {
+           process.stdout.write(" ")
+           var interval = setInterval(function() {
+                process.stdout.write(" ")
+                amount --;
+               if (amount <= 1) {
+                   clearInterval(interval)
+                callback()   
+               }
+           }.bind(this),3)
+    }
+    interval(num,func,call,time) {
+        var int = setInterval(function() {
+            func()
+            num --;
+            if (num <= 1) {
+                clearInterval(int)
+                call()   
+            }
+        }.bind(this),time)
+    }
+    writeLog() { // CALLBACK HELL! (Yet too cool)
+        var eol = require('os').EOL;
+                var logs = this.console[this.selected]
+                if (!logs) return
+       var height = process.stdout.rows
+       var width = process.stdout.columns
+       
+        process.stdout.write('\u001B[H\u001B[2r')
+      
+      this.clearAnim(height * width,function() {
+          process.stdout.write("\x1b[K")
+               this.interval(height,function() {process.stdout.write("\x1b[1A")},function() {
+                  this.interval(width, function() {process.stdout.write("\x1b[1D")},function() {
+                        process.stdout.write('\u001B[0r')
+                      var sel = Math.max(logs.length - height,0);
+                      
+                      function set() {
+                        var ind = 0;  
+                      var int = setInterval(function() {
+                          if (logs[sel]) {
+                              var d = logs[sel].charAt(ind)
+                              if (!d) {
+                                  process.stdout.write(eol)
+                                  
+                                  sel ++;
+                                  clearInterval(int)
+                                  set()
+                              }
+                              process.stdout.write(d)
+                              ind ++;
+                          } else {
+                              clearInterval(int)
+                             
+                          }
+                      },15)
+                      }
+                      set()
+                  }.bind(this),15)
+               }.bind(this),20)
+           
+      
+   
+  
+      
+        /*
+         
+      for (var i = 0; i < logs.length; i ++) {
+            process.stdout.write(logs[i] +"\n")
+      }
+           */
+          
+      }.bind(this))
+         
+    }
+     log(id,a,log) {
+         if (id == this.selected && !log) console.log(a)
+        if (!this.console[id]) this.console[id] = [];
+        this.console[id].push(a)
+    }
     drawSplash() {
-console.log("   ___                      _                    ")
-console.log("  / _ \\ _ __   ___ _ __    / \\   __ _  __ _ _ __ ")
-console.log(" | | | | '_ \\ / _ \\ '_ \\  / _ \\ / _` |/ _` | '__|")
-console.log(" | |_| | |_) |  __/ | | |/ ___ \\ (_| | (_| | |   ")
-console.log("  \\___/| .__/ \\___|_| |_/_/   \\_\\__, |\\__,_|_|   ")
-console.log("       |_|                      |___/            ")
+
+this.log(0,"   ___                      _                    ")
+this.log(0,"  / _ \\ _ __   ___ _ __    / \\   __ _  __ _ _ __ ")
+this.log(0," | | | | '_ \\ / _ \\ '_ \\  / _ \\ / _` |/ _` | '__|")
+this.log(0," | |_| | |_) |  __/ | | |/ ___ \\ (_| | (_| | |   ")
+this.log(0,"  \\___/| .__/ \\___|_| |_/_/   \\_\\__, |\\__,_|_|   ")
+this.log(0,"       |_|                      |___/            ")
     }
     init() {
         this.drawSplash()
@@ -97,8 +183,10 @@ console.log("       |_|                      |___/            ")
     }
 
     parseCommands(str) {
+        
       //  this.controller.logger.onCommand(str);
         if (str === '') return;
+        this.log(this.selected,">" + str,true)
         this.controller.execCommand(str)
     }
 };

@@ -10,11 +10,11 @@ module.exports = {
             },
             startv: require('./lib/startv.js'),
             stop: require('./lib/stop.js'),
-            help: function() {
-            console.log("|-----------------Available Commands------------------|")
-            console.log("| Help                     | Shows help for commands  |")
-            console.log("| Stop                     | Stops the server         |")
-            console.log("|-----------------------------------------------------|")
+            help: function(str,ss,log) {
+            log("|-----------------Available Commands------------------|")
+            log("| Help                     | Shows help for commands  |")
+            log("| Stop                     | Stops the server         |")
+            log("|-----------------------------------------------------|")
                 
             }
         }
