@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/AJS-development/OpenAgar.svg?branch=master)](https://travis-ci.org/AJS-development/OpenAgar) [![Forums](https://img.shields.io/badge/Forums-Ogarul.io-blue.svg)](https://forum.ogarul.io)
 # OpenAgar
-Open source web game.
+
+Hello, we are AJS Development! We are the same team that brought you OgarUl! In AJS, we have many members. The main members are Andrews54757 and LegitSoulja. We decided to create this project after OgarUl's Ogar infrastructure couldnt hold with all those cool features! So, we created our own, completely from scratch. Now, OpenAgar is the most efficient Agar.io server available! Twice as efficient as MultiOgar, a gazillion times efficient than OgarUL, and 5 times efficient than Ogar! We also decided to make OpenAgar as interesting as possible! New physics, new features, new gameplay and more!
 
 ## What game?
 It is a web game similar to Agar.io
@@ -34,3 +35,9 @@ There are commands you can type in command line.
 |help       |Displays a list of commands|
 |startv     |Start visual gui, not implemented|
 |stop       |Stops the server|
+
+
+## Developers
+
+* Andrews54757
+* LegitSoulja
