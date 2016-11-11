@@ -26,6 +26,7 @@ const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
 const Commands = require('../commands')
 // const async = require("async");
+const PluginService = require('./pluginService.js')
 
 module.exports = class Main {
     constructor(isMain,id,name,scname,globalData,config,log) {
@@ -34,6 +35,7 @@ module.exports = class Main {
         this.name = name;
         this.scname = scname;
    this.log = log;
+     
         this.minfood = 500;
         this.clientLen = 0;
         this.updLb = true;
@@ -82,6 +84,7 @@ module.exports = class Main {
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
+           this.pluginService = new PluginService(this)
        this.addBots(config.serverBots)
     }
     addMinions(player,num) {
@@ -221,6 +224,7 @@ module.exports = class Main {
     }
     
     spawn(player) {
+       if (!this.pluginService.send('beforeSpawn',{player:player,main:this})) return
         if (!player.isBot) player.gameData.chatname = this.getChatName(player)
     
         var pos = this.foodService.getRandomPos();
@@ -612,6 +616,7 @@ module.exports = class Main {
     }
     
     init() {
+       this.pluginService.init() 
         // initiate server launch
     }
     stop() {
@@ -620,8 +625,5 @@ module.exports = class Main {
     pause() {
         // pause the server
     }
-    start() {
-        // starts the server
-        setImmediate(this.loop);
-    }
+   
 };

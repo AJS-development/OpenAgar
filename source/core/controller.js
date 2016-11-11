@@ -44,8 +44,9 @@ function Controller() {
         };
         
         this.globalData = new GlobalData(this.config); 
+     this.shellService = new ShellService(this)
         this.serverService = new ServerService(this,this.globalData);
-    this.shellService = new ShellService(this)
+   
     }
      
     Controller.prototype.start = function() {
