@@ -90,6 +90,11 @@ module.exports = class Player {
         this.minions.push(minion)
    
     }
+    setMass(m) {
+        this.cells.forEach((cell)=>{
+            cell.updateMass(m)
+        })
+    }
     removeMinion(minion) {
     var ind = this.minions.indexOf(minion)
     if (ind != -1) this.minions.splice(ind,1)
@@ -147,14 +152,14 @@ module.exports = class Player {
         this.cellHash[cell.id] = true;
         this.socket.emit('mes',{type: "addNode",id:cell.id})
     }
-    changeColor(color) {
+    setColor(color) {
         this.gameData.color = color
         this.cells.forEach((cell)=>{
             cell.color = color
         })
         
     }
-    changeName(name) {
+    setName(name) {
          this.gameData.name = name
         this.cells.forEach((cell)=>{
             cell.name = name
@@ -163,6 +168,7 @@ module.exports = class Player {
         
         
     }
+    
     removeCell(cell) {
         var a = this.cells.indexOf(cell)
         if (a != -1) this.cells.splice(a,1)
@@ -220,7 +226,7 @@ module.exports = class Player {
                 
                 if (this.playing) return;
                 this.sendData = true;
-                this.gameData.name = (msg.name) ? msg.name : "";
+                this.setName(msg.name || "");
                 
                 this.server.spawn(this)
                  this.resetView()

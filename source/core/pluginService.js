@@ -16,11 +16,12 @@
 var pluginParser = require('./pluginParser.js')
 module.exports = class PluginService {
     constructor(main) {
-        this.vars = ["configs","commands"]
+        this.vars = ["configs","commands","addToHelp"]
         this.main = main
         this.plugins = {};
         this.pdata = {}
-        
+        this.commands = {};
+        this.addToHelp = [];
         this.data = {
             main: main,
             log: main.log
@@ -35,6 +36,22 @@ module.exports = class PluginService {
         this.parser.init()  
         this.plugins = this.parser.getPlugins()
         this.pdata = this.parser.getData()
+        var command = this.getData('commands')
+      var help = this.getData('addToHelp')
+      this.commands = {};
+     
+          this.addToHelp = [];
+      help.forEach((help)=>{
+                   this.addToHelp = this.addToHelp.concat(help)
+                   })
+            command.forEach((comm)=>{
+                if (!comm) return;
+               for (var i in comm) {
+                    this.commands[i] = comm[i]
+                    
+                }
+            })
+        
     }
     getData(data) {
         if (data) {
@@ -60,9 +77,7 @@ module.exports = class PluginService {
         return this.plugins
     }
     
-    getData() {
-        return this.pdata
-    }
+  
     
     
 }

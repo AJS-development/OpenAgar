@@ -334,8 +334,38 @@ module.exports = class Main {
             command(str,this,this.log)
             return true;
         }
+        var command = this.pluginService.commands[cmd]
+        if (command) {
+             command(str,this,this.log)
+             return true;
+        }
         return false;
    
+    }
+    getPlayer(id) {
+        var final = false;
+        if (this.clients.every((client)=>{
+            if (client.id == id){
+                final = client
+                 return false
+            }
+            return true;
+        })) return final
+            if (this.bots.every((client)=>{
+            if (client.id == id){
+                final = client
+                 return false
+            }
+            return true;
+        })) return final
+            if (this.minions.every((client)=>{
+            if (client.id == id){
+                final = client
+                 return false
+            }
+            return true;
+        })) return final
+        
     }
     splitCell(cell,angle,speed,decay) {
         var pos = {
