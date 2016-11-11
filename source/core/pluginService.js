@@ -14,6 +14,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var pluginParser = require('./pluginParser.js')
+var fs = require('fs')
 module.exports = class PluginService {
     constructor(main) {
         this.vars = ["configs","commands","addToHelp"]
@@ -51,7 +52,9 @@ module.exports = class PluginService {
                     
                 }
             })
-        
+        this.plugins.forEach((plugin)=>{
+       
+        })
     }
     getData(data) {
         if (data) {
