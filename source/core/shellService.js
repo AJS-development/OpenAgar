@@ -124,7 +124,7 @@ this.stdin.setEncoding('utf8');
      log(id,a,log) {
          if (id == this.selected && !log) console.log(a)
         if (!this.console[id]) this.console[id] = [];
-        this.console[id].push(a)
+        this.console[id].push(a.toString())
     }
     drawSplash() {
 
