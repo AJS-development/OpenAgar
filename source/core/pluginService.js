@@ -15,6 +15,7 @@
 */
 var pluginParser = require('./pluginParser.js')
 var fs = require('fs')
+var ini = require('../modules/ini.js')
 module.exports = class PluginService {
     constructor(main) {
         this.vars = ["configs","commands","addToHelp"]
@@ -28,7 +29,9 @@ module.exports = class PluginService {
             log: main.log
             
         }
-        this.parser = new pluginParser(function(a) {main.log("\x1b[32m[PluginService]\x1b[0m " + a)}.bind(this),__dirname + "/../plugins",this.vars,this.data,_version,false)
+        this.configs = ini.parse(fs.readFileSync(__dirname + '/../settings/pluginConfig.ini',"utf8"))
+        if (this.configs.allowed) this.configs.allowed = this.configs.allowed.split(";")
+        this.parser = new pluginParser(function(a) {main.log("\x1b[32m[PluginService]\x1b[0m " + a)}.bind(this),__dirname + "/../plugins",this.vars,this.data,_version,this.configs.allowed,this.configs.dev == 1)
     
  
     } 
