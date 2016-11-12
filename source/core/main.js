@@ -334,7 +334,7 @@ module.exports = class Main {
             command(str,this,this.log)
             return true;
         }
-        var command = this.pluginService.commands[cmd]
+        var command = this.pluginService.commands[cmd[0]]
         if (command) {
              command(str,this,this.log)
              return true;
