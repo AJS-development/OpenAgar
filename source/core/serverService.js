@@ -36,17 +36,24 @@ module.exports = class ServerService {
         boundWidth: 10000,
         boundHeight: 10000,
         playerSpeed: 40,
-        splitSpeed: 100,
+        splitSpeed: 50,
         splitDecay: 20,
-        playerMaxCells: 32,
+        playerMaxCells: 16,
         ejectedMass: 10,
-        ejectedSpeed: 200,
+        ejectedSpeed: 100,
         ejectedDecay: 5,
         serverBots: 0,
         playerMergeMult: -0.05,
         playerMerge: 8,
         leaderBoardLen: 10,
-        disconnectTime: 30
+        disconnectTime: 30,
+        maxVirusMass: 1000,
+        virusMass: 100,
+        virusFeedMin: 5,
+        maxVirus: 150,
+        minVirus: 80,
+        virusSpeed: 50,
+        virusDecay: 12
     }
         var serv = new Main(true,0,"Main","Main",globalData,config,function(a) {
             this.controller.shellService.log(0,a)

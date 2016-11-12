@@ -35,7 +35,7 @@ module.exports = class Main {
         this.name = name;
         this.scname = scname;
    this.log = log;
-     
+     this.viruses = 0;
         this.minfood = 500;
         this.clientLen = 0;
         this.updLb = true;
@@ -273,8 +273,8 @@ module.exports = class Main {
             */
             if (!cell) continue;
             var angle = Math.atan2(deltaY,deltaX)
-           var splitted = this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay)
-                           
+           var splitted = this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay, ~~(cell.mass/2))
+                            cell.updateMass(~~(cell.mass/2))
         splitted.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
                    cell.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
         }
@@ -367,14 +367,14 @@ module.exports = class Main {
         })) return final
         
     }
-    splitCell(cell,angle,speed,decay) {
+    splitCell(cell,angle,speed,decay,mass) {
         var pos = {
             x: cell.position.x,
             y: cell.position.y
         }
         var a = (cell.type == 0) ? "" : "m"
-        var node = this.addNode(pos,~~(cell.mass/2),cell.type,cell.owner,[],a)
-        cell.updateMass(~~(cell.mass/2))
+        var node = this.addNode(pos,mass,cell.type,cell.owner,[],a)
+       
         node.setEngine1(angle,speed,decay)
         return node
     }
@@ -422,11 +422,13 @@ module.exports = class Main {
           this.timer.updatePN += local - this.timer.time;
         this.timer.time = local;
       //  if (this.timer.passed <= 0) return
+      
           // 0.05 seconds
+
             if (this.timer.updatePN >= 50) { 
                 
                 this.updatePlayerNodes();
-               
+                this.updateMovingCells();
                 this.updateBots()
                this.timer.updatePN = 0;
             }
@@ -443,12 +445,13 @@ module.exports = class Main {
             if (this.timer.rslow >= 5) {
                 this.timer.rslow = 0;
                 this.playerCollision();
-                this.updateMovingCells();
+               
                  
                 // 1 second
                 if (this.timer.slow >= 10) {
                     this.timer.slow = 0;
                     this.checkFood();
+                    this.foodService.checkVirus()
                     this.checkMass();
                     this.updateMerge();
                     this.updateLB()
@@ -596,10 +599,10 @@ module.exports = class Main {
         });
     }
    
-    updateMovingCells() { // slow (1)
+    updateMovingCells() { // fast(0)
         this.getWorld().getNodes("moving").forEach((node)=>{
       
-          node.move(this,1)
+          node.move(this,0)
         });
     }
     

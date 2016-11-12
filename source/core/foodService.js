@@ -41,4 +41,19 @@ module.exports = class FoodService {
             this.main.addNode(pos,2,4);
         }
     }
+    checkVirus() {
+          if (this.main.viruses < this.main.getConfig().minVirus) {
+            this.addVirus(this.main.getConfig().minVirus- this.main.viruses);
+        } else {
+        // console.log(this.main.dataService.world.getNodes())
+        }
+    }
+    addVirus(m) {
+  
+         for (var i = 0; i < m; i ++) {
+            var pos = this.getRandomPos();
+            // console.log(pos)
+            this.main.addNode(pos,this.main.getConfig().virusMass,2);
+        }
+    }
 };

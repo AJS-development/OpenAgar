@@ -257,6 +257,10 @@ setPos(x,y) {
            
             var angle = Math.atan2(deltaY,deltaX)
         var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
+        if (speed == -1) {
+            m.deltaT += 0.5 
+            Velocity *= 0.5
+        } else
         if (speed == 0) {
              m.deltaT += 1 
         } else if (speed == 1) {
@@ -290,15 +294,23 @@ setPos(x,y) {
      
           var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
              var dx = 0;
+        if (speed == -1) {
+            Velocity *= 0.5
+             this.moveEngine.deltaT += 0.5
+              dx = m.velocityInit + (1/2 * m.acceleration * 0.25) 
+        } else 
           if (speed == 0) {
+              
               this.moveEngine.deltaT += 1
              dx = m.velocityInit + (1/2 * m.acceleration) 
         } else if (speed == 1) {
+             Velocity *= 2
             this.moveEngine.deltaT += 2
             dx = m.velocityInit * 2 + (1/2 * m.acceleration * 4)
         } else if (speed == 2) {
+             Velocity *= 4
             this.moveEngine.deltaT += 4
-             dx = m.velocityInit * 2 + (1/2 * m.acceleration * 16)
+             dx = m.velocityInit * 4 + (1/2 * m.acceleration * 16)
         } 
         
     
@@ -327,6 +339,9 @@ setPos(x,y) {
     var curve = m.deltaT * m.curveM + m.curveB;
         
         if (!curve) return;
+        if (speed == -1) {
+            curve *= 0.5
+        } else 
         if (speed == 1) {
             curve *= 2
         } else if (speed == 2) {
@@ -348,8 +363,8 @@ setPos(x,y) {
         
     }
  
-    
-  move(main,speed) { // Speed code: 0 = 0.05, 1 = 0.1, 2 = 0.2
+  
+  move(main,speed) { // Speed code:-1 = 0.25, 0 = 0.05, 1 = 0.1, 2 = 0.2
       if (this.moveEngine2.useEngine) this.calcMove2(main,speed)
     if (this.moveEngine.useEngine) this.calcMove(main,speed)
     
