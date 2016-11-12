@@ -34,7 +34,9 @@ module.exports = class virus extends template {
         this.nearby = [];
       
     }
-    
+    feed(node) {
+        
+    }
    
     doesCollide(node,main) {
         return true;
