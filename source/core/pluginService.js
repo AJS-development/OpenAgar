@@ -52,9 +52,9 @@ module.exports = class PluginService {
                     
                 }
             })
-        this.plugins.forEach((plugin)=>{
-       
-        })
+       for (var i in this.plugins) {
+           var plugin = this.plugins[i]
+       }
     }
     getData(data) {
         if (data) {
