@@ -1,7 +1,7 @@
 {
-  "name": "ProjectN",
+  "name": "OpenAgar",
   "version": "1.0.0",
-  "description": "Shh",
+  "description": "An open source web game",
   "main": "index.js",
   "engines": {
     "node": "5.9.0"
@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AJS-development/Project-Nehemiah"
+    "url": "https://github.com/AJS-development/OpenAgar"
   },
   "author": "AJS-development",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/AJS-development/Project-Nehemiah/issues"
+    "url": "https://github.com/AJS-development/OpenAgar/issues"
   },
-  "homepage": "https://github.com/AJS-development/Project-Nehemiah"
+  "homepage": "https://github.com/AJS-development/OpenAgar"
 }
