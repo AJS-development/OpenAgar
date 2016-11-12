@@ -21,7 +21,7 @@ It is a web game similar to Agar.io
 3. Make sure all the dependancies are installed
 4. Install npm dependancies `npm install`
 5. Run index.js using node `node index.js`
-6. Record the ID given and get the appropriete key.
+6. Record the ID given and get the appropriete key from staff.
 7. Paste your key into `key.txt` (command line: `nano key.txt`)
 8. Run index.js again
 9. Connect using `play.ogarul.io/new`
