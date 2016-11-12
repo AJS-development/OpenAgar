@@ -27,7 +27,7 @@ module.exports = class virus extends template {
           g: 255,
           b: 0
         }
-        
+        this.fed = 0;
         this.type = 4;
 
         this.moving = true;
