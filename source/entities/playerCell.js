@@ -115,9 +115,9 @@ module.exports = class cell extends template {
        
     }
     move(main, sp) {
-       
-          if (this.moveEngine2.useEngine) this.calcMove2(main,sp)
-          if (this.moveEngine.useEngine) this.calcMove(main,sp); this.moveToMouse(main,sp)
+       this.moveToMouse(main,sp)
+          if (this.moveEngine2.useEngine) this.calcMove2(main,sp);
+          if (this.moveEngine.useEngine) this.calcMove(main,sp); 
     
      
         
