@@ -556,7 +556,7 @@ module.exports = class Main {
             
             switch (check.type) {
                 case 0: // players
-                     if (check == node || check.mass > node.mass) return;
+                     if (check == node || check.mass  * 1.25 > node.mass) return;
                     if (check.owner == node.owner) {
                         
                         if (!node.canMerge || !check.canMerge) {
@@ -572,8 +572,13 @@ module.exports = class Main {
                     if (check.mass > node.mass) return;
                     list.push(check);
                     break;
+                case 2: // virus
+                    if (check == node || check.mass  * 1.33 > node.mass) return
+                    check.collide(node,this)
+                    return;
+                    break;
                 case 3: // ejectedmass
-                    
+                    if (check == node) return
                  if (check.getAge(this) > 300)
                      list.push(check)
                     

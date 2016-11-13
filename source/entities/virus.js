@@ -44,7 +44,7 @@ module.exports = class virus extends template {
                      | // ejected mass hits edge of virus
         
         */
-        this.addMass(node.mass)
+       
         if (this.mass > main.getConfig().maxVirusMass) this.updateMass(main.getConfig().maxVirusMass)
         
         
@@ -63,7 +63,7 @@ module.exports = class virus extends template {
             this.updateMass(main.getConfig().virusMass)
             
         }
-        main.removeNode(node)
+        node.eat(this,main)
     }
    split(angle,main) {
        main.splitCell(this,angle,main.getConfig().virusSpeed,main.getConfig().virusDecay,main.getConfig().virusMass)
@@ -81,9 +81,31 @@ module.exports = class virus extends template {
     }
      getEatRange() {
 
-     return this.size;  
+        return this.size * -0.5;  
     
    }
+    collide(node,main) {
+      var split =  main.getConfig().playerMaxCells - node.owner.cells.length;
+    var defaultmass = ~~(node.mass/(split + 2))
+    var big = defaultmass * 2 + defaultmass/2
+    var medium = defaultmass/2 + defaultmass
+    var angle = (Math.random() * 6.28318530718) // Math.floor(Math.random() * max) + min
+    node.updateMass(big)
+    this.eat(node,main)
+   
+    // need to divide angle in order to spread them evenly
+    // 360 degrees -> 2PI radians -> 6.28318530718
+    var increment = 6.28318530718 / (split + 1) // want to add some randomness
+    var g = ~~(split.length/2)
+    for (var i = 0; i < split; i ++) {
+       var mass = (i==0) ? medium : defaultmass;
+        main.splitCell(node,angle,main.getConfig().splitSpeed,main.getConfig().splitDecay,mass)
+        
+        angle += increment + (Math.random() * 0.03)
+        if (angle > 6.28318530718) angle += -6.28318530718// radians dims 0 < x < 2PI
+    }
+        
+    }
     move(main, sp) {
        
           if (this.moveEngine2.useEngine) this.calcMove2(main,sp)

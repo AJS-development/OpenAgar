@@ -81,6 +81,7 @@ module.exports = class cell extends template {
          var dif = add - this.mass
          this.owner.mass += dif
         this.mass = add
+        
         this.getSize()
         
         this.speed = Math.pow(this.mass, -1.0 / 4.5) * 50 / 40;
