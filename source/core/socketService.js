@@ -136,6 +136,11 @@ return CryptoJS.enc.Utf8.stringify(decrypted);
             if (i != -1) this.clients[i] = false;
             
         }.bind(this))
+        socket.on('chat',function(data) {
+            if (!data) return;
+            data = data.toString()
+            socket._player.onChat(data)
+        })
         this.clients.push(socket);
     }
 };

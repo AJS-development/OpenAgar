@@ -44,22 +44,22 @@ module.exports = class Player {
         this.moveView = [];
         this.upmoveHash = {};
         this.moveHash = {};
-        
+       
         this.cellHash = {};
        this.timer = {
         view: 0,
           second: 0
        }
-        this.gameData = {
+         this.gameData = {
             name: "",
             color: server.getRandomColor(),
-            chatname: "",
+            chatColor: server.getRandomColor(),
             reservedChatNames: [],
             chatName: "",
            chkDeath: false,
+            chatBan: false,
             reservedNamesMap: []
         }
-        
         this.killer = false;
         this.globalData = globalData
         this.view = {
@@ -90,6 +90,12 @@ module.exports = class Player {
         this.minions.push(minion)
    
     }
+    msg(m,n,c,i) {
+         var color = c || {'r': 155, 'g': 155, 'b': 155};
+        var id = i || -1
+        var name = n || "[OpenAgar]"
+        this.socket.emit('chat',{color:color,name:name,msg:m,id:id})
+    }
     setMass(m) {
         this.cells.forEach((cell)=>{
             cell.updateMass(m)
@@ -101,6 +107,10 @@ module.exports = class Player {
     }
     updateMinions() {
         
+        
+    }
+    onChat(msg) {
+        this.server.addChat(this,msg)
         
     }
     changeServers(msg,servers) {
@@ -120,13 +130,14 @@ module.exports = class Player {
         this.minions = [];
         this.cells = [];
         this.visible = [];
-      this.gameData = {
+        this.gameData = {
             name: "",
             color: server.getRandomColor(),
-            chatname: "",
+            chatColor: server.getRandomColor(),
             reservedChatNames: [],
             chatName: "",
            chkDeath: false,
+            chatBan: false,
             reservedNamesMap: []
         }
         this.owning = []

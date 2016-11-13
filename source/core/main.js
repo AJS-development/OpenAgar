@@ -43,6 +43,8 @@ module.exports = class Main {
         this.selected = false;
         this.food = 0;
         this.updateCode = 0;
+        this.chatId = 1;
+        this.chat = [];
         this.bots = [];
         this.deleteR = "";
         this.chatNames = [];
@@ -106,6 +108,36 @@ module.exports = class Main {
             
         }
     }
+    removeChat(id) {
+        if (this.chat.every((ch,i)=>{
+            if (ch.id != id) return true;
+        this.chat.splice(i,1)
+        return false
+        })) return false;
+        this.clients.forEach((client)=>{
+            client.socket.emit('chat',{remove:id})
+        })
+        return true;
+    }
+    addChat(player,msg) {
+        var name = player.gameData.chatName
+        if (!name) return player.msg("Your chatname is not set! Please join the game")
+        if (player.gameData.chatBan) return player.msg("You are banned from the chat!")
+        var data = {
+            id: this.chatId ++,
+            name: player.gameData.chatName,
+            color: player.gameData.chatColor,
+            msg: msg
+            
+        }
+  
+        this.chat.push(data)
+        if (this.chat.length >= 15) this.chat.splice(0,1)
+        this.clients.forEach((client)=>{
+            client.socket.emit('chat',data)
+        })
+    }
+  
     getGlobal() {
         return this.dataService.globalData
     }
@@ -225,7 +257,7 @@ module.exports = class Main {
     
     spawn(player) {
        if (!this.pluginService.send('beforeSpawn',{player:player,main:this})) return
-        if (!player.isBot) player.gameData.chatname = this.getChatName(player)
+        if (!player.isBot) player.gameData.chatName = this.getChatName(player)
     
         var pos = this.foodService.getRandomPos();
        if (player.name == "") player.name = "An Unamed Cell"; this.addNode(pos,this.getConfig().startMass,0,player);
