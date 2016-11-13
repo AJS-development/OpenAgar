@@ -30,7 +30,7 @@ module.exports = class PluginService {
             
         }
         this.configs = ini.parse(fs.readFileSync(__dirname + '/../settings/pluginConfig.ini',"utf8"))
-        if (this.configs.allowed) this.configs.allowed = this.configs.allowed.split(";")
+        if (this.configs.allowed) this.configs.allowed = this.configs.allowed.split(",")
         this.parser = new pluginParser(function(a) {main.log("\x1b[32m[PluginService]\x1b[0m " + a)}.bind(this),__dirname + "/../plugins",this.vars,this.data,_version,this.configs.allowed,this.configs.dev == 1)
     
  
