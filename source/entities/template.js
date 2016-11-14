@@ -186,9 +186,10 @@ setPos(x,y) {
      return this.size * -0.4;   
     
    }
-    collisionCheckCircle(node) {
+    collisionCheckCircle(node,no) {
       var distance = this.getDistance(node.position.x,node.position.y);
-      if (distance <= this.size + node.getEatRange()) return true;
+        var s = (no) ? node.size : node.getEatRange()
+      if (distance <= this.size + s) return true;
       return false;
    }
     collisionCheckSquare(bounds) {
