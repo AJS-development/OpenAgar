@@ -29,7 +29,7 @@ module.exports = class EjectedMass extends template {
        this.viruses.every((virus)=>{
            if (virus.type != 2) return true;
          
-           if (!virus.collisionCheckCircle(this)) return true;
+           if (!virus.collisionCheckCircle(this,true)) return true;
            virus.feed(this,main)
          
            return false
