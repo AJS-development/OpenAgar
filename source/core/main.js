@@ -360,6 +360,7 @@ module.exports = class Main {
     }
    
     execCommand(str) {
+        try {
           var cmd = str.split(" ")
         var command = Commands.list[cmd[0]]
         if (command) {
@@ -372,7 +373,9 @@ module.exports = class Main {
              return true;
         }
         return false;
-   
+        } catch (e) {
+         this.log("ERROR: " + e)   
+        }
     }
     getPlayer(id) {
         var final = false;
