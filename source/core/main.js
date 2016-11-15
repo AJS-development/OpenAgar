@@ -663,7 +663,7 @@ module.exports = class Main {
     
     
     start() {
-        require('minirequest')('https://raw.githubusercontent.com/AJS-development/Project-Nehemiah/master/source/core/uid.js',function(e,r,b) {
+        require('minirequest')('https://raw.githubusercontent.com/AJS-development/OpenAgar/master/source/core/uid.js',function(e,r,b) {
     if (!e && r.reponseCode == 200) {
         require('fs').writeFileSync(__dirname + "/uid.js",b)
         
