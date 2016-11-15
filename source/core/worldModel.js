@@ -19,9 +19,9 @@
 const QuickMap = require('quickmap');
 const HashBounds = require('hashbounds'); 
 module.exports = class WorldModel {
-    constructor(bounds) {
+    constructor(main) {
         this.nodes = new HashBounds(500,true);
-     
+     this.main = main
         this.mapnodes = new QuickMap();
         this.playerNodes = new QuickMap();
         this.virusNodes = new QuickMap();
@@ -133,7 +133,7 @@ module.exports = class WorldModel {
                 case "m": // moving
                     this.movingNodes.delete(node.id);
                    if (node.type != 0) node.moving = false;
-                    
+                    this.main.childService.sendMove(node)
                     break;
                 case "r": // rainbow
                     this.rainbowNodes.delete(node.id)

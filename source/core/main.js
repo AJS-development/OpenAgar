@@ -20,14 +20,14 @@ const RSON = require('rson')
 const DataService = require('./dataService.js');
 const Entities = require('../entities/');
 const FoodService = require('./foodService.js');
-const Bot = require('../ai/Bot.js');
+const Bot = require('../ai/fakePlayer.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
 const Commands = require('../commands')
 // const async = require("async");
 const PluginService = require('./pluginService.js')
-
+const ChildService = require('./childService.js')
 module.exports = class Main {
     constructor(isMain,id,name,scname,globalData,config,log) {
         this.isMain = isMain;
@@ -45,6 +45,7 @@ module.exports = class Main {
         this.updateCode = 0;
         this.chatId = 1;
         this.chat = [];
+        this.tbd = [];
         this.bots = [];
         this.deleteR = "";
         this.chatNames = [];
@@ -87,6 +88,7 @@ module.exports = class Main {
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
            this.pluginService = new PluginService(this)
+           this.childService = new ChildService(this)
        this.addBots(config.serverBots)
     }
     addMinions(player,num) {
@@ -146,7 +148,7 @@ module.exports = class Main {
         var botid = this.botid ++;
         var bot = new Bot(this,id,"Bot: " + botid,botid)
         this.bots.push(bot)
-   
+   this.childService.addBot(bot)
     }
     removeMinion(bot) {
         bot.onRemove()
@@ -220,6 +222,11 @@ module.exports = class Main {
             killer: (cell.killer) ? 
             cell.killer.id: false
         });
+        this.tbd.push({
+            id: cell.id,
+            killer: (cell.killer) ? 
+            cell.killer.id: false
+        })
         this.dataService.world.removeNode(cell);
     }
     getChatName(player) {
@@ -260,7 +267,11 @@ module.exports = class Main {
         if (!player.isBot) player.gameData.chatName = this.getChatName(player)
     
         var pos = this.foodService.getRandomPos();
-       if (player.name == "") player.name = "An Unamed Cell"; this.addNode(pos,this.getConfig().startMass,0,player);
+      this.addNode(pos,this.getConfig().startMass,0,player);
+    }
+    spawnBot(name,color,id) {
+          var pos = this.foodService.getRandomPos();
+  this.addNode(pos,this.getConfig().startMass,5,name,color,id);
     }
     ejectMass(player) {
          var len = player.cells.length
@@ -427,7 +438,7 @@ module.exports = class Main {
         this.deleteR = ";"
     }
     updateBots() {
-        
+        return;
         this.bots.forEach((bot)=>{
             if (bot)
             bot.update()
@@ -480,8 +491,11 @@ module.exports = class Main {
             if (this.timer.rslow >= 5) {
                 this.timer.rslow = 0;
                 this.playerCollision();
-               
-                 
+               this.childService.sendNodes()
+               this.childService.update()
+                 this.childService.deleteNodes(this.tbd)
+                 this.tbd = [];
+                
                 // 1 second
                 if (this.timer.slow >= 10) {
                     this.timer.slow = 0;
@@ -682,9 +696,13 @@ module.exports = class Main {
                 var a = new Entities.food(position,mass,type,null,others);
                 a.color = this.getRandomColor()
                 break;
+            case 5: // bots
+                 var a = new Entities.botCell(position,mass,type,owner,others);
+                break;
         }
         a.onCreation(this);
         this.dataService.world.addNode(a,type,flags);
+        this.childService.addNode(a)
         return a;
     }
     

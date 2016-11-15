@@ -23,6 +23,6 @@ module.exports = class DataService {
         this.globalData = globalData;
         this.config = config;
        
-        this.world = new WorldModel(main.bounds);
+        this.world = new WorldModel(main);
     }
 };

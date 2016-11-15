@@ -20,7 +20,7 @@ var template = require('./template.js');
 module.exports = class cell extends template {
     constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
-        this.name = owner.gameData.name;
+        this.name = name;
         this.color = owner.gameData.color;
         this.mergeage = 0;
         this.canMerge = false;
