@@ -19,8 +19,9 @@ module.exports = class Manager {
         
            if (this.addedHash[node.id]) {
                
-           var node = this.map.get(node.id)
-               node.set(node)
+           var n = this.map.get(node.id)
+               n.set(node)
+                      this.nodes.update(n)
                return;
                
                };
@@ -28,10 +29,10 @@ module.exports = class Manager {
             this.addedHash[node.id] = true;
             var owner = (node.owner) ? this.bots.get(node.owner) : false
             
-            node = new Node(node,owner)
+            var n = new Node(node,owner)
        
-            this.nodes.insert(node)
-            this.map.set(node.id,node)
+            this.nodes.insert(n)
+            this.map.set(node.id,n)
             
         })
     }
@@ -57,8 +58,15 @@ module.exports = class Manager {
     getConfig() {
         return this.config
     }
-    moveCode() {
-        
+    moveCode(nodes) {
+        nodes.forEach((node)=>{
+            var n = this.map.get(node.id)
+            if (n) {
+             n.position.x = n.x
+                n.position.y = n.y
+                this.nodes.update(n)
+            }
+        })
     }
     stop() {
         clearInterval(this.interval)
