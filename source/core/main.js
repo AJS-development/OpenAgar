@@ -25,7 +25,7 @@ const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
 const Commands = require('../commands')
-// const async = require("async");
+
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 module.exports = class Main {
