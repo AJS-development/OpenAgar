@@ -21,7 +21,7 @@ var GlobalData = require('./globalData.js');
 var request = require('minirequest')
 var UID = require('./uid.js');
 Util = require('./utilities.js')
-_version = "2.8.1"
+_version = "2.9.3"
 _key = ""
 try {
     try {_key = parseInt(require('fs').readFileSync(__dirname + '/../../key.txt',"utf8"))} catch(j){
