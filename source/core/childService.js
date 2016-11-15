@@ -34,6 +34,7 @@ module.exports = class childService {
     onData(data) {
         
         data = JSON.parse(data)
+        
      // console.log(data)
         data.forEach((bot)=>{
             if (bot.action) {
@@ -79,7 +80,7 @@ this.send(5,{id: bot.id, bot: bot.botid})
       
   }
     deleteNodes(nodes) {
-        
+        if (nodes[0])
         this.send(2,{nodes:nodes})
        
     }
@@ -93,7 +94,9 @@ this.send(5,{id: bot.id, bot: bot.botid})
     }
     update() {
         var nodes = this.main.getWorld().getNodes('player')
+        
         nodes.forEach((node)=>{
+           
             if (node.updateCode != this.updHash[node.id]) {
                 this.updHash[node.id] = node.updateCode
                 this.addNode(node)
@@ -107,8 +110,9 @@ this.send(5,{id: bot.id, bot: bot.botid})
             }
             
         })
-         if (this.movCode) this.send(3,{nodes:this.moveCode})
+         if (this.movCode[0]) this.send(3,{nodes:this.movCode})
          this.movCode = [];
+        
     }
     
   sendNodes() {

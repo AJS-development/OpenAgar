@@ -7,7 +7,7 @@ module.exports = class Manager {
     constructor() {
         this.nodes = [];
         this.addedHash = [];
-         this.nodes = new HashBounds(500);
+         this.nodes = new HashBounds(500,true);
         this.toSend = [];
         this.map = new QuickMap()
         this.bots = new QuickMap()
@@ -16,7 +16,7 @@ module.exports = class Manager {
     addNodes(nodes) {
 
         nodes.forEach((node)=>{
-        
+    
            if (this.addedHash[node.id]) {
                
            var n = this.map.get(node.id)
@@ -50,6 +50,10 @@ module.exports = class Manager {
           node.onDelete(this)
     }
     deleteNodes(nodes) {
+        nodes.forEach((node)=>{
+            var n = this.map.get(node.id)
+            if (n) this.deleteNode(n)
+        })
         
     }
     asign() {
@@ -59,9 +63,11 @@ module.exports = class Manager {
         return this.config
     }
     moveCode(nodes) {
+      
         nodes.forEach((node)=>{
             var n = this.map.get(node.id)
             if (n) {
+                console.log(n.x,n.y)
              n.position.x = n.x
                 n.position.y = n.y
                 this.nodes.update(n)

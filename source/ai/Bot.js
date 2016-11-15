@@ -45,7 +45,7 @@ this.playing = false;
     }
   
    onDeath() {
-      
+      this.playing = false;
       
    }
     spawn() {
@@ -73,6 +73,7 @@ setRandom() {
     var a = this.a
         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y
+         
 }
   update() { // 0.5 sec
    
@@ -82,6 +83,7 @@ setRandom() {
 
        //   if (this.center.x == this.mouse.x || this.center.y == this.mouse.y) 
       this.setRandom()
+      
           // this.checkDeath()
           /*
       if (this.timers.changeDir >= 20) {
@@ -101,7 +103,9 @@ setRandom() {
          if (this.cells.length == 0) return
         var totalSize = 1.0;
         var x = 0, y = 0;
+       // console.log(this.cells)
         this.cells.forEach((cell)=>{
+            
             if (!cell) return
             x += cell.position.x
             y += cell.position.y
@@ -131,6 +135,8 @@ setRandom() {
     removeCell(cell) {
         var ind = this.cells.indexOf(cell)
         if (ind != -1) this.cells.splice(ind,1)
+        console.log(this.cells.length)
+        if (this.cells.length == 0) return this.onDeath()
     }
   
 }
