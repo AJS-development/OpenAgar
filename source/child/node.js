@@ -36,7 +36,7 @@ module.exports = class Node {
         return this.mass
     }
     onDelete(main) {
-       if (this.bot) this.bot.removeCell(this)
+       if (this.owner) this.owner.removeCell(this)
     }
     
     
