@@ -75,7 +75,7 @@ module.exports = class Manager {
              try {
              process.send(JSON.stringify(this.toSend))
              } catch (e) {
-               
+               process.exit(0)
              }
              this.toSend = [];
          }.bind(this),1000) 
