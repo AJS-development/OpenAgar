@@ -67,9 +67,9 @@ module.exports = class Manager {
         nodes.forEach((node)=>{
             var n = this.map.get(node.id)
             if (n) {
-                console.log(n.x,n.y)
-             n.position.x = n.x
-                n.position.y = n.y
+               
+             n.position.x = node.x
+                n.position.y = node.y
                 this.nodes.update(n)
             }
         })
