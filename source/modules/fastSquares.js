@@ -8,14 +8,18 @@ module.exports = class FastSquares {
  init() {
   
  
-for (var i = 0; i < 1000000; i ++) {
+for (var i = 0; i < 2000000; i ++) {
  this.lib[i] = Math.sqrt(i)
 }
   
   
  }
    sqrt(a) {
-    return this.lib[~~a]
+   var a = this.lib[~~a]
+   if (a === undefined) {
+   return Math.sqrt(~~a)
+   }
+    return a
    }
  
 }
