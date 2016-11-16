@@ -99,20 +99,15 @@ setPos(x,y) {
       this.speed = Math.pow(this.mass, -1.0 / 4.5) * 50 / 40;
       return this.speed
    }
-    getDistApprox(x1,y1,x2,y2) { // faster than getDistance but less accurate
-           if (!x2) x2 = this.position.x;
-       if (!y2) y2 = this.position.y;
-      var distx = x1 - x2
-      var disty = y1 - y2
-        var angle = Math.atan2(disty,distx)
-        return Math.abs(disty / Math.sin(angle));
-    }
+  
    getDistance(x1,y1,x2,y2) {
        if (!x2) x2 = this.position.x;
        if (!y2) y2 = this.position.y;
       var distx = x1 - x2
       var disty = y1 - y2
-      return ~~(Math.sqrt(distx * distx + disty * disty))
+
+      return Sqrt.sqrt(distx * distx + disty * disty)
+    //  return ~~(Math.sqrt(distx * distx + disty * disty))
    }
   addMass(m) {
       // console.log(m)

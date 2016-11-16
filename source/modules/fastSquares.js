@@ -13,11 +13,12 @@ module.exports = class FastSquares {
 for (var i = 0; i < 10000000; i ++) {
  this.lib[i] = Math.sqrt(i)
 }
-   fs.writeFileSync(__dirname + './squares.json',JSON.stringify(this.lib))
+   fs.writeFileSync(__dirname + '/squares.json',JSON.stringify(this.lib))
    console.log("Generated library")
   }
+ }
    sqrt(a) {
     return this.lib[~~a]
    }
- }
+ 
 }
