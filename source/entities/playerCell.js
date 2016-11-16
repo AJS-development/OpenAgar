@@ -102,7 +102,7 @@ module.exports = class cell extends template {
         distx = mouse.x - this.position.x,
         disty = mouse.y - this.position.y,
         // y^2 = x^2 + b^2 -> y = sq(x^2 + b^2)
-        dist = Math.floor(Math.sqrt(distx * distx + disty * disty));
+        dist = ~~(Sqrt.sqrt(distx * distx + disty * disty));
         var angle = Math.atan2(disty,distx)
         if (!dist) return; // dont want 0
         // want cell to slow down as it gets closer to mouse
