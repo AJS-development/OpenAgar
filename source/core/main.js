@@ -268,6 +268,7 @@ module.exports = class Main {
     
         var pos = this.foodService.getRandomPos();
       this.addNode(pos,this.getConfig().startMass,0,player);
+    
     }
     spawnBot(name,color,id) {
           var pos = this.foodService.getRandomPos();

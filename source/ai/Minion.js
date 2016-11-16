@@ -25,6 +25,7 @@ module.exports = class Minion {
       this.isBot = true;
       this.isMinion = true;
   this.mouse = this.parent.mouse
+
     this.center = {
      x: 0,
         y: 0
@@ -67,8 +68,7 @@ module.exports = class Minion {
                 
                
                 this.server.spawn(this)
-                this.calcView()
-                this.setRandom()
+        
                 this.playing = true;   
     }
  getScore(re) {

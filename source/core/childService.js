@@ -96,11 +96,12 @@ this.send(5,{id: bot.id, bot: bot.botid})
         var nodes = this.main.getWorld().getNodes('player')
         
         nodes.forEach((node)=>{
-           
+         
             if (node.updateCode != this.updHash[node.id]) {
                 this.updHash[node.id] = node.updateCode
                 this.addNode(node)
             } else if (node.moveCode != this.movHash[node.id]) {
+                
                 this.movHash[node.id] = node.moveCode
             this.movCode.push({
                 id: node.id,
