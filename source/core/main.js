@@ -89,7 +89,7 @@ module.exports = class Main {
         this.collisionHandler = new CollisionHandler(this)
            this.pluginService = new PluginService(this)
            this.childService = new ChildService(this)
-       this.addBots(500)
+       this.addBots(config.serverBots)
     }
     addMinions(player,num) {
         for (var i = 0; i < num; i ++) {

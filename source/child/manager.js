@@ -45,6 +45,7 @@ module.exports = class Manager {
     }
     deleteNode(node) {
         node.destroyed = true;
+        node.dead = true;
          this.nodes.delete(node)
           this.map.delete(node.id)
           node.onDelete(this)

@@ -135,7 +135,7 @@ setRandom() {
     removeCell(cell) {
         var ind = this.cells.indexOf(cell)
         if (ind != -1) this.cells.splice(ind,1)
-        console.log(this.cells.length)
+       // console.log(this.cells.length)
         if (this.cells.length == 0) return this.onDeath()
     }
   

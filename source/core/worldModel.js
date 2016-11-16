@@ -64,7 +64,11 @@ module.exports = class WorldModel {
     }
     
     getNextID() {
-        if (this.lastID > 10000) this.lastID = 0;
+        if (this.lastID > 1000000) {
+            this.lastID = 0;
+    
+        }
+   
         return this.lastID ++;
     }
     update(node) {
@@ -150,6 +154,7 @@ module.exports = class WorldModel {
     }
     
     removeNode(node) {
+       
         this.nodes.delete(node);
   
       this.rainbowNodes.delete(node.id)
