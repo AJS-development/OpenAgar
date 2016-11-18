@@ -122,6 +122,7 @@ module.exports = class Main {
         return true;
     }
     addChat(player,msg) {
+              if (!this.pluginService.send('beforeChat',{player:player,main:this,msg:msg})) return
         var name = player.gameData.chatName
         if (!name) return player.msg("Your chatname is not set! Please join the game")
         if (player.gameData.chatBan) return player.msg("You are banned from the chat!")
