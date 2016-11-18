@@ -25,7 +25,7 @@ module.exports = class FastSquares {
   
  
 for (var i = 0; i < 1000000; i ++) {
- this.lib[i] = Math.sqrt(i)
+ this.lib.push(Math.sqrt(i))
 }
   
   
