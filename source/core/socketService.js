@@ -17,7 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CryptoJS = require('node-cryptojs-aes').CryptoJS;
 const RSON = require('rson');
 const Player = require('./Player.js');
  const crypto = require('crypto')
@@ -44,16 +43,7 @@ module.exports = class socketService {
         return this.globalData.getNextId()
     }
 
-encrypt(text,password){
-var cip = CryptoJS.AES.encrypt(text, password).toString();
-}
- 
-decrypt(text,password){
-  var decrypted = CryptoJS.AES.decrypt(text, password);
 
-// convert to Utf8 format unmasked data
-return CryptoJS.enc.Utf8.stringify(decrypted);
-}
     connection(socket) {
         socket._remoteAddress = socket.request.connection.remoteAddress
         
