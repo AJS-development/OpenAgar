@@ -1,5 +1,7 @@
+// No license here! This is free to the public!
+
 "use strict"
-var fs = require('fs')
+
 module.exports = class FastSquares {
  constructor() {
    this.lib = [];
