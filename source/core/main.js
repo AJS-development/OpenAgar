@@ -182,6 +182,7 @@ module.exports = class Main {
     
     addClient(client) {
         if (this.clients.indexOf(client) == -1) {
+                  if (!this.pluginService.send('onClientAdd',{player:client,main:this})) return
             this.clients.push(client);
             
         }
