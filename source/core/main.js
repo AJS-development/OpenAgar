@@ -24,7 +24,7 @@ const Bot = require('../ai/fakePlayer.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
-const Commands = require('../commands')
+const Commands = require('../commands').list
 
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
@@ -375,13 +375,13 @@ module.exports = class Main {
    
     execCommand(str) {
         try {
-          var cmd = str.split(" ")
-        var command = Commands.list[cmd[0]]
+          var cmd = str.split(" ")[0].toLowerCase()
+        var command = Commands[cmd]
         if (command) {
             command(str,this,this.log)
             return true;
         }
-        var command = this.pluginService.commands[cmd[0]]
+        var command = this.pluginService.commands[cmd]
         if (command) {
              command(str,this,this.log)
              return true;

@@ -95,8 +95,8 @@ module.exports = class ServerService {
     }
     prsCommand(str) {
       
-        var cmd = str.split(" ")
-        var command = Commands.serverService[cmd[0]]
+        var cmd = str.split(" ")[0].toLowerCase()
+        var command = Commands.serverService[cmd]
         if (command) {
             command(str,this,this.log.bind(this))
             return true;

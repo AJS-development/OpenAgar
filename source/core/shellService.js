@@ -150,7 +150,7 @@ this.log(0,"       |_|                      |___/            ")
          if (this.redrawing) return;
         if (key == '\u000D') { //enter
              process.stdout.write('\n')
-        if (this.text) {this.parseCommands(this.text.toLowerCase())
+        if (this.text) {this.parseCommands(this.text)
         this.commands.push(this.text)
                        }
        
@@ -166,6 +166,7 @@ this.log(0,"       |_|                      |___/            ")
                 process.stdout.write('\r                                   ');
                     process.stdout.write('\r>' + this.text);
             return
+       
                } else if (key == '\u001B\u005B\u0042') { // down
               
                    if (this.ind < this.commands.length) this.ind ++;
@@ -173,6 +174,7 @@ this.log(0,"       |_|                      |___/            ")
                    process.stdout.write('\r                                   ');
                     process.stdout.write('\r>' + this.text);
                    return;
+                   
         } else if (key == '\u007F' && this.text.length > 0) {
             this.ind = this.commands.length
             this.text = this.text.substr(0,this.text.length - 1)

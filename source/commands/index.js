@@ -18,7 +18,8 @@ module.exports = {
             },
             startv: require('./lib/startv.js'),
             stop: require('./lib/stop.js'),
-            redraw: require('./lib/redraw.js')
+            redraw: require('./lib/redraw.js'),
+            plugin: require('./lib/plugin.js')
             
         }
     

@@ -59,6 +59,9 @@ module.exports = class PluginService {
            var plugin = this.plugins[i]
        }
     }
+    reload() {
+        this.init()
+    }
     getData(data) {
         if (data) {
             return this.pdata[data]
