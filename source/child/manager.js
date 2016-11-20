@@ -12,6 +12,7 @@ module.exports = class Manager {
         this.map = new QuickMap()
         this.bots = new QuickMap()
         this.config = {};
+        this.s = false;
     }
     addNodes(nodes) {
 
@@ -85,7 +86,7 @@ module.exports = class Manager {
           this.interval = setInterval(function() {
              this.bots.forEach((bot)=>{
                  bot.update()
-                 this.toSend.push({i:bot.id,m:bot.mouse})
+                 if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
              try {
              process.send(JSON.stringify(this.toSend))
@@ -93,7 +94,7 @@ module.exports = class Manager {
                process.exit(0)
              }
              this.toSend = [];
-         }.bind(this),1000) 
+         }.bind(this),100) 
     }
     addBot(id,bot) {
         this.bots.set(id,new Bot(id,this,bot))

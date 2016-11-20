@@ -72,7 +72,7 @@ module.exports = class socketService {
              socket.emit('mes',{type:"clearNodes"})
              socket.emit('mes',{type:"setPid",pid: socket._player.id})
                socket.emit('mes',{type:"showOverlay"})
-                socket.emit('mes',{type:"setFPS",fps: 6})
+                socket.emit('mes',{type:"setFPS",fps: 10})
         }
         socket.on('key',function(data) {
             if (!data) return;

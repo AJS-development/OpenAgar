@@ -32,7 +32,7 @@ this.center = {
 this.playing = false;
  this.server = server;  
     this.cells = [];
-     
+     this.send = ~~(Math.random() * 10)
   }
      onRemove(main) {
         
@@ -75,7 +75,7 @@ setRandom() {
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y
          
 }
-  update() { // 0.5 sec
+  update() { // 0.1 sec
    
         if (this.cells.length == 0 && !this.playing) this.spawn()
       var a = this.calcView()
@@ -123,6 +123,12 @@ setRandom() {
         width: 2 * this.sightRangeX        
     }
     return this.a
+    }
+    shouldSend() {
+        if (this.send <= 0) {
+            this.send = 10
+            return true;
+        } else this.send --;
     }
     changeColor(color) {
        
