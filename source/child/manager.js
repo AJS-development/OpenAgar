@@ -148,10 +148,10 @@ module.exports = class Manager {
        this.loop()
          }.bind(this),100) 
           this.on('delPlayer',function(ps) {
-           ps.forEach((p)=>{
-               this.removeClient(p)
+          
+               this.removeClient(ps)
                
-           }) 
+           
           }.bind(this))
     }
     removeClient(id) {

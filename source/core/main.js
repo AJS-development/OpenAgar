@@ -154,10 +154,12 @@ module.exports = class Main {
     removeMinion(bot) {
         bot.onRemove()
       this.minions.delete(bot.id)
+     this.childService.removeClient(bot)
     }
     removeBot(bot) {
         bot.onRemove()
       this.bots.delete(bot.id)
+    this.childService.removeClient(bot)
     }
     removeBot(ids) {
        
@@ -204,6 +206,7 @@ module.exports = class Main {
         })
         
       this.clients.delete(client.id);
+        this.childService.removeClient(client)
     }
     
     removeNode(cell) {
@@ -316,6 +319,7 @@ module.exports = class Main {
         }
     }
     updateLB() {
+        if (this.childService.lb.length <= 0) return;
         var tosend = [];
     this.childService.lb.forEach((lb)=>{
         var a = this.getPlayer(lb.i)

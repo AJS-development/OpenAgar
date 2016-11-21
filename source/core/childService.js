@@ -82,6 +82,9 @@ module.exports = class childService {
    
 this.send(5,{id: bot.id, bot: bot.botid})
   }
+    removeClient(client) {
+        this.emit('delPlayer',client.id)
+    }
   addNode(node) {
       if (this.hash[node.id]) return;
       this.toSend.push({
