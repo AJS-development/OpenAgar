@@ -542,21 +542,21 @@ module.exports = class Main {
     
     collide(node) {
       
-        var list = [];
+   
         var hashnodes = this.getWorld().getNodes('hash').getNodes(node.bounds);
       node.nearby = hashnodes;
         
-        hashnodes.forEach((check)=>{
+        hashnodes.every((check)=>{
                
            if (check.moveEngine.collision == "circle") {
-                if (!node.collisionCheckCircle(check)) return
+                if (!node.collisionCheckCircle(check)) return true
                     
                 
                 
             } else if (item.moveEngine.collision == "square") {
-                if (!node.collisionCheckSquare(check)) return
+                if (!node.collisionCheckSquare(check)) return true
             } else {
-                return;  
+                return true;  
             }
             // check for collisions
             
@@ -566,40 +566,40 @@ module.exports = class Main {
                     if (check.owner == node.owner) {
                         
                         if (!node.canMerge || !check.canMerge) {
-                            return;
+                            return true;
                         }
                             
                             
                             }
-                    list.push(check);
+                 check.eat(node,this)
                     break;
                 
                 case 1: // cells
-                    if (check.mass > node.mass) return;
-                    list.push(check);
+                    if (check.mass > node.mass) return true;
+                  check.eat(node,this)
                     break;
                 case 2: // virus
-                    if (check == node || check.mass  * 1.33 > node.mass) return
+                    if (check == node || check.mass  * 1.33 > node.mass) return true
                     check.collide(node,this)
                     return;
                     break;
                 case 3: // ejectedmass
-                    if (check == node) return
+                    if (check == node) return true
                  if (check.getAge(this) > 300)
-                     list.push(check)
+                   check.eat(node,this)
                     
                     break;
                 case 4: // food
-                    list.push(check);
+                    check.eat(node,this)
                     break;
-                    
+                default:
+                    return true;
+                    break;
             }
+            return false;
         });
         
-        list.forEach((item)=>{
-           
-           item.eat(node,this)
-        });
+      
     }
    
     playerCollision() { // rel slow (1)
