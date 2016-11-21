@@ -18,7 +18,7 @@ var fs = require('fs')
 var ini = require('../modules/ini.js')
 module.exports = class PluginService {
     constructor(main) {
-        this.vars = ["configs","commands","addToHelp"]
+        this.vars = ["configs","commands","addToHelp","gamemodes"]
         this.main = main
         this.plugins = {};
         this.pdata = {}
@@ -29,6 +29,7 @@ module.exports = class PluginService {
             log: main.log
             
         }
+        this.gamemodes = []
         this.configs = ini.parse(fs.readFileSync(__dirname + '/../settings/pluginConfig.ini',"utf8"))
         if (this.configs.allowed) this.configs.allowed = this.configs.allowed.split(",")
         this.parser = new pluginParser(function(a) {main.log("\x1b[32m[PluginService]\x1b[0m " + a)}.bind(this),__dirname + "/../plugins",this.vars,this.data,_version,this.configs.allowed,this.configs.dev == 1)
@@ -42,6 +43,7 @@ module.exports = class PluginService {
         this.pdata = this.parser.getData()
         var command = this.getData('commands')
       var help = this.getData('addToHelp')
+      var gamemodes = this.getData('gamemode')
       this.commands = {};
      
           this.addToHelp = [];
@@ -55,9 +57,17 @@ module.exports = class PluginService {
                     
                 }
             })
+            gamemodes.forEach((gamemode)=>{
+                if (!gamemode) return;
+                gamemode.forEach((g,i)=>{
+                    if (!g || !g.id || !g.name) return;
+                    this.gamemodes[parseInt(g.id)] = g
+                })
+            })
        for (var i in this.plugins) {
            var plugin = this.plugins[i]
        }
+        
     }
     reload() {
         this.init()
@@ -76,7 +86,7 @@ module.exports = class PluginService {
      for (var i in this.plugins) {
          var plugin = this.plugins[i]
             if (plugin && plugin[event]) {
-               if (!plugin[event](data)) return false;
+               if (plugin[event](data) === false) return false;
             }
             continue;
         }

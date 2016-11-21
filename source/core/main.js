@@ -28,6 +28,7 @@ const Commands = require('../commands').list
 const QuickMap = require('quickmap')
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
+const GMService = require('./gameMode.js')
 module.exports = class Main {
     constructor(isMain,id,name,scname,globalData,config,log) {
         this.isMain = isMain;
@@ -89,7 +90,10 @@ module.exports = class Main {
         this.collisionHandler = new CollisionHandler(this)
            this.pluginService = new PluginService(this)
            this.childService = new ChildService(this)
+            this.gameMode = new GMService(this)
+        
        this.addBots(config.serverBots)
+      
     }
     addMinions(player,num) {
         for (var i = 0; i < num; i ++) {
