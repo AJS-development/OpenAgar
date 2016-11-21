@@ -60,7 +60,7 @@ module.exports = class Manager {
         function insert(p) {
             p.getScore()
             var a = function(p,i) {
-            if (hash[p.mass + i]) return a(p,i) 
+            if (hash[p.mass + i]) return a(p,i + 1) 
             hash[p.mass + i] = p
                 }
             a(p,0)
