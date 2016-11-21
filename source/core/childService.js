@@ -12,8 +12,9 @@ module.exports = class childService {
       this.movHash = {};
     this.movCode = [];
       this.hash = [];
-      
-   this.bots = new QuickMap()   
+      this.events = {}
+      this.lb = [];
+ 
    this.init()
   }
   init() {
@@ -21,8 +22,19 @@ module.exports = class childService {
           this.onData(data)
       }.bind(this))
        this.send(0,{hello:"hello",config: this.main.getConfig()})
-    
+    this.on('lb',function(lb) {
+        this.lb = lb
+    }.bind(this))
   }
+    on(e,f) {
+        this.events[e] = f
+    }
+    emit(e,d) {
+        this.send(7,{e:e,d:d})
+    }
+    clearEvents() {
+       this.events = {} 
+    }
     action(bot,action,data) {
         switch (action) {
             case 1: // spawn
@@ -31,18 +43,25 @@ module.exports = class childService {
                 break;
         }
     }
+    event(event,data) {
+        if (this.events[event]) this.events[event](data)
+    }
     onData(data) {
         
         data = JSON.parse(data)
-        
+     
      // console.log(data)
         data.forEach((bot)=>{
+               if (bot.e) {
+            this.event(bot.e,bot.d)
+        } else
             if (bot.action) {
-                   var b =this.bots.get(bot.id)
+                   var b =this.main.bots.get(bot.id)
+                   if (!b) return
                    this.action(b,bot.action,bot)
             } else {
-            var b =this.bots.get(bot.i)
-            
+            var b =this.main.bots.get(bot.i)
+                     if (!b) return
             b.mouse.x = bot.m.x
             b.mouse.y = bot.m.y
             }
@@ -60,7 +79,7 @@ module.exports = class childService {
       }
     }
   addBot(bot) {
-      this.bots.set(bot.id,bot)
+   
 this.send(5,{id: bot.id, bot: bot.botid})
   }
   addNode(node) {

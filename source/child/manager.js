@@ -3,6 +3,7 @@ var HashBounds = require('hashbounds')
 var QuickMap = require('quickmap')
 var Node = require('./node.js')
 var Bot = require('../ai/Bot.js')
+var Player = require('./Player.js')
 module.exports = class Manager {
     constructor() {
         this.nodes = [];
@@ -13,6 +14,11 @@ module.exports = class Manager {
         this.bots = new QuickMap()
         this.config = {};
         this.s = false;
+        this.events = {}
+        this.timers = {
+            a: 10
+        }
+        this.players = new QuickMap();
     }
     addNodes(nodes) {
 
@@ -28,7 +34,19 @@ module.exports = class Manager {
                };
             
             this.addedHash[node.id] = true;
-            var owner = (node.owner) ? this.bots.get(node.owner) : false
+            var owner = false
+            if (node.owner || node.owner === 0) {
+                owner = this.bots.get(node.owner) 
+                if (!owner) {
+                    owner = this.players.get(node.owner)
+                    if (!owner) {
+                        owner = new Player(node.owner,this)
+                        this.players.set(node.owner,owner)
+                    }
+                }
+                
+            }
+            
             
             var n = new Node(node,owner)
        
@@ -37,6 +55,42 @@ module.exports = class Manager {
             
         })
     }
+    updateLB() {
+        var hash = [];
+        function insert(p) {
+            p.getScore()
+            var a = function(p,i) {
+            if (hash[p.mass + i]) return a(p,i) 
+            hash[p.mass + i] = p
+                }
+            a(p,0)
+        }
+        this.bots.forEach((bot)=>{
+          insert(bot)
+        })
+        this.players.forEach((player)=>{
+            
+            insert(player)
+        })
+         var amount = this.getConfig().leaderBoardLen;
+         var rank = 1;
+        var lb = [];
+        for (var i = hash.length; i > 0; i-- ) {
+           if (!hash[i]) continue;
+          
+            
+         lb.push({
+          r: rank++,
+             i: hash[i].id
+         })
+         amount --;
+           if (amount <= 0) break;
+       
+        }
+       
+        return lb
+    }
+    
     spawn(bot) {
         this.toSend.push({
             id: bot.id,
@@ -44,17 +98,18 @@ module.exports = class Manager {
         })
         
     }
-    deleteNode(node) {
+   removeNode(node) {
         node.destroyed = true;
         node.dead = true;
          this.nodes.delete(node)
           this.map.delete(node.id)
           node.onDelete(this)
     }
-    deleteNodes(nodes) {
+    
+  removeNodes(nodes) {
         nodes.forEach((node)=>{
             var n = this.map.get(node.id)
-            if (n) this.deleteNode(n)
+            if (n) this.removeNode(n)
         })
         
     }
@@ -83,8 +138,68 @@ module.exports = class Manager {
     init(msg) {
         
        this.config = msg.config
+       try {
+           
+           clearInterval(this.interval)
+       } catch (e) {
+           
+       }
           this.interval = setInterval(function() {
-             this.bots.forEach((bot)=>{
+       this.loop()
+         }.bind(this),100) 
+          this.on('delPlayer',function(ps) {
+           ps.forEach((p)=>{
+               this.removeClient(p)
+               
+           }) 
+          }.bind(this))
+    }
+    removeClient(id) {
+        var a = this.bots.get(id)
+        if (a) {
+            this.bots.delete(id)
+            a.onRemove(this)
+            return;
+        }
+         var a = this.players.get(id)
+        if (a) {
+            this.players.delete(id)
+            a.onRemove(this)
+            return;
+        }
+    }
+    addBot(id,bot) {
+        this.bots.set(id,new Bot(id,this,bot))
+    }
+    emit(event,data) {
+    var a = {
+        e: event,
+        d: data
+    }
+        this.toSend.push(a)
+    }
+    event(msg) {
+       var e = msg.e
+       var d = msg.d
+       if (this.events[e]) this.events[e](d)
+    }
+    on(e,f) {
+        this.events[e] = f
+    }
+    clearEvents() {
+        this.events = {};
+    }
+    loop() { // 0.1 s
+        if (this.timers.a <= 0) {
+            var lb = this.updateLB()
+            this.emit('lb',lb)
+            this.timers.a = 10;
+        } else this.timers.a--;
+        
+        
+        
+        
+              this.bots.forEach((bot)=>{
                  bot.update()
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
@@ -94,10 +209,6 @@ module.exports = class Manager {
                process.exit(0)
              }
              this.toSend = [];
-         }.bind(this),100) 
-    }
-    addBot(id,bot) {
-        this.bots.set(id,new Bot(id,this,bot))
     }
     other() {
         

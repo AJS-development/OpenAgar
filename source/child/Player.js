@@ -17,9 +17,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = class Bot {
-  constructor(id,server,botid) {
+  constructor(id,server) {
     this.id = id
-    this.botid = botid
+ 
 this.score = 0;
 this.mouse = {
     x: 0,
@@ -32,14 +32,12 @@ this.center = {
 this.playing = false;
  this.server = server;  
     this.cells = [];
-     this.send = ~~(Math.random() * 10)
+    
   }
      onRemove(main) {
-   
         this.cells.forEach((cell)=>{
             main.removeNode(cell)
         })
-      
     }
   addCell(cell) {
 
@@ -58,7 +56,7 @@ this.playing = false;
  
     }
  getScore(re) {
-        if (this.cells.length == 0) return 0;
+      if (this.cells.length == 0) return 0;
        
         var l = 0;
         this.cells.forEach((n)=>{
@@ -67,7 +65,8 @@ this.playing = false;
         this.mass = l;
         this.score = Math.max(this.score,l)
         return this.score
- }
+        
+    }
   
 setRandom() {
        if (!this.a) return;
@@ -76,30 +75,7 @@ setRandom() {
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y
          
 }
-  update() { // 0.1 sec
-   
-        if (this.cells.length == 0 && !this.playing) this.spawn()
-      var a = this.calcView()
-      if (!a) return
-
-       //   if (this.center.x == this.mouse.x || this.center.y == this.mouse.y) 
-      this.setRandom()
-      
-          // this.checkDeath()
-          /*
-      if (this.timers.changeDir >= 20) {
-       this.timers.changeDir = 0;
-          var a = this.calcView()
-         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
-          this.moude.y = Math.floor(a.height * Math.random()) + a.y
-          this.checkDeath()
-      } else {
-    this.timers.changeDir ++;
-      }
-      */
  
-    
-  }
     calcView() {
          if (this.cells.length == 0) return
         var totalSize = 1.0;
@@ -125,12 +101,7 @@ setRandom() {
     }
     return this.a
     }
-    shouldSend() {
-        if (this.send <= 0) {
-            this.send = 10
-            return true;
-        } else this.send --;
-    }
+ 
     changeColor(color) {
        
         

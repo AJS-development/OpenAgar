@@ -25,7 +25,7 @@ const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
 const Commands = require('../commands').list
-
+const QuickMap = require('quickmap')
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 module.exports = class Main {
@@ -46,7 +46,7 @@ module.exports = class Main {
         this.chatId = 1;
         this.chat = [];
         this.tbd = [];
-        this.bots = [];
+        this.bots = new QuickMap();
         this.deleteR = "";
         this.chatNames = [];
         this.botid = 0;
@@ -64,14 +64,14 @@ module.exports = class Main {
             {'r': 80, 'g':170, 'b':240},
             {'r': 55, 'g': 92, 'b':255},
         ];
-        this.clients = [];
+        this.clients = new QuickMap();
         this.bounds = {
             x:config.boundX,
             y:config.boundY,
             width:config.boundWidth,
             height: config.boundHeight
         };
-        this.minions = []
+        this.minions = new QuickMap()
         this.dataService = new DataService(this,globalData,config);
         this.timer = {
             tick: 0,
@@ -100,7 +100,7 @@ module.exports = class Main {
          var id = this.getGlobal().getNextId()
         var botid = this.botid ++;
          var bot = new Minion(this,id,"Bot: " + botid,botid,player)
-          this.minions.push(bot)
+          this.minions.set(bot.id,bot)
           player.addMinion(bot)
      
     }
@@ -148,42 +148,32 @@ module.exports = class Main {
         var id = this.getGlobal().getNextId()
         var botid = this.botid ++;
         var bot = new Bot(this,id,"Bot: " + botid,botid)
-        this.bots.push(bot)
+        this.bots.set(bot.id,bot)
    this.childService.addBot(bot)
     }
     removeMinion(bot) {
         bot.onRemove()
-        var ind = this.minions.indexOf(bot)
-        if (ind != -1) this.minions.splice(ind,1)
+      this.minions.delete(bot.id)
     }
     removeBot(bot) {
         bot.onRemove()
-        var ind = this.bots.indexOf(bot)
-        if (ind != -1) this.bots.splice(ind,1)
+      this.bots.delete(bot.id)
     }
     removeBot(ids) {
-        var hash = {}
+       
      ids.forEach((id)=>{
-         hash[id] = true;
+        var b = this.bots.get(id) 
+       if (b) this.removeBot(b)
      })
-            
-            for (var i = 0; i < this.bots.length; i ++) {
-                var bot = this.bots[i]
-                if (hash[bot.id]) {
-                    bot.onRemove(this)
-                    this.bots.splice(i,1)
-                    i --;
-                }
-                
-            }
+          
         
         
     }
     
     addClient(client) {
-        if (this.clients.indexOf(client) == -1) {
+        if (!this.clients.get(client.id)) {
                   if (!this.pluginService.send('onClientAdd',{player:client,main:this})) return
-            this.clients.push(client);
+            this.clients.set(client.id,client);
             
         }
         
@@ -212,8 +202,8 @@ module.exports = class Main {
         client.minions.forEach((minion)=>{
             this.removeMinion(minion)
         })
-        var a = this.clients.indexOf(client);
-        if (a != -1) this.clients.splice(a,1);
+        
+      this.clients.delete(client.id);
     }
     
     removeNode(cell) {
@@ -326,50 +316,18 @@ module.exports = class Main {
         }
     }
     updateLB() {
-     if (this.clients.length == 0) return;
-        this.updLb = !this.updLb
-        if (this.updLb) return
-        
-        var hash = [];
-  
-       this.clients.forEach((client)=>{
-        
-           var score = client.getScore()
-           if (!hash[score]) hash[score] = [];
-           hash[score].push(client)
-
-       }) 
-       this.bots.forEach((bot)=>{
-           
-           var score = bot.getScore()
-             if (!hash[score]) hash[score] = [];
-           hash[score].push(bot)
-          
-       })
-       this.minions.forEach((minion)=>{
-           var score = minion.getScore()
-             if (!hash[score]) hash[score] = [];
-           hash[score].push(minion)
-       })
-       var lb = [];
-        var amount = this.getConfig().leaderBoardLen;
-        var rank = 1;
-      for (var i = hash.length; i > 0; i--) {
-          if (!hash[i]) continue;
-           if (!hash[i].every((client)=>{
-               client.rank = rank ++;
-         lb.push({
-             name: client.gameData.name,
-             id: client.id
-         })
-         amount --;
-           if (amount <= 0) return false;
-           return true;
-           })) break;
-       }
-       this.clients.forEach((client)=>{
+        var tosend = [];
+    this.childService.lb.forEach((lb)=>{
+        var a = this.getPlayer(lb.i)
+        a.rank = lb.r
+        tosend.push({
+            name: a.gameData.name || "An Unamed Cell",
+            id: lb.i
+        })
+    })
+     this.clients.forEach((client)=>{
      
-           client.socket.emit('lb',{lb:lb})
+           client.socket.emit('lb',{lb:tosend})
        })
     }
    
@@ -392,29 +350,13 @@ module.exports = class Main {
         }
     }
     getPlayer(id) {
-        var final = false;
-        if (this.clients.every((client)=>{
-            if (client.id == id){
-                final = client
-                 return false
-            }
-            return true;
-        })) return final
-            if (this.bots.every((client)=>{
-            if (client.id == id){
-                final = client
-                 return false
-            }
-            return true;
-        })) return final
-            if (this.minions.every((client)=>{
-            if (client.id == id){
-                final = client
-                 return false
-            }
-            return true;
-        })) return final
-        
+        var final = this.clients.get(id);
+      
+          if (final) return final
+            var final = this.bots.get(id);
+         if (final) return final
+          var final = this.minions.get(id);
+        return final
     }
     splitCell(cell,angle,speed,decay,mass) {
         var pos = {

@@ -11,7 +11,7 @@ process.on('message',function(msg) {
              manager.addNodes(msg.nodes)
             break;
         case 2: // deletenodes
-            manager.deleteNodes(msg.nodes)
+            manager.removeNodes(msg.nodes)
             break;
         case 3: // movecode
             manager.moveCode(msg.nodes)
@@ -24,6 +24,9 @@ process.on('message',function(msg) {
             break;
         case 6: // stop
             manager.stop(msg)
+            break;
+        case 7: // event
+            manager.event(msg)
             break;
             
     }
