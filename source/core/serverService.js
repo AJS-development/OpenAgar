@@ -54,7 +54,8 @@ module.exports = class ServerService {
         maxVirus: 90,
         minVirus: 60,
         virusSpeed: 50,
-        virusDecay: 12
+        virusDecay: 12,
+        splitMin: 32
     }
         var serv = new Main(true,0,"Main","Main",globalData,config,function(a) {
             this.controller.shellService.log(0,a)

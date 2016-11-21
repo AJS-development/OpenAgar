@@ -293,6 +293,13 @@ module.exports = class Main {
                 }
         
     }
+    splitPlayerCell(cell,angle,speed,decay) {
+          var splitted = this.splitCell(cell,angle,speed,decay, ~~(cell.mass/2))
+                            cell.updateMass(~~(cell.mass/2))
+        splitted.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
+                   cell.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
+                   return splitted
+    }
     splitPlayer(player) {
         var maxSplit = this.getConfig().playerMaxCells - player.cells.length;
         var len = player.cells.length
@@ -311,11 +318,12 @@ module.exports = class Main {
      angle = Tan-1(y/x)
             */
             if (!cell) continue;
+            if (cell.mass < this.getConfig().splitMin) continue;
             var angle = Math.atan2(deltaY,deltaX)
-           var splitted = this.splitCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay, ~~(cell.mass/2))
-                            cell.updateMass(~~(cell.mass/2))
-        splitted.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
-                   cell.setMerge(this,this.getConfig().playerMerge,this.getConfig().playerMergeMult)
+           var splitted = this.splitPlayerCell(cell,angle,cell.getSpeed() * this.getConfig().splitSpeed,this.getConfig().splitDecay)
+               
+               
+         
         }
     }
     updateLB() {
