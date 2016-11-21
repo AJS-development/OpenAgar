@@ -50,3 +50,4 @@ updateLB(data) {
     // Called when the leaderboard update function is called
      
 }
+}

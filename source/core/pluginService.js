@@ -43,7 +43,7 @@ module.exports = class PluginService {
         this.pdata = this.parser.getData()
         var command = this.getData('commands')
       var help = this.getData('addToHelp')
-      var gamemodes = this.getData('gamemode')
+      var gamemodes = this.getData('gamemodes')
       this.commands = {};
      
           this.addToHelp = [];
