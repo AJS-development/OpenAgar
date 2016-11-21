@@ -189,17 +189,24 @@ module.exports = class Player {
     checkKeys(main) {
         if (this.keys.space) {
             this.keys.space = false;
-            main.splitPlayer(this)
+            if (this.GMEvent('pressSpace',{player:this})) main.splitPlayer(this)
+            
         }
-            if (this.keys.w) {
-                this.keys.w = false;
-                main.ejectMass(this)
-            }
-                if (this.keys.e) {
-                    
-                }
-        
+     if (this.keys.w) {
+         this.keys.w = false;
+        if (this.GMEvent('pressW',{player:this})) main.ejectMass(this)
+      }
+     if (this.keys.e) {
+          this.GMEvent('pressE',{player:this})          
+     }
+    if (this.keys.q) {
+        this.GMEvent('pressQ',{player:this})
+    }
     } 
+    GMEvent(e,d) {
+        if (!this.server) return true;
+        return this.server.gameMode.event(e,d)
+    }
     pressKey(id) {
        // console.log(id)
         id = parseInt(id)

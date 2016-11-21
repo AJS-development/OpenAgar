@@ -95,6 +95,9 @@ module.exports = class Main {
        this.addBots(config.serverBots)
       
     }
+    changeMode(mode) {
+        this.gameMode.event('onChange')
+    }
     addMinions(player,num) {
         for (var i = 0; i < num; i ++) {
             this.addMinion(player)
@@ -179,6 +182,7 @@ module.exports = class Main {
     addClient(client) {
         if (!this.clients.get(client.id)) {
                   if (!this.pluginService.send('onClientAdd',{player:client,main:this})) return
+                  if (!this.gameMode.event('onPlayerInit',{player:client})) return;
             this.clients.set(client.id,client);
             
         }
@@ -263,7 +267,8 @@ module.exports = class Main {
     
     spawn(player) {
        if (!this.pluginService.send('beforeSpawn',{player:player,main:this})) return
-        if (!player.isBot) player.gameData.chatName = this.getChatName(player)
+       if (!this.gameMode.event('onPlayerSpawn',{player:player})) return
+       if (!player.isBot) player.gameData.chatName = this.getChatName(player)
     
         var pos = this.foodService.getRandomPos();
       this.addNode(pos,this.getConfig().startMass,0,player);
@@ -331,6 +336,7 @@ module.exports = class Main {
         }
     }
     updateLB() {
+        if (!this.gameMode.event('updateLB',{lb:this.childService.lb})) return
         if (this.childService.lb.length <= 0) return;
         var tosend = [];
     this.childService.lb.forEach((lb)=>{
@@ -455,6 +461,7 @@ module.exports = class Main {
                this.childService.sendNodes()
                this.childService.update()
                  this.childService.deleteNodes(this.tbd)
+                 this.gameMode.event('onTick')
                  this.tbd = [];
                 
                 // 1 second
@@ -643,6 +650,7 @@ module.exports = class Main {
         switch (type) {
             case 0: // playercells
                 var a = new Entities.playerCell(position,mass,type,owner,others);
+                
                 break;
             case 1: // cells
                 var a = new Entities.cell(position,mass,type,null,others);

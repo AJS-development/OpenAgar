@@ -86,6 +86,7 @@ module.exports = class WorldModel {
         switch (type) {
             case 0: // player
                 this.playerNodes.set(id,node);
+                this.main.gameMode.event('onCellAdd',{cell:node})
                 break;
             case 1: // cell
                 break;
@@ -163,7 +164,7 @@ module.exports = class WorldModel {
          this.mergeNodes.delete(node.id)
         node.moving = false
         this.ejectedNodes.delete(node.id);
-        if (this.playerNodes.delete(node.id)) return;
+        if (this.playerNodes.delete(node.id)) return this.gameMode.event('onCellRemove',{cell:node});
         if (this.virusNodes.delete(node.id)) return;
     }
 };
