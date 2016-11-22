@@ -73,11 +73,10 @@ module.exports = class Manager {
         var hash = [];
         function insert(p) {
             p.getScore()
-            var a = function(p,i) {
-            if (hash[p.mass + i]) return a(p,i + 1) 
-            hash[p.mass + i] = p
-                }
-            a(p,0)
+          
+            if (!hash[p.mass]) hash[p.mass] = []; 
+            hash[p.mass].push(p)
+            
         }
         this.bots.forEach((bot)=>{
           insert(bot)
@@ -91,15 +90,16 @@ module.exports = class Manager {
         var lb = [];
         for (var i = hash.length; i > 0; i-- ) {
            if (!hash[i]) continue;
-          
+          if (!hash[i].every((h)=>{
             
          lb.push({
           r: rank++,
-             i: hash[i].id
+             i: h.id
          })
          amount --;
-           if (amount <= 0) break;
-       
+           if (amount <= 0) return false;
+              return true;
+          })) break;
         }
        
         return lb

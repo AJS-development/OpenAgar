@@ -164,7 +164,7 @@ module.exports = class WorldModel {
          this.mergeNodes.delete(node.id)
         node.moving = false
         this.ejectedNodes.delete(node.id);
-        if (this.playerNodes.delete(node.id)) return this.gameMode.event('onCellRemove',{cell:node});
+        if (this.playerNodes.delete(node.id)) return this.main.gameMode.event('onCellRemove',{cell:node});
         if (this.virusNodes.delete(node.id)) return;
     }
 };
