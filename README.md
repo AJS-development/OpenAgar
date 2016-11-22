@@ -58,9 +58,11 @@ People have complained to me about this project being semi private. But in order
 #### Will this project ever be fully opened to the public?
 No, we want to keep it semi-private. No more than 100 users
 
-#### How can I help
+#### How can I help?
 You cant
 
+#### How come features are so limited?
+Actually, there are a lot of features, but none come in the box. You must use the plugin command to add them
 
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
