@@ -426,7 +426,7 @@ module.exports = class Main {
     }
     
     mloop() {
-       setTimeout(function() {this.loop()}.bind(this),1);
+       setTimeout(function() {this.loop()}.bind(this),2);
         let local = Date.now();
         this.timer.tick += (local - this.timer.time);
         this.timer.passed = local - this.timer.time
