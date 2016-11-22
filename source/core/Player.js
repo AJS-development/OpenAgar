@@ -189,20 +189,26 @@ module.exports = class Player {
     checkKeys(main) {
         if (this.keys.space) {
             this.keys.space = false;
-            if (this.GMEvent('pressSpace',{player:this})) main.splitPlayer(this)
+            if (this.PEvent('onPressSpace',{player:this}) && this.GMEvent('pressSpace',{player:this})) main.splitPlayer(this)
             
         }
      if (this.keys.w) {
          this.keys.w = false;
-        if (this.GMEvent('pressW',{player:this})) main.ejectMass(this)
+        if (this.PEvent('onPressW',{player:this}) && this.GMEvent('pressW',{player:this})) main.ejectMass(this)
       }
      if (this.keys.e) {
+         this.PEvent('onPressE',{player:this})
           this.GMEvent('pressE',{player:this})          
      }
     if (this.keys.q) {
+        this.PEvent('onPressQ',{player:this})
         this.GMEvent('pressQ',{player:this})
     }
     } 
+    PEvent(e,d) {
+          if (!this.server) return true;
+        return this.server.pluginService.send(e,d)
+    }
     GMEvent(e,d) {
         if (!this.server) return true;
         return this.server.gameMode.event(e,d)
