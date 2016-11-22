@@ -36,7 +36,9 @@ There are commands you can type in command line.
 |-----------|--------|
 |help       |Displays a list of commands|
 |startv     |Start visual gui, not implemented|
+|plugin     |Plugin command, the core feature of OpenAgar|
 |stop       |Stops the server|
+
 
 
 ## Developers
