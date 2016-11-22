@@ -44,6 +44,13 @@ There are commands you can type in command line.
 * Andrews54757
 * LegitSoulja
 
+## Support
+One thing we decided, was that we are not going to help other people run this project. If you cant... Too bad, use ogar. We are really trying to have this project be semi-private. 
+
+
+## More like ClosedAgar
+People have complained to me about this project being semi private. But in order to have everybody enjoy it, we must, since being too open means disaster. This was the problem with OgarUL, it got too big it collapsed on itself.
+
 
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
