@@ -52,6 +52,14 @@ One thing we decided, was that we are not going to help other people run this pr
 People have complained to me about this project being semi private. But in order to have everybody enjoy it, we must, since being too open means disaster. This was the problem with OgarUL, it got too big it collapsed on itself.
 
 
+## FAQ
+#### Will this project ever be fully opened to the public?
+No, we want to keep it semi-private. No more than 100 users
+
+#### How can I help
+You cant
+
+
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
 
