@@ -461,7 +461,7 @@ module.exports = class Main {
                this.childService.sendNodes()
                this.childService.update()
                  this.childService.deleteNodes(this.tbd)
-                 this.gameMode.event('onTick')
+                 
                  this.tbd = [];
                 
                 // 1 second
