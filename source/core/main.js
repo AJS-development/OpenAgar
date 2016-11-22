@@ -558,7 +558,7 @@ module.exports = class Main {
       node.nearby = hashnodes;
         
         hashnodes.every((check)=>{
-               
+               if (check == node) return true;
            if (check.moveEngine.collision == "circle") {
                 if (!node.collisionCheckCircle(check)) return true
                     
