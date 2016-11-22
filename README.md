@@ -64,6 +64,9 @@ You cant
 #### How come features are so limited?
 Actually, there are a lot of features, but none come in the box. You must use the plugin command to add them
 
+#### Can I make a Pull Request?
+Yes, but note that we are very very strict. So many pull requests wont be accepted
+
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
 
