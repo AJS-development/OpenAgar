@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.org/AJS-development/OpenAgar.svg?branch=master)](https://travis-ci.org/AJS-development/OpenAgar) [![Forums](https://img.shields.io/badge/Forums-Ogarul.io-blue.svg)](http://forum.ogarul.io)
 # OpenAgar
 
-Hello, we are AJS Development! We are the same team that brought you OgarUl! In AJS, we have many members. The main members are Andrews54757 and LegitSoulja. We decided to create this project after OgarUl's Ogar infrastructure couldnt hold with all those cool features! So, we created our own, completely from scratch. Now, OpenAgar is the most efficient Agar.io server available! Twice as efficient as MultiOgar, a gazillion times efficient than OgarUL, and 5 times efficient than Ogar! ([Proof](https://github.com/AJS-development/OpenAgar/issues/1)) We also decided to make OpenAgar as interesting as possible! New physics, new features, new gameplay and more!
+Hello, we are AJS Development! We are the same team that brought you OgarUl! In AJS, we have many members. The main members are Andrews54757 and LegitSoulja. We decided to create this project after OgarUl's Ogar infrastructure couldnt hold with all those cool features! So, we created our own, completely from scratch. Now, OpenAgar is the most efficient Ogar-like game server available! Twice as efficient as MultiOgar, a gazillion times efficient than OgarUL, and 5 times efficient than Ogar! ([Proof](https://github.com/AJS-development/OpenAgar/issues/1)) We also decided to make OpenAgar as interesting as possible! New physics, new features, new gameplay and more!
 
 ## What game?
-It is a web game similar to Agar.io
+It is a web game similar to Agar.io but is different in many ways.
 
 ## How to Use
 
@@ -24,8 +24,10 @@ It is a web game similar to Agar.io
 6. Record the ID given and get the appropriete key from staff.
 7. Paste your key into `key.txt` (command line: `nano key.txt`)
 8. Run index.js again
-9. Connect using `play.ogarul.io/new`
+9. Connect using `play.ogarul.io/new` (development client, real one will be at ogarul.io)
 
+#### The key system
+In order to use this, you must have a key. This is so this project isnt overwhelmed with people. However, you can get your key from us. We will never charge or demand anything for it.
 
 ## Commands
 There are commands you can type in command line.
@@ -41,3 +43,8 @@ There are commands you can type in command line.
 
 * Andrews54757
 * LegitSoulja
+
+
+## Another Note
+This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
+
