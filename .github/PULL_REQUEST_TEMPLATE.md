@@ -9,3 +9,6 @@ Important rules for pull requests:
 6. Avoid circlular data structures
 
 
+IF THE PR's FUNCTIONALITY CAN BE MADE INTO A PLUGIN, DO THAT INSTEAD
+
+
