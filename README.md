@@ -37,6 +37,7 @@ There are commands you can type in command line.
 |help       |Displays a list of commands|
 |startv     |Start visual gui, not implemented|
 |plugin     |Plugin command, the core feature of OpenAgar|
+|list       |List the players/bots/minions in the game|
 |stop       |Stops the server|
 
 
