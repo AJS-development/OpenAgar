@@ -163,6 +163,9 @@ module.exports = class Main {
          bot.cells.forEach((c)=>{
          this.removeNode(c)
      })
+          bot.owning.forEach((c)=>{
+         this.removeNode(c)
+     })
       this.minions.delete(bot.id)
      this.childService.removeClient(bot)
     
@@ -170,6 +173,9 @@ module.exports = class Main {
     removeBot(bot) {
         bot.onRemove()
          bot.cells.forEach((c)=>{
+         this.removeNode(c)
+     })
+         bot.owning.forEach((c)=>{
          this.removeNode(c)
      })
       this.bots.delete(bot.id)

@@ -30,6 +30,7 @@ module.exports = class Minion {
      x: 0,
         y: 0
     }
+    this.owning = [];
     this.mass = 0;
     this.timer = {
         changeDir: 0,

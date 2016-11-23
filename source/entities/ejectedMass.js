@@ -27,12 +27,20 @@ module.exports = class EjectedMass extends template {
        this.viruses = main.getWorld().getNodes('hash').getNodes(this.bounds)
         
        this.viruses.every((virus)=>{
-           if (virus.type != 2) return true;
+            if (virus.type == 2) {
          
            if (!virus.collisionCheckCircle(this,true)) return true;
            virus.feed(this,main)
          
            return false
+           } 
+           if (virus.type == 0) {
+               if (!virus.collisionCheckCircle(this)) return true;
+               this.eat(virus,main)
+               return false;
+           }
+          
+           return true;
            
        })
     }
