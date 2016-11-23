@@ -31,11 +31,11 @@ for (var i = 0; i < 1000000; i ++) {
   
  }
    sqrt(a) {
-   var a = this.lib[~~a]
-   if (a === undefined) {
+   var b = this.lib[~~a]
+   if (b === undefined) {
    return Math.sqrt(~~a)
    }
-    return a
+    return b
    }
  
 }

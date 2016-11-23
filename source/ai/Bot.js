@@ -76,6 +76,15 @@ setRandom() {
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y
          
 }
+    getSmallest() {
+        if (this.cells.length == 0) return;
+        var min = this.cells[0]
+        
+        this.cells.forEach((cell)=>{
+            if (cell.mass < min.mass) min = cell;
+        })
+       return min;
+    }
   update() { // 0.1 sec
    
         if (this.cells.length == 0 && !this.playing) this.spawn()
@@ -83,6 +92,9 @@ setRandom() {
       if (!a) return
 
        //   if (this.center.x == this.mouse.x || this.center.y == this.mouse.y) 
+  this.view = a;
+     this.nodes = this.server.nodes.getNodes(this.view)
+     this.decide()
       this.setRandom()
       
           // this.checkDeath()
@@ -100,6 +112,65 @@ setRandom() {
  
     
   }
+    decide() {
+        var canEat = [];
+        var predators = []
+        
+        var min = this.getSmallest()
+        this.nodes.forEach((node)=>{
+            if (node.owner == this) return;
+            switch (node.type) {
+                case 0: // players
+                    if (node.mass > min.mass * 1.33) {
+                        predators.push(node)
+                    } else if (min.mass > 1.33 * node.mass ) {
+                        
+                        canEat.push(node)
+                    }
+                    
+                    break;
+                case 1:
+                    
+                    break;
+                case 2:
+                    
+                    break;
+                case 3:
+                    
+                    break;
+                case 4: // food
+                    canEat.push(node)
+                    break;
+                default:
+                    
+                    break;
+                    
+            }
+        })
+        if (predators.length == 0 && this.mouse == this.center) {
+            this.mouse = canEat[Math.floor(Math.random() * canEat.length)]
+        } else if (predators.length != 0) {
+            var avgx = 0;
+            var avgy = 0;
+            predators.forEach((n)=>{
+                avgx += n.position.x
+               avgy += n.position.y
+               
+                
+            })
+            avgx = avgx/predators.length - this.center.x
+            avgy = avgy/predators.length - this.center.y
+             var angle = Math.atan2(avgy,avgx)
+             
+                var flipped = angle + Math.PI // flip angle
+                if (flipped > 2 * Math.PI) flipped -= 2 * Math.PI
+                this.mouse.x = Math.floor(this.center.x + (1000 + Math.cos(flipped)))
+                this.mouse.y =  Math.floor(this.center.y + (1000 + Math.sin(flipped)))
+                // console.log(this.center,this.mouse,(flipped * 180) / Math.PI)
+               
+        }
+        
+    }
     calcView() {
          if (this.cells.length == 0) return
         var totalSize = 1.0;

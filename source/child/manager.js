@@ -244,6 +244,17 @@ module.exports = class Manager {
                 final.push({i:cell.id,l:list})
             })
         })
+         this.bots.forEach((player)=>{
+            if (player.cells.length == 0) return;
+            player.cells.forEach((cell)=>{
+               var nodes = this.nodes.getNodes(cell.bounds)
+               var list = [];
+                nodes.forEach((node)=>{
+                    if (node.id != cell.id) list.push(node.id)
+                })
+                final.push({i:cell.id,l:list})
+            })
+        })
         if (final.length == 0) return;
         var a = {
             d: final,

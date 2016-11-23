@@ -572,13 +572,13 @@ module.exports = class Main {
     
         
         hashnodes.every((check)=>{
-               if (check == node) return true;
+               if (check == node || check.dead) return true;
            if (check.moveEngine.collision == "circle") {
                 if (!node.collisionCheckCircle(check)) return true
                     
                 
                 
-            } else if (item.moveEngine.collision == "square") {
+            } else if (node.moveEngine.collision == "square") {
                 if (!node.collisionCheckSquare(check)) return true
             } else {
                 return true;  
