@@ -20,7 +20,7 @@ module.exports = class GlobalData {
     constructor(config) {
         this.data = {};
         this.config = config;
-          this.id = 0;
+          this.id = 1;
 
     }
     getNextId() {
