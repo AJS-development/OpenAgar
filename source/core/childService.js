@@ -52,8 +52,9 @@ module.exports = class childService {
     action(bot,action,data) {
         switch (action) {
             case 1: // spawn
-                
+                bot.onSpawn()
                 this.main.spawn(bot)
+                
                 break;
         }
     }
@@ -134,6 +135,7 @@ this.send(5,{id: bot.id, bot: bot.botid})
         nodes.forEach((node)=>{
          
             if (node.updateCode != this.updHash[node.id]) {
+              this.hash[node.id] = false;
                 this.updHash[node.id] = node.updateCode
                 this.addNode(node)
             } else if (node.moveCode != this.movHash[node.id]) {

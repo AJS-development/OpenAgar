@@ -43,7 +43,7 @@ module.exports = class Bot {
      var t = new Date()
         this.alive = t.getTime()
     this.cells = [];
-      this.spawn()
+    
   }
      onRemove(main) {
         
@@ -57,17 +57,14 @@ module.exports = class Bot {
    onDeath() {
       this.mass = 0;
        this.score =0;
-      this.alive = this.server.timer.time;
+     
        this.playing = false;
-       this.spawn()
+    
    }
-    spawn() {
-        return;
-     if (this.playing) return;
-                
-               
-                this.server.spawn(this)
-         
+    onSpawn() {
+     
+  if (this.playing) return
+  this.alive = this.server.timer.time;
                 this.playing = true;   
     }
  getScore(re) {

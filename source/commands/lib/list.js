@@ -11,19 +11,54 @@ module.exports = function(str,main,log) {
     str = str.split(" ")
     if (str[1] == "players") {
         // 50
-        log("-----------------------------------Players-----------------------------------")
-        log("| Id  | Ip        | Name          | ChatName        | rank | posX | posY |")
+        log("|------------------------------------Players-----------------------------------|")
+        log("| Id  | Ip         | Name           | ChatName         | LBrank | posX  | posY |")
         main.clients.forEach((client)=>{
         
 
             var name = client.gameData.name
             var chatname = client.gameData.chatName
             name = name || "An Unamed Cell";
-          log("|" + fill(client.id.toString(),5) + "|" + fill(client.socket.remoteAddress,10) + "|" + fill(name,15) + "|" + fill(chatname,17) + "|")  
+            var rank = client.rank || "NA";
+            var center = {
+                x: "NA",
+                y: "NA"
+            }
+       
+                if (client.center.x) {
+                    center = client.center
+          center.y = ~~center.y 
+          center.x = ~~center.x 
+                }
+          log("|" + fill(client.id.toString(),5) + "|" + fill(client.socket.remoteAddress,12) + "|" + fill(name,16) + "|" + fill(chatname,18) + "|" + fill(rank.toString(),8) + "|" + fill(center.x.toString(),7) + "|" + fill(center.y.toString(),6) + "|") 
         })
         
     } else if (str[1] == "bots") {
+           log("|-------------------------------------Bots-------------------------------------|")
+        log("| Id  | BotId | Name           | LBrank |  posX  |  posY  | Alive  | Mass   |")
+        main.bots.forEach((client)=>{
         
+
+            var name = client.gameData.name
+            var chatname = client.gameData.chatName
+            name = name || "An Unamed Cell";
+            var rank = client.rank || "NA";
+            var center = {
+                x: "NA",
+                y: "NA"
+            }
+       var alive = main.timer.time - client.alive
+       alive = ~~(alive/6000)
+       alive *= 0.1
+       
+                if (client.cells[0]) {
+                    center = client.cells[0].position
+                    center.y = ~~center.y 
+          center.x = ~~center.x    
+                }
+          
+          log("|" + fill(client.id.toString(),5) + "|" + fill(client.botid.toString(),7) + "|" + fill(name,16) + "|" + fill(rank.toString(),8) + "|" + fill(center.x.toString(),9) + "|" + fill(center.y.toString(),9) + "|" + fill(alive.toString(),8) + "|" + fill(client.mass.toString(),7)) 
+        })
     } else if (str[1] == "minions") {
         
     } else if (str[1] == "help") {

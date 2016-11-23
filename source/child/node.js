@@ -31,6 +31,7 @@ module.exports = class Node {
  
   
         this.mass = node.mass || this.mass; 
+     
     }
     getSize() {
         return this.mass

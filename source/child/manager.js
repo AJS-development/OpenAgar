@@ -117,6 +117,7 @@ module.exports = class Manager {
         node.dead = true;
          this.nodes.delete(node)
           this.map.delete(node.id)
+           this.addedHash[node.id] = false;
           node.onDelete(this)
     }
     
