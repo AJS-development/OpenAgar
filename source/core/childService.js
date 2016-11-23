@@ -63,7 +63,7 @@ module.exports = class childService {
     }
     onData(data) {
         
-        data = JSON.parse(data)
+      
      
      // console.log(data)
         data.forEach((bot)=>{
@@ -88,7 +88,7 @@ module.exports = class childService {
     send(type,data) {
         data.type = type;
       try {
-      this.child.send(JSON.stringify(data))
+      this.child.send(data)
       } catch (e) {
   
       }

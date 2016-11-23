@@ -219,7 +219,7 @@ module.exports = class Manager {
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
              try {
-             process.send(JSON.stringify(this.toSend))
+             process.send(this.toSend)
              } catch (e) {
                process.exit(0)
              }

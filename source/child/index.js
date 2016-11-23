@@ -15,7 +15,7 @@
 var Manager = require('./manager.js')
 var manager = new Manager()
 process.on('message',function(msg) {
-    msg = JSON.parse(msg.toString())
+   
  
     switch (msg.type) {
         case 0: // init
