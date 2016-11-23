@@ -30,7 +30,8 @@ module.exports = class Manager {
         this.s = false;
         this.events = {}
         this.timers = {
-            a: 10
+            a: 100,
+            b: 10
         }
         this.players = new QuickMap();
     }
@@ -49,7 +50,7 @@ module.exports = class Manager {
             
             this.addedHash[node.id] = true;
             var owner = false
-            if (node.owner || node.owner === 0) {
+            if (node.owner && node.type == 0) {
                 owner = this.bots.get(node.owner) 
                 if (!owner) {
                     owner = this.players.get(node.owner)
@@ -204,17 +205,16 @@ module.exports = class Manager {
     clearEvents() {
         this.events = {};
     }
-    loop() { // 0.1 s
+    loop() { // 0.01 s
         if (this.timers.a <= 0) {
             var lb = this.updateLB()
             this.emit('lb',lb)
-            this.timers.a = 10;
+            this.timers.a = 100;
         } else this.timers.a--;
         
         
-        
-        
-              this.bots.forEach((bot)=>{
+        if (this.timers.b <= 0) {
+            this.bots.forEach((bot)=>{
                  bot.update()
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
@@ -224,6 +224,36 @@ module.exports = class Manager {
                process.exit(0)
              }
              this.toSend = [];
+            this.timers.b = 10;
+        } else this.timers.b--;
+        this.updatePlayers()
+       
+        
+            
+    }
+    updatePlayers() {
+        var final = [];
+        this.players.forEach((player)=>{
+            if (player.cells.length == 0) return;
+            player.cells.forEach((cell)=>{
+               var nodes = this.nodes.getNodes(cell.bounds)
+               var list = [];
+                nodes.forEach((node)=>{
+                    if (node.id != cell.id) list.push(node.id)
+                })
+                final.push({i:cell.id,l:list})
+            })
+        })
+        if (final.length == 0) return;
+        var a = {
+            d: final,
+            p: true
+        }
+        try {
+        process.send(a)
+        } catch(e) {
+                process.exit(0)
+        }
     }
     other() {
         

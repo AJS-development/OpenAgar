@@ -61,10 +61,12 @@ this.velocity = 0;
         maxCurve: 0,
         useCurve: false
     }
+    this.nearby = [];
   this.other = other
   this.size = Math.ceil(Math.sqrt(100 * this.mass));
      this.getSpeed()
      this.getSize()
+     
      var d = new Date()
         this.created = d.getTime()
   }

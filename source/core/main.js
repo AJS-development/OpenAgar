@@ -551,11 +551,11 @@ module.exports = class Main {
       // w.update(node)
     } 
     
-    collide(node) {
+    collide(node,h) {
       
    
-        var hashnodes = this.getWorld().getNodes('hash').getNodes(node.bounds);
-      node.nearby = hashnodes;
+        var hashnodes = node.nearby
+    
         
         hashnodes.every((check)=>{
                if (check == node) return true;
@@ -616,9 +616,16 @@ module.exports = class Main {
     playerCollision() { // rel slow (1)
         
         
-        this.getWorld().getNodes("player").forEach((node)=>{
-           if (!node.dead) setTimeout(function() {this.collide(node)}.bind(this),1); // async
-        });
+        var nodes = this.getWorld().getNodes("player")
+
+        
+     nodes.forEach((node)=>{
+         
+         
+            this.collide(node)
+            
+     })
+        
     }
    
     updateMovingCells() { // fast(0)

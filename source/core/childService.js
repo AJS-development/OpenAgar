@@ -62,7 +62,22 @@ module.exports = class childService {
         if (this.events[event]) this.events[event](data)
     }
     onData(data) {
-        
+        if (data.p) {
+   
+           var world = this.main.getWorld().getNodes('map')
+           data.d.forEach((c)=>{
+               var cell = world.get(c.i)
+               if (!cell) return;
+               cell.nearby = []
+               c.l.forEach((n)=>{
+                          
+                var node = world.get(n)
+              
+                if (node) cell.nearby.push(node)
+               })
+           })
+            return;
+        }
       
      
      // console.log(data)
