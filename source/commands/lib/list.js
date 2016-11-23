@@ -28,6 +28,9 @@ module.exports = function(str,main,log) {
         
     } else if (str[1] == "help") {
         
+    } else {
+     log("Command not found, Available commands: players,bots,minions,all"   
+        
     }
     
 }
