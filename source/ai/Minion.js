@@ -45,10 +45,12 @@ module.exports = class Minion {
      var t = new Date()
         this.alive = t.getTime()
     this.cells = [];
+      this.removed = false;
       this.spawn()
   }
     onRemove(main) {
         this.parent.removeMinion(this)
+        this.removed = true;
     }
  
   addCell(cell) {
@@ -64,12 +66,13 @@ module.exports = class Minion {
        this.spawn()
    }
     spawn() {
-     if (this.playing) return;
+     if (this.playing || this.removed) return;
                 
                
                 this.server.spawn(this)
         
                 this.playing = true;   
+        if (this.parent.pausem) this.frozen = true;
     }
  getScore(re) {
       

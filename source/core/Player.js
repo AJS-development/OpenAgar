@@ -38,6 +38,8 @@ module.exports = class Player {
             t: false,
             q: false
         }
+        this.pausem = false;
+        this.frozen = false;
         this.score = 0;
         this.nodeHash = {};
         this.hashnodes = [];
@@ -197,10 +199,33 @@ module.exports = class Player {
         if (this.PEvent('onPressW',{player:this}) && this.GMEvent('pressW',{player:this})) main.ejectMass(this)
       }
      if (this.keys.e) {
-         this.PEvent('onPressE',{player:this})
-          this.GMEvent('pressE',{player:this})          
+              this.keys.e = false;
+        if (this.PEvent('onPressE',{player:this}) && this.GMEvent('pressE',{player:this})) {
+            this.minions.forEach((minion)=>{
+                main.splitPlayer(minion)
+            })
+            
+        }         
+     }
+         if (this.keys.r) {
+                  this.keys.r = false;
+         if (this.PEvent('onPressR',{player:this}) && this.GMEvent('pressR',{player:this})) {
+              this.minions.forEach((minion)=>{
+                main.ejectMass(minion)
+            })
+         }
+     }
+           if (this.keys.t) {
+                  this.keys.t = false;
+         if (this.PEvent('onPressT',{player:this}) && this.GMEvent('pressT',{player:this})) {
+             this.pausem = !this.pausem
+             this.minions.forEach((minion)=>{
+           minion.frozen = this.pausem
+            })
+         }
      }
     if (this.keys.q) {
+             this.keys.q = false;
         this.PEvent('onPressQ',{player:this})
         this.GMEvent('pressQ',{player:this})
     }

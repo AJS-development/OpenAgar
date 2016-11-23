@@ -160,15 +160,22 @@ module.exports = class Main {
     }
     removeMinion(bot) {
         bot.onRemove()
+         bot.cells.forEach((c)=>{
+         this.removeNode(c)
+     })
       this.minions.delete(bot.id)
      this.childService.removeClient(bot)
+    
     }
     removeBot(bot) {
         bot.onRemove()
+         bot.cells.forEach((c)=>{
+         this.removeNode(c)
+     })
       this.bots.delete(bot.id)
     this.childService.removeClient(bot)
     }
-    removeBot(ids) {
+    removeBots(ids) {
        
      ids.forEach((id)=>{
         var b = this.bots.get(id) 
@@ -341,6 +348,7 @@ module.exports = class Main {
         var tosend = [];
     this.childService.lb.forEach((lb)=>{
         var a = this.getPlayer(lb.i)
+        if (!a) return;
         a.rank = lb.r
         tosend.push({
             name: a.gameData.name || "An Unamed Cell",
@@ -523,7 +531,7 @@ module.exports = class Main {
             if (this.timer.pn) return
         }
         this.getWorld().getNodes("player").forEach((player)=>{
-           
+           if (player.owner.frozen) return;
             if (player.owner.isBot) {
                 
                 if (!this.timer.bot) return // bots update slower
