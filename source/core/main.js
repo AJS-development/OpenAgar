@@ -198,14 +198,44 @@ module.exports = class Main {
     
     addClient(client) {
         if (!this.clients.get(client.id)) {
-                  if (!this.pluginService.send('onClientAdd',{player:client,main:this})) return
-                  if (!this.gameMode.event('onPlayerInit',{player:client})) return;
+                  this.pluginService.send('onClientAdd',{player:client,main:this})
+                  
+                  this.gameMode.event('onPlayerInit',{player:client})
             this.clients.set(client.id,client);
-            
+            this.sendClientPacket(client)
         }
         
     }
-    
+    sendClientPacket(client) {
+        var config = this.getConfig()
+        var a = {
+         // Macros (1 = on)
+    sMacro: config.clientSMacro,
+    wMacro: config.clientWMacro,
+    qMacro: config.clientQMacro,
+    eMacro: config.clientEMacro,
+    rMacro: config.clientRMacro,
+    darkBG: config.clientDarkBG,
+    chat: config.clientChat,
+    skins: config.clientSkins,
+    grid: config.clientGrid,
+    acid: config.clientAcid,
+    colors: config.clientColors,
+    names: config.clientNames,
+    showMass: config.clientShowMass,
+    smooth: config.clientSmooth,
+    minionCount: 0,
+    minimap: 0,
+    maxName: config.clientMaxName,
+    title: config.clientTitle,
+    defaultusername: config.clientDefaultUsername,
+    nickplaceholder: config.clientNickPlaceholder,
+    instructions: config.clientInstructions,
+    leavemessage: config.clientLeaveMessage,
+    customHTML: "",
+        }
+        client.socket.emit('cpacket',a)
+    }
     removeClient(client) {
         setTimeout(function() {
              client.cells.forEach((cell)=>{
@@ -452,6 +482,7 @@ module.exports = class Main {
         
           this.timer.updatePN += local - this.timer.time;
         this.timer.time = local;
+       
       //  if (this.timer.passed <= 0) return
       
           // 0.05 seconds

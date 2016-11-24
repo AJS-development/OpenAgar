@@ -50,7 +50,7 @@ module.exports = class socketService {
          socket._activated = false;
         socket._disconnect = false;
         socket._uidp = this.uid + Math.floor(Math.random() * 1000)
-        socket.emit('hello', {msg:"Achieved Connection",uid: socket._uidp,suid: this.uid,key: _key,version:"2.9.3",secure: this.globalData.config.socketProtection});
+        socket.emit('hello', {msg:"Achieved Connection",uid: socket._uidp,suid: this.uid,key: _key,version:_version,secure: this.globalData.config.socketProtection});
       var id = this.getNextId();
        socket._player = new Player(
             id,

@@ -30,7 +30,7 @@ module.exports = class virus extends template {
         this.fed = 0;
         this.type = 2;
 
-        
+        this.spiked = true;
         this.nearby = [];
       
     }

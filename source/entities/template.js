@@ -66,7 +66,8 @@ this.velocity = 0;
   this.size = Math.ceil(Math.sqrt(100 * this.mass));
      this.getSpeed()
      this.getSize()
-     
+     this.agit = false
+     this.spiked = false
      var d = new Date()
         this.created = d.getTime()
   }

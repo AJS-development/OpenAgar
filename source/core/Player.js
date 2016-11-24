@@ -84,8 +84,8 @@ module.exports = class Player {
         this.socket = new Socket(socket,this)
         this.server.addClient(this)
         this.sendData = true;
-        var t = new Date()
-        this.alive = t.getTime()
+
+        this.alive = Date.now()
         
     }
     addMinion(minion) {
@@ -186,7 +186,7 @@ module.exports = class Player {
         var a = this.cells.indexOf(cell)
         if (a != -1) this.cells.splice(a,1)
         this.cellHash[cell.id] = false;
-        if (this.cells.length == 0) this.onDeath(this,cell.killer)
+        if (this.cells.length == 0) this.onDeath(cell.killer)
     }
     checkKeys(main) {
         if (this.keys.space) {
@@ -378,12 +378,14 @@ module.exports = class Player {
         })
         this.minions = []
     }
-   onDeath(main,killer) {
+   onDeath(killer) {
        this.killer = (killer && killer.owner) ? killer.owner : false;
+     
        this.mass = 0;
        this.score =0;
-      this.socket.emit('rip',{alive: main.timer.time - this.alive, killerId: (killer && killer.owner) ? killer.owner.id : -1})
-      this.alive = main.timer.time;
+  
+      this.socket.emit('rip',{alive: this.server.timer.time - this.alive, killerId: (killer && killer.owner) ? killer.owner.id : -1})
+      this.alive = this.server.timer.time;
        
            this.playing = false;
 setTimeout(function() { // let the player see who killed them

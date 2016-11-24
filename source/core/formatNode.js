@@ -19,20 +19,18 @@ module.exports = function(node, main) {
     
     var a = {
         id: node.id,
-        owId: (node.owner) ? node.owner.id : false,
+        owId: (node.owner) ? node.owner.id : 0,
         size: node.size,
         mass: node.mass,
         type: node.type,
-        name: node.name,
-        color: node.color,
         posX: node.position.x,
         posY: node.position.y,
-        spiked: 0,
-        skin: false,
-        agit: 0
+        color: node.color
     };
-    if (!a.color) console.log("k")
-    // console.log(node.position.x + "|" + a.posY+"|" +main.bounds.height+ "|"+ node.position.y)
-    if (node.type == 2) a.spiked = true;
+    node.name && (a.name = node.name)
+    node.agit && (a.agit = 1)
+    node.skin && (a.skin = node.skin)
+  
+    node.spiked && (a.spiked = 1);
     return a;
 };
