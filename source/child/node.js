@@ -22,6 +22,13 @@ module.exports = class Node {
             this.owner.addCell(this)
         }
     }
+    collisionCheck(node) {
+        var size = node.size + this.size + 100 
+        
+        var x = this.position.x - node.position.x
+        var y = this.position.y - node.position.y
+       return (size * size >= x * x + y * y)
+    }
     set(node) {
        this.type = node.type || this.type;
         this.position = node.position || this.position;

@@ -14,6 +14,7 @@
 */
 var Manager = require('./manager.js')
 var manager = new Manager()
+// require('../../cpu.js').init('./data')
 process.on('message',function(msg) {
    
  

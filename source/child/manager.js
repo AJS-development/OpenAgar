@@ -31,8 +31,8 @@ module.exports = class Manager {
         this.haveTeams = false;
         this.events = {}
         this.timers = {
-            a: 100,
-            b: 5
+            a: 200,
+            b: 10
         }
         this.players = new QuickMap();
     }
@@ -176,7 +176,7 @@ module.exports = class Manager {
        }
           this.interval = setInterval(function() {
        this.loop()
-         }.bind(this),100) 
+         }.bind(this),50) 
           this.on('delPlayer',function(ps) {
           
                this.removeClient(ps)
@@ -219,17 +219,19 @@ module.exports = class Manager {
     clearEvents() {
         this.events = {};
     }
-    loop() { // 0.01 s
+    loop() { // 0.005 s
         if (this.timers.a <= 0) {
             var lb = this.updateLB()
             if (lb.length != 0) this.emit('lb',lb)
-            this.timers.a = 100;
+            this.timers.a = 200;
         } else this.timers.a--;
         
         
         if (this.timers.b <= 0) {
             this.bots.forEach((bot)=>{
+                setTimeout(function() {
                  bot.update()
+                },1)
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
              try {
@@ -239,8 +241,9 @@ module.exports = class Manager {
                process.exit(0)
              }
              this.toSend = [];
-            this.timers.b = 5;
+            this.timers.b = 10;
         } else this.timers.b--;
+       
         this.updatePlayers()
        
         
@@ -254,7 +257,11 @@ module.exports = class Manager {
                var nodes = this.nodes.getNodes(cell.bounds)
                var list = [];
                 nodes.forEach((node)=>{
-                    if (node.id != cell.id) list.push(node.id)
+                    if (node.id != cell.id) {
+                        
+                        if (cell.collisionCheck(node)) list.push(node.id)
+                        
+                    }
                 })
                 final.push({i:cell.id,l:list})
             })
@@ -265,8 +272,12 @@ module.exports = class Manager {
                var nodes = this.nodes.getNodes(cell.bounds)
                var list = [];
                 nodes.forEach((node)=>{
-                    if (node.id != cell.id) list.push(node.id)
+                    if (node.id != cell.id) {
+                        
+                      if (cell.collisionCheck(node)) list.push(node.id)
+                    }
                 })
+                
                 final.push({i:cell.id,l:list})
             })
         })
@@ -281,6 +292,25 @@ module.exports = class Manager {
                 process.exit(0)
         }
     }
+    checkMass() {
+        var list = [];
+        var max = this.config.playerMaxMass
+        this.players.forEach((player)=>{
+            player.cells.forEach((cell)=>{
+                if (cell.mass > max) list.push(cell.id)
+            })
+            
+        })
+        this.bots.forEach((player)=>{
+            player.cells.forEach((cell)=>{
+                if (cell.mass > max) list.push(cell.id)
+            })
+            
+        })
+        if (list.length == 0) return;
+        this.emit('mass',list)
+    }
+    
     other() {
         
     }

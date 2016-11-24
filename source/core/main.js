@@ -474,7 +474,7 @@ module.exports = class Main {
     }
     
     mloop() {
-       setTimeout(function() {this.loop()}.bind(this),2);
+       setTimeout(function() {this.loop()}.bind(this),5);
         let local = Date.now();
         this.timer.tick += (local - this.timer.time);
         this.timer.passed = local - this.timer.time
@@ -518,7 +518,6 @@ module.exports = class Main {
                     this.timer.slow = 0;
                     this.checkFood();
                     this.foodService.checkVirus()
-                    this.checkMass();
                     this.updateMerge();
                     this.updateLB()
                 } else {
@@ -544,14 +543,7 @@ module.exports = class Main {
     getConfig() {
         return this.dataService.config;
     }
-    
-    checkMass() { 
-        // checks for players that have too much mass
-        this.getWorld().getNodes('player').forEach((node)=>{
-            if (node.mass <= this.getConfig().playerMaxMass) return;
-            node.updateMass(this.getConfig().playerMaxMass);
-        });
-    }
+   
     checkMerge() { // checks if cells can merge
         this.getWorld().getNodes('player').forEach((node)=>{
             
@@ -579,16 +571,19 @@ module.exports = class Main {
              setImmediate(function() {player.move(this,1 + shift)}.bind(this))
              this.collisionHandler.collidePlayer(player)
               player.checkGameBorders(this);
-                this.updateHash(player)
+               
                 player.movCode()
             } else {
             player.move(this,0+ shift);
              this.collisionHandler.collidePlayer(player)
               player.checkGameBorders(this);
-                this.updateHash(player)
+               
                 player.movCode()
             }
         });
+        this.getWorld().getNodes("player").forEach((player)=>{
+          this.updateHash(player)  
+        })
         
         this.timer.bot = !this.timer.bot
     }

@@ -39,6 +39,17 @@ module.exports = class childService {
     this.on('lb',function(lb) {
         this.lb = lb
     }.bind(this))
+    this.on('mass',function(m) {
+        var nodes = this.main.getWorld().getNodes('player'),
+            max = this.main.getConfig().playerMaxMass;
+        m.forEach((k)=>{
+        var node = nodes.get(k)
+        if (node) {
+            node.mass = Math.min(node.mass,max)
+            node.updCode()
+        } 
+        })
+    }.bind(this))
   }
     on(e,f) {
         this.events[e] = f
