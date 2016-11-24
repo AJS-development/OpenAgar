@@ -31,7 +31,7 @@ module.exports = class Manager {
         this.haveTeams = false;
         this.events = {}
         this.timers = {
-            a: 200,
+            a: 100,
             b: 10
         }
         this.players = new QuickMap();
@@ -222,8 +222,10 @@ module.exports = class Manager {
     loop() { // 0.005 s
         if (this.timers.a <= 0) {
             var lb = this.updateLB()
+            this.checkMass()
             if (lb.length != 0) this.emit('lb',lb)
-            this.timers.a = 200;
+            
+            this.timers.a = 100;
         } else this.timers.a--;
         
         
