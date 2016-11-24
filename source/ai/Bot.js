@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+var BotAi = require('./botAI.js')
 module.exports = class Bot {
   constructor(id,server,botid) {
     this.id = id
@@ -29,10 +30,12 @@ this.center = {
      x: 0,
         y: 0
     }
+this.team = 0;
 this.playing = false;
  this.server = server;  
     this.cells = [];
-     this.send = ~~(Math.random() * 10)
+     this.send = false;
+   this.ai = new BotAi(this)
   }
      onRemove(main) {
    
@@ -76,6 +79,12 @@ setRandom() {
           this.mouse.y = Math.floor(a.height * Math.random()) + a.y
          
 }
+    ejectMass() {
+        this.server.ejectMass(this)
+    }
+    splitCells() {
+        this.server.splitPlayer(this)
+    }
     getSmallest() {
         if (this.cells.length == 0) return;
         var min = this.cells[0]
@@ -85,7 +94,7 @@ setRandom() {
         })
        return min;
     }
-  update() { // 0.1 sec
+  update() { // 0.05 sec
    
         if (this.cells.length == 0 && !this.playing) this.spawn()
       var a = this.calcView()
@@ -94,8 +103,7 @@ setRandom() {
        //   if (this.center.x == this.mouse.x || this.center.y == this.mouse.y) 
   this.view = a;
      this.nodes = this.server.nodes.getNodes(this.view)
-     this.decide()
-      this.setRandom()
+  this.ai.update()
       
           // this.checkDeath()
           /*
@@ -112,65 +120,7 @@ setRandom() {
  
     
   }
-    decide() {
-        var canEat = [];
-        var predators = []
-        
-        var min = this.getSmallest()
-        this.nodes.forEach((node)=>{
-            if (node.owner == this) return;
-            switch (node.type) {
-                case 0: // players
-                    if (node.mass > min.mass * 1.33) {
-                        predators.push(node)
-                    } else if (min.mass > 1.33 * node.mass ) {
-                        
-                        canEat.push(node)
-                    }
-                    
-                    break;
-                case 1:
-                    
-                    break;
-                case 2:
-                    
-                    break;
-                case 3:
-                    
-                    break;
-                case 4: // food
-                    canEat.push(node)
-                    break;
-                default:
-                    
-                    break;
-                    
-            }
-        })
-        if (predators.length == 0 && this.mouse == this.center) {
-            this.mouse = canEat[Math.floor(Math.random() * canEat.length)]
-        } else if (predators.length != 0) {
-            var avgx = 0;
-            var avgy = 0;
-            predators.forEach((n)=>{
-                avgx += n.position.x
-               avgy += n.position.y
-               
-                
-            })
-            avgx = avgx/predators.length - this.center.x
-            avgy = avgy/predators.length - this.center.y
-             var angle = Math.atan2(avgy,avgx)
-             
-                var flipped = angle + Math.PI // flip angle
-                if (flipped > 2 * Math.PI) flipped -= 2 * Math.PI
-                this.mouse.x = Math.floor(this.center.x + (1000 + Math.cos(flipped)))
-                this.mouse.y =  Math.floor(this.center.y + (1000 + Math.sin(flipped)))
-                // console.log(this.center,this.mouse,(flipped * 180) / Math.PI)
-               
-        }
-        
-    }
+   
     calcView() {
          if (this.cells.length == 0) return
         var totalSize = 1.0;
@@ -197,10 +147,9 @@ setRandom() {
     return this.a
     }
     shouldSend() {
-        if (this.send <= 0) {
-            this.send = 10
-            return true;
-        } else this.send --;
+        var a = this.send
+        if (this.send) this.send = false;
+      return a
     }
     changeColor(color) {
        

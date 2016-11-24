@@ -35,7 +35,7 @@ module.exports = class childService {
       this.child.on('message',function(data) {
           this.onData(data)
       }.bind(this))
-       this.send(0,{hello:"hello",config: this.main.getConfig()})
+       this.send(0,{hello:"hello",config: this.main.getConfig(),teams:this.main.haveTeams})
     this.on('lb',function(lb) {
         this.lb = lb
     }.bind(this))
@@ -55,6 +55,12 @@ module.exports = class childService {
                 bot.onSpawn()
                 this.main.spawn(bot)
                 
+                break;
+            case 2: // eject
+                this.main.ejectMass(bot)
+                break;
+            case 3: // split
+                  this.main.splitPlayer(bot)
                 break;
         }
     }
@@ -124,7 +130,8 @@ this.send(5,{id: bot.id, bot: bot.botid})
           bounds: node.bounds,
           position: node.position,
           owner: (node.owner) ? node.owner.id : false,
-          mass: node.mass
+          mass: node.mass,
+          speed: node.speed
           
           
       })

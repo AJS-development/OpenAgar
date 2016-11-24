@@ -19,7 +19,7 @@
 module.exports = class Bot {
   constructor(id,server) {
     this.id = id
- 
+ this.team = 0;
 this.score = 0;
 this.mouse = {
     x: 0,
@@ -68,11 +68,11 @@ this.playing = false;
         
     }
   
-setRandom() {
+getRandom() {
        if (!this.a) return;
     var a = this.a
-        this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
-          this.mouse.y = Math.floor(a.height * Math.random()) + a.y
+        return {x:Math.floor(a.width * Math.random()) + a.x,
+          y:Math.floor(a.height * Math.random()) + a.y}
          
 }
  

@@ -8,7 +8,7 @@ module.exports = class Node {
         this.id = node.id;
         this.owner = owner
         this.size = node.size;
-      
+      this.speed = node.speed
 
         this.mass = node.mass;
         
@@ -31,7 +31,7 @@ module.exports = class Node {
  
   
         this.mass = node.mass || this.mass; 
-     
+     this.speed = node.speed || this.speed
     }
     getSize() {
         return this.mass

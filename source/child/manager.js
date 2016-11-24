@@ -28,10 +28,11 @@ module.exports = class Manager {
         this.bots = new QuickMap()
         this.config = {};
         this.s = false;
+        this.haveTeams = false;
         this.events = {}
         this.timers = {
             a: 100,
-            b: 10
+            b: 5
         }
         this.players = new QuickMap();
     }
@@ -113,6 +114,18 @@ module.exports = class Manager {
         })
         
     }
+    ejectMass(bot) {
+         this.toSend.push({
+            id: bot.id,
+            action: 2
+        })
+    }
+     splitPlayer(bot) {
+         this.toSend.push({
+            id: bot.id,
+            action: 3
+        })
+    }
    removeNode(node) {
         node.destroyed = true;
         node.dead = true;
@@ -154,6 +167,7 @@ module.exports = class Manager {
     init(msg) {
         
        this.config = msg.config
+       this.haveTeams = msg.teams
        try {
            
            clearInterval(this.interval)
@@ -208,7 +222,7 @@ module.exports = class Manager {
     loop() { // 0.01 s
         if (this.timers.a <= 0) {
             var lb = this.updateLB()
-            this.emit('lb',lb)
+            if (lb.length != 0) this.emit('lb',lb)
             this.timers.a = 100;
         } else this.timers.a--;
         
@@ -219,12 +233,13 @@ module.exports = class Manager {
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
              try {
-             process.send(this.toSend)
+                 
+             if (this.toSend[0]) process.send(this.toSend)
              } catch (e) {
                process.exit(0)
              }
              this.toSend = [];
-            this.timers.b = 10;
+            this.timers.b = 5;
         } else this.timers.b--;
         this.updatePlayers()
        

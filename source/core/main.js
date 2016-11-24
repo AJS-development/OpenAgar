@@ -51,6 +51,10 @@ module.exports = class Main {
         this.deleteR = "";
         this.chatNames = [];
         this.botid = 0;
+        this.lbConfig = {
+            lbtype: 0
+        }
+        this.haveTeams = false;
         this.colors  = [
             {'r':235, 'g': 75, 'b':  0},
             {'r':225, 'g':125, 'b':255},
