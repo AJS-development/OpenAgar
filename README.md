@@ -54,29 +54,24 @@ There are also chat commands
 Since most of OpenAgar's features doesnt come in the box, plugins are very important. So we made it very easy to install plugins. 
 
 #### The Plugin Command
-The plugin command has four important actions. They are
+The plugin command has four important actions.
 
-1. install: Install a plugin from a library
-2. search: search libraries for plugins
-3. library: Add a library
-4. add: Add a plugin by url
-
-##### install
+##### 1. install
 > plugin install [name]
 
 Install a plugin from plugin library. The default library is [this](https://github.com/AJS-development/OAPlugins). Note that plugins are case sensitive.
 
-##### search
+##### 2. search
 > plugin search [search term]
 
 Search plugin librarys for plugins matching your search term
 
-##### library
+##### 3. library
 > plugin library [url] 
 
 This adds a library to install/search plugins from. The url is the plugin JSON file with all the plugin data ([example](https://github.com/AJS-development/OAPlugins/blob/master/plugins.json)). All the libraries are stored in `source/commands/lib/libraries`. It is a line-break separated list of urls.
 
-##### add
+##### 4. add
 > plugin add [name] [url]
 
 This adds a plugin from it's url.
