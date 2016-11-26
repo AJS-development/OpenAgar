@@ -13,7 +13,7 @@ module.exports = {
             }
         },
         serverService: {
-            create: function(serverService,str) {
+            create: function(str,ss,log) {
                 serverService.create();
             },
             startv: require('./lib/startv.js'),
@@ -21,7 +21,17 @@ module.exports = {
             redraw: require('./lib/redraw.js'),
             plugin: require('./lib/plugin.js')
             
+        },
+    chat: {
+        help: function(str,main,log) {
+            log("================= Commands =================")
+            log("Help               | Shows help for commands")
+            main.pluginService.chatA.forEach((cmd)=>{log(cmd)})
+            log("============================================")
+               
         }
+        
+    }
     
     
 };

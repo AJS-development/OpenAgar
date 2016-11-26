@@ -25,6 +25,7 @@ const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
 const Commands = require('../commands').list
+const ChatCommands = require('../commands').chat
 const QuickMap = require('quickmap')
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
@@ -134,10 +135,16 @@ module.exports = class Main {
         return true;
     }
     addChat(player,msg) {
+        if (msg.charAt(0) == "/") {
+            if (!this.parseChatCommand(player,msg)) player.msg("That command was not found")
+                
+                return
+        }
               if (!this.pluginService.send('beforeChat',{player:player,main:this,msg:msg})) return
         var name = player.gameData.chatName
         if (!name) return player.msg("Your chatname is not set! Please join the game")
         if (player.gameData.chatBan) return player.msg("You are banned from the chat!")
+
         var data = {
             id: this.chatId ++,
             name: player.gameData.chatName,
@@ -149,10 +156,27 @@ module.exports = class Main {
         this.chat.push(data)
         if (this.chat.length >= 15) this.chat.splice(0,1)
         this.clients.forEach((client)=>{
-            client.socket.emit('chat',data)
+            if (client.recievePublicChat && client.mutePlayers.indexOf(player.id) == -1) client.socket.emit('chat',data)
         })
     }
-  
+  parseChatCommand(player,msg) {
+      msg = msg.substr(1)
+    if (!msg) return false;
+      var cmd = msg.split(" ")[0].toLowerCase()
+      if (ChatCommands[cmd]) {
+          ChatCommands[cmd](msg,this,function(a) {
+              player.msg(a)
+          })
+          return true;
+      } else if (this.pluginService.chatC[cmd]) {
+          this.pluginService.chatC[cmd](msg,this,function(a) {
+              player.msg(a)
+          })
+          return true;
+      }
+      
+      return false
+  }
     getGlobal() {
         return this.dataService.globalData
     }
@@ -204,8 +228,14 @@ module.exports = class Main {
                   this.gameMode.event('onPlayerInit',{player:client})
             this.clients.set(client.id,client);
             this.sendClientPacket(client)
+            this.sendPrevChat(client)
         }
         
+    }
+    sendPrevChat(client) {
+        this.chat.forEach((chat)=>{
+            client.socket.emit('chat',chat)
+        })
     }
     sendClientPacket(client) {
         var config = this.getConfig()

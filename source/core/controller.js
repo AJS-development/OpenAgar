@@ -23,7 +23,7 @@ var UID = require('./uid.js');
 Util = require('./utilities.js')
 var a = require('../modules/fastSquares.js')
 Sqrt = new a()
-_version = "3.1.5"
+_version = "3.1.7"
 _key = ""
 try {
     try {_key = parseInt(require('fs').readFileSync(__dirname + '/../../key.txt',"utf8"))} catch(j){

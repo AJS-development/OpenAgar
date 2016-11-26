@@ -18,7 +18,7 @@ var fs = require('fs')
 var ini = require('../modules/ini.js')
 module.exports = class PluginService {
     constructor(main) {
-        this.vars = ["configs","commands","addToHelp","gamemodes"]
+        this.vars = ["configs","commands","addToHelp","gamemodes","chatCommands","chatHelp"]
         this.main = main
         this.plugins = {};
         this.pdata = {}
@@ -29,6 +29,8 @@ module.exports = class PluginService {
             log: main.log
             
         }
+        this.chatC = {};
+        this.chatA = [];
         this.gamemodes = []
         this.configs = ini.parse(fs.readFileSync(__dirname + '/../settings/pluginConfig.ini',"utf8"))
         if (this.configs.allowed) this.configs.allowed = this.configs.allowed.split(",")
@@ -41,6 +43,20 @@ module.exports = class PluginService {
         this.parser.init()  
         this.plugins = this.parser.getPlugins()
         this.pdata = this.parser.getData()
+        var command = this.getData('chatCommands')
+         var help = this.getData('chatHelp')
+        this.chatC = {}
+        this.chatA = []
+        command.forEach((comm)=>{
+                if (!comm) return;
+               for (var i in comm) {
+                    this.chatC[i] = comm[i]
+                    
+                }
+            })
+             help.forEach((help)=>{
+                   this.chatA = this.chatA.concat(help)
+                   })
         var command = this.getData('commands')
       var help = this.getData('addToHelp')
       var gamemodes = this.getData('gamemodes')

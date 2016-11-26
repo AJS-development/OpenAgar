@@ -46,7 +46,8 @@ module.exports = class Player {
         this.moveView = [];
         this.upmoveHash = {};
         this.moveHash = {};
-       
+       this.recievePublicChat = true;
+        this.mutePlayers = []
         this.cellHash = {};
        this.timer = {
         view: 0,
