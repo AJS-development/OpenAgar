@@ -23,7 +23,7 @@ module.exports = {
             
         },
     chat: {
-        help: function(str,main,log) {
+        help: function(str,main,player,log) {
             log("================= Commands =================")
             log("Help               | Shows help for commands")
             main.pluginService.chatA.forEach((cmd)=>{log(cmd)})
