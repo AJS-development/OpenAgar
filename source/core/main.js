@@ -50,6 +50,7 @@ module.exports = class Main {
         this.bots = new QuickMap();
         this.deleteR = "";
         this.chatNames = [];
+        this.interface = true;
         this.botid = 0;
         this.lbConfig = {
             lbtype: 0

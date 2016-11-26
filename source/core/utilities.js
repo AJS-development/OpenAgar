@@ -13,7 +13,7 @@ argsParser: function(str,splitpoint) { // commandname first:hello,secound:just,t
         }
         return results; 
     },
-dirEscape: function(input,dir,ext) {
+dirEscape: function(before,dir,ext) {
 
      dir = dir.split('/')
     var file = dir[dir.length-1]
@@ -22,6 +22,6 @@ dirEscape: function(input,dir,ext) {
     var f = dir.slice(0,dir.length-1)
     f = f.join("/")
     if (f) f = f.replace(/\./g,"")
-   return dir + f + "/" + file
+   return before + f + "/" + file
 }
 }

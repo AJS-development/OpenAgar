@@ -147,7 +147,7 @@ this.log(0,"       |_|                      |___/            ")
  return true;
 }
     prompt(key) {
-         if (this.redrawing) return;
+         if (this.redrawing || !this.controller.serverService.selected.interface) return;
         if (key == '\u000D') { //enter
              process.stdout.write('\n')
         if (this.text) {this.parseCommands(this.text)
