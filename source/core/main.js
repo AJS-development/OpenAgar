@@ -164,12 +164,12 @@ module.exports = class Main {
     if (!msg) return false;
       var cmd = msg.split(" ")[0].toLowerCase()
       if (ChatCommands[cmd]) {
-          ChatCommands[cmd](msg,this,function(a) {
+          ChatCommands[cmd](msg,this,player,function(a) {
               player.msg(a)
           })
           return true;
       } else if (this.pluginService.chatC[cmd]) {
-          this.pluginService.chatC[cmd](msg,this,function(a) {
+          this.pluginService.chatC[cmd](msg,this,player,function(a) {
               player.msg(a)
           })
           return true;
