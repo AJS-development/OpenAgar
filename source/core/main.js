@@ -412,7 +412,7 @@ module.exports = class Main {
         }
         var command = this.pluginService.commands[cmd]
         if (command) {
-             command(str,this,this.log)
+             command(str,this,this.log,__dirname)
              return true;
         }
         return false;
