@@ -42,6 +42,12 @@ There are commands you can type in command line.
 |stop       |Stops the server|
 
 
+## Chat Commands
+There are also chat commands
+
+|Command    | Desc   |
+|-----------|--------|
+|help       |Displays a list of commands|
 
 ## Developers
 
