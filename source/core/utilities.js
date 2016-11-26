@@ -12,5 +12,8 @@ argsParser: function(str,splitpoint) { // commandname first:hello,secound:just,t
             results[a[0]] = a[1];
         }
         return results; 
-    }
+    },
+dirEscape: function(input,dir) {
+        
+}
 }
