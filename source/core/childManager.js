@@ -1,6 +1,7 @@
 "use strict"
 var Child = require('child_process')
 var QuickMap = require('quickmap')
+var ChildHolder = require('./childHolder.js')
 module.exports = class childManager {
     constructor() {
         this.cpus = require('os').cpus()
@@ -10,7 +11,7 @@ module.exports = class childManager {
     assignChild(sid) {
         if (this.childs.length < this.cpus.length) {
            var child = this.createNewChild()
-            child.send({type:8,a:sid})
+            child.assign(sid)
            return child
         } 
     var lowest = false;
@@ -19,18 +20,18 @@ module.exports = class childManager {
         
     })
             if (!lowest) throw "ERR: Child was not found"
-            lowest.assigned ++;
-        lowest.send({type:8,a:sid})
+         
+        lowest.assign(sid)
             return lowest
         
             }
     deAssignChild(id,sid) {
         var child = this.childs.get(id)
         if (!child) throw "ERR: Cannot deassign child that doesnt exsist!"
-        child.assigned --;
-        child.send({type:8,da:sid})
+  
+        child.deAssign(sid)
         if (child.assign <= 0) {
-            child.send({type:"stop"})
+            child.stop()
             this.childs.delete(id)
         }
         
@@ -42,11 +43,7 @@ module.exports = class childManager {
     createNewChild() {
         var child = Child.fork(__dirname + '/../child/index.js')
         var id = this.getNextCID()
-        var data = {
-            id: id,
-            assigned: 1,
-            child: child
-        }
+        var data = new ChildHolder(id,child)
         this.childs.set(id,data)
         return data;
     }

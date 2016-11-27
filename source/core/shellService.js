@@ -73,6 +73,7 @@ this.stdin.setEncoding('utf8');
        
         process.stdout.write('\u001B[H\u001B[2r')
       this.redrawing = true;
+     
       this.clearAnim(height * width,function() {
           process.stdout.write("\x1b[K")
           
@@ -147,6 +148,7 @@ this.log(0,"       |_|                      |___/            ")
  return true;
 }
     prompt(key) {
+ 
          if (this.redrawing || !this.controller.serverService.selected.interface) return;
         if (key == '\u000D') { //enter
              process.stdout.write('\n')

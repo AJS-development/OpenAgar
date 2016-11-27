@@ -31,10 +31,11 @@ const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 const GMService = require('./gameMode.js')
 module.exports = class Main {
-    constructor(isMain,id,name,scname,globalData,config,log) {
+    constructor(isMain,id,name,scname,globalData,config,log,child) {
         this.isMain = isMain;
         this.id = id;
         this.name = name;
+        this.childid = child.id;
         this.scname = scname;
    this.log = log;
      this.viruses = 0;
@@ -95,7 +96,7 @@ module.exports = class Main {
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
            this.pluginService = new PluginService(this)
-           this.childService = new ChildService(this)
+           this.childService = new ChildService(this,child)
             this.gameMode = new GMService(this)
         
        this.addBots(config.serverBots)

@@ -16,10 +16,10 @@
 var Child = require('child_process')
 var QuickMap = require('quickmap')
 module.exports = class childService {
-  constructor(main) {
+  constructor(main,child) {
     this.cpus = require('os').cpus().length
   
-    this.child = Child.fork(__dirname + '/../child/index.js')
+    this.child = child
     
     this.main = main;
       this.toSend = [];
@@ -33,7 +33,7 @@ module.exports = class childService {
    this.init()
   }
   init() {
-      this.child.on('message',function(data) {
+      this.child.on(this.main.id,function(data) {
           this.onData(data)
       }.bind(this))
        this.send(0,{hello:"hello",config: this.main.getConfig(),teams:this.main.haveTeams})
@@ -121,7 +121,7 @@ module.exports = class childService {
     send(type,data) {
         data.type = type;
       try {
-      this.child.send(data)
+      this.child.send(this.main.id,data)
       } catch (e) {
   
       }

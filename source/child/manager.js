@@ -19,8 +19,8 @@ var Node = require('./node.js')
 var Bot = require('../ai/Bot.js')
 var Player = require('./Player.js')
 module.exports = class Manager {
-    constructor() {
-        this.nodes = [];
+    constructor(id) {
+       this.id = id;
         this.addedHash = [];
          this.nodes = new HashBounds(500,true);
         this.toSend = [];
@@ -160,10 +160,7 @@ module.exports = class Manager {
             }
         })
     }
-    stop() {
-        clearInterval(this.interval)
-        console.log("[Child Process] Stopped")
-    }
+    
     init(msg) {
         
        this.config = msg.config
@@ -184,6 +181,32 @@ module.exports = class Manager {
            
           }.bind(this))
     }
+    onRemove() {
+        try {
+         clearInterval(this.interval)
+        } catch (e) {
+            
+        }
+        this.bots.forEach((b)=>{
+            b.onRemove(this)
+        })
+        this.players.forEach((b)=>{
+            b.onRemove(this)
+        })
+         this.addedHash = false;
+         this.nodes = false
+        this.toSend = false;
+        this.map = false
+        this.bots = false
+        this.config = false;
+        this.s = false;
+        this.haveTeams = false;
+        this.events = false
+        this.timers = false
+        this.players = false
+         
+    }
+    
     removeClient(id) {
         var a = this.bots.get(id)
         if (a) {
@@ -214,6 +237,7 @@ module.exports = class Manager {
        if (this.events[e]) this.events[e](d)
     }
     on(e,f) {
+        
         this.events[e] = f
     }
     clearEvents() {
@@ -236,12 +260,10 @@ module.exports = class Manager {
                 },1)
                  if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
              })
-             try {
+           
                  
-             if (this.toSend[0]) process.send(this.toSend)
-             } catch (e) {
-               process.exit(0)
-             }
+             if (this.toSend[0]) this.send(this.toSend)
+           
              this.toSend = [];
             this.timers.b = 10;
         } else this.timers.b--;
@@ -288,10 +310,17 @@ module.exports = class Manager {
             d: final,
             p: true
         }
+        
+        this.send(a)
+        
+    }
+    send(data) {
+        
         try {
-        process.send(a)
-        } catch(e) {
-                process.exit(0)
+            process.send({id:this.id,data:data})
+            
+        } catch (e) {
+            process.exit(0)
         }
     }
     checkMass() {

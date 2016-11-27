@@ -14,12 +14,18 @@
 */
 var Manager = require('./manager.js')
 var manager = new Manager()
+var QuickMap = require('quickmap')
+var managers = new QuickMap();
 // require('../../cpu.js').init('./data')
 process.on('message',function(msg) {
-   
- 
+    if (msg.sid || msg.sid == 0) {
+   var manager = managers.get(msg.sid)
+ if (!manager) return;
+    }
+
     switch (msg.type) {
         case 0: // init
+            
             manager.init(msg)
             break;
         case 1: // addnodes
@@ -38,12 +44,25 @@ process.on('message',function(msg) {
             manager.addBot(msg.id,msg.bot)
             break;
         case 6: // stop
-            manager.stop(msg)
+            managers.forEach(function(m) {
+                m.onRemove()
+            })
+            process.exit(0)
             break;
         case 7: // event
             manager.event(msg)
             break;
         case 8: // assign/deassign
+            if (msg.a || msg.a === 0) {
+                var mn = new Manager(msg.a)
+            
+             managers.set(msg.a,mn)
+            } else if (msg.da || msg.a === 0) {
+                var mn = manager.get(msg.da)
+                if (mn) mn.onRemove()
+                manager.delete(msg.da)
+            }
+            
             
             break;
             
