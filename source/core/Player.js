@@ -116,15 +116,15 @@ module.exports = class Player {
         this.server.addChat(this,msg)
         
     }
-    changeServers(msg,servers) {
-    if (!msg || !msg.id) return
-    if (!servers.servers[msg.id]) {
-        this.socket.emit("msg",{type: "error",msg: "Server not found"})
-        return;
+    changeServers(id,servers) {
+    if (!id) return
+    if (!servers.servers.get(id)) {
+       
+        return false;
     }
         if (this.server) this.server.removeClient(this)
         this.reset()
-        this.server = server;
+        this.server = servers.servers.get(id);
         this.server.addClient(this)
         this.init()
     }

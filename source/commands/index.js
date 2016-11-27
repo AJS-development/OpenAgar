@@ -13,9 +13,7 @@ module.exports = {
             }
         },
         serverService: {
-            create: function(str,ss,log) {
-                serverService.create();
-            },
+            server: require('./lib/server.js'),
             startv: require('./lib/startv.js'),
             stop: require('./lib/stop.js'),
             redraw: require('./lib/redraw.js'),

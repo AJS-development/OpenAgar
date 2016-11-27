@@ -90,7 +90,8 @@ module.exports = class Main {
             rslow: 0,
             bot: false,
             pn: false,
-            passed: 0
+            passed: 0,
+            init: Date.now()
         };
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
@@ -104,6 +105,21 @@ module.exports = class Main {
     }
     changeMode(mode) {
         this.gameMode.event('onChange')
+    }
+    onRemove() {
+        this.getWorld().getNodes('map').forEach((node)=>{
+            this.removeNode(node)
+        })
+        this.minions.forEach((min)=>{
+            this.removeMinion(min)
+        })
+        this.bots.forEach((bot)=>{
+            this.removeBot(bot)
+        })
+        this.clients = false;
+        this.bots = false;
+        this.minions = false;
+        
     }
     addMinions(player,num) {
         for (var i = 0; i < num; i ++) {

@@ -52,7 +52,7 @@ module.exports = function(str,main,log) {
             }
        var alive = main.timer.time - client.alive
        alive = Math.round(alive/6000)
-       alive *= 0.1
+       alive = alive / 10
        
                 if (client.cells[0]) {
                     center = client.cells[0].position

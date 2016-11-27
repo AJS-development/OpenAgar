@@ -38,9 +38,12 @@ this.stdin.setEncoding('utf8');
 }.bind(this));
 
     }
-    select(id) {
+    select(id,c) {
         this.selected = id
-        this.writeLog()
+        this.writeLog(c)
+    }
+    removeServ(id) {
+        delete this.console[id]
     }
     clearAnim(amount,callback) {
            process.stdout.write(" ")
