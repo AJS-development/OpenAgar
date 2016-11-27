@@ -117,7 +117,9 @@ module.exports = class Player {
         
     }
     changeServers(id,servers) {
+     
     if (!id) return
+    
     if (!servers.servers.get(id)) {
        
         return false;
@@ -135,8 +137,8 @@ module.exports = class Player {
         this.visible = [];
         this.gameData = {
             name: "",
-            color: server.getRandomColor(),
-            chatColor: server.getRandomColor(),
+            color: this.server.getRandomColor(),
+            chatColor: this.server.getRandomColor(),
             reservedChatNames: [],
             chatName: "",
            chkDeath: false,
@@ -144,6 +146,8 @@ module.exports = class Player {
             reservedNamesMap: []
         }
         this.owning = []
+        this.playing = false;
+        this.sendData = false;
     }
     init() {
         this.socket.emit('mes',{type: "setBorder",bounds: this.server.bounds})
@@ -162,7 +166,9 @@ module.exports = class Player {
         }
     }
     addCell(cell) {
-        if (this.cells.indexOf(cell) != -1) return; this.cells.push(cell)
+      
+        if (this.cells.indexOf(cell) != -1) return;
+        this.cells.push(cell)
         this.cellHash[cell.id] = true;
         this.socket.emit('mes',{type: "addNode",id:cell.id})
     }
@@ -305,6 +311,7 @@ module.exports = class Player {
     }
 
     calcView() {
+       
         if (this.cells.length == 0) return
         var totalSize = 1.0;
         var x = 0, y = 0;
@@ -398,7 +405,7 @@ setTimeout(function() { // let the player see who killed them
     send() {
     
         if (this.toSend.length == 0) return;
-        
+       
         this.socket.sendNodes(this.toSend)
        this.toSend = [];
     }
@@ -407,6 +414,7 @@ setTimeout(function() { // let the player see who killed them
         this.toSend.push({moveUpt: node.id,x: node.position.x,y:node.position.y})
     }
     update(main) { // every 0.02 sec
+        
         if (!this.sendData) return;
            if (this.cells.length == 0 && this.playing) return;
         if (main.toBeDeleted.length > 0) this.deleteNodes(main);

@@ -42,7 +42,35 @@ module.exports = class socketService {
     getNextId() {
         return this.globalData.getNextId()
     }
-
+    setup(socket) {
+         socket._activated = true;
+             socket.emit('accepted',"Welcome")
+             socket.emit('mes',{type:"clearNodes"})
+             socket.emit('mes',{type:"setPid",pid: socket._player.id})
+               socket.emit('mes',{type:"showOverlay"})
+                socket.emit('mes',{type:"setFPS",fps: 10})
+                this.sendInfoPacket(socket)
+    }
+    reloadInfoP() {
+        this.clients.forEach((client)=>{
+            this.sendInfoPacket(client)
+        })
+    }
+    sendInfoPacket(socket) {
+        var data= [];
+        this.serverService.servers.forEach((server)=>{
+        data.push({
+            id: server.id,
+            name: server.name,
+            scn: server.scname,
+            players: server.clients.length,
+            bots: server.bots.length
+            
+        })
+        })
+        
+       socket.emit('infop',data)
+    }
 
     connection(socket) {
         socket._remoteAddress = socket.request.connection.remoteAddress
@@ -66,14 +94,7 @@ module.exports = class socketService {
             socket.disconnect()
         }
         },700)
-        function setup(socket) {
-            socket._activated = true;
-             socket.emit('accepted',"Welcome")
-             socket.emit('mes',{type:"clearNodes"})
-             socket.emit('mes',{type:"setPid",pid: socket._player.id})
-               socket.emit('mes',{type:"showOverlay"})
-                socket.emit('mes',{type:"setFPS",fps: 10})
-        }
+        
         socket.on('key',function(data) {
             if (!data) return;
                var uid = socket._uidp
@@ -83,7 +104,7 @@ module.exports = class socketService {
               
                if (a) {
            
-            setup(socket)
+            this.setup(socket)
               
                } else {
                    socket.emit('kicked',"Key not valid. You may be a bot!")
@@ -93,18 +114,16 @@ module.exports = class socketService {
                }
         }.bind(this));
         } else {
-            setup(socket)
+            this.setup(socket)
         }
         socket.on('cha',function(data) {
             if (!socket._activated) return;
-            try { 
-                data = data.toString();
-                data = RSON.parse(data);
-                socket._player.changeServers(data,this.serverService);
-            } catch (e) {
-                console.log(e);
-            }
-        });
+          
+              if (!data.id) return;
+                socket._player.changeServers(data.id,this.serverService);
+            socket.emit('mes',{type:"clearNodes"})
+            
+        }.bind(this));
         socket.on('pong',function(data) {
             
         })
@@ -123,7 +142,7 @@ module.exports = class socketService {
          socket._disconnect = true;   
             socket._player.onDisconnect()
            var i = this.clients.indexOf(socket)
-            if (i != -1) this.clients[i] = false;
+            if (i != -1) this.clients.splice(i,1)
             
         }.bind(this))
         socket.on('chat',function(data) {

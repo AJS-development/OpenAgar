@@ -240,9 +240,11 @@ module.exports = class Main {
     
     addClient(client) {
         if (!this.clients.get(client.id)) {
+           
                   this.pluginService.send('onClientAdd',{player:client,main:this})
                   
                   this.gameMode.event('onPlayerInit',{player:client})
+         
             this.clients.set(client.id,client);
             this.sendClientPacket(client)
             this.sendPrevChat(client)
@@ -285,7 +287,8 @@ module.exports = class Main {
         client.socket.emit('cpacket',a)
     }
     removeClient(client) {
-        setTimeout(function() {
+    
+      //  setTimeout(function() {
              client.cells.forEach((cell)=>{
             this.removeNode(cell);
         });
@@ -293,7 +296,7 @@ module.exports = class Main {
             this.removeNode(cell)
         })
              client.cells = [];
-        }.bind(this),this.getConfig().disconnectTime * 1000)
+    //    }.bind(this),this.getConfig().disconnectTime * 1000)
        
        
         var names = client.gameData.reservedNamesMap;
@@ -366,6 +369,7 @@ module.exports = class Main {
        if (!player.isBot) player.gameData.chatName = this.getChatName(player)
     
         var pos = this.foodService.getRandomPos();
+ 
       this.addNode(pos,this.getConfig().startMass,0,player);
     
     }
@@ -493,8 +497,9 @@ module.exports = class Main {
     updateClients() {
        // if (this.toBeDeleted.length == 1) this.toBeDeleted.push({id:0,killer:0})
         this.deleteR = JSON.stringify(this.toBeDeleted)
+ 
         this.clients.forEach((client)=>{
-          
+       
             client.update(this);
         });
         this.toBeDeleted = [];

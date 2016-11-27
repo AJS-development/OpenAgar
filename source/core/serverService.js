@@ -28,7 +28,7 @@ module.exports = class ServerService {
         this.globalData = globalData;
         this.controller = controller;   
         this.servers = new QuickMap;
-        this.ids = 0;
+        this.ids = 1;
        
         this.selected = false;
         this.childManager = new ChildManager()
@@ -44,7 +44,7 @@ module.exports = class ServerService {
         return this.ids ++;
     }
     start() {
-        this.default.start();
+      
     }
     execCommand(str) {
         if (!str) return;
@@ -78,16 +78,20 @@ module.exports = class ServerService {
         }
         return false;
     }
+    reloadInfoP() {
+        this.socketService.reloadInfoP()
+    }
     createServer(name,scname,config,selected) {
         var id = this.getNextId()
         var child = this.childManager.assignChild(id)
-        var serv = new Main(id == 0,id,name,scname,this.globalData,config,function(a) {
+        var serv = new Main(id == 1,id,name,scname,this.globalData,config,function(a) {
             this.controller.shellService.log(id,a)
         }.bind(this),child);
         this.servers.set(id,serv)
         if (selected) this.select(id)
         
         serv.init()
+        serv.start()
         return serv
     }
     removeServer(id) {
