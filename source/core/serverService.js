@@ -57,7 +57,7 @@ module.exports = class ServerService {
         virusDecay: 12,
         splitMin: 32,
         gameMode: 0,
-        botmaxsplit: 4,
+        botMaxSplit: 4,
         clientSMacro: 0,
         clientWMacro: 0,
         clientQMacro: 0,
