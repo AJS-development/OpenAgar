@@ -290,12 +290,19 @@ module.exports = class Main {
     removeClient(client) {
     
       //  setTimeout(function() {
-             client.cells.forEach((cell)=>{
+    for (var i = 0; i < client.cells.length; i++) {
+        var cell = client.cells[i]
+        if (!cell) continue;
             this.removeNode(cell);
-        });
-        client.owning.forEach((cell)=>{
-            this.removeNode(cell)
-        })
+        i --;
+        };
+        for (var i = 0; i < client.owning.length; i++) {
+        var cell = client.owning[i]
+        if (!cell) continue;
+            this.removeNode(cell);
+        i --;
+        };
+    
              client.cells = [];
     //    }.bind(this),this.getConfig().disconnectTime * 1000)
        
