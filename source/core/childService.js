@@ -18,6 +18,7 @@ var QuickMap = require('quickmap')
 module.exports = class childService {
   constructor(main) {
     this.cpus = require('os').cpus().length
+  
     this.child = Child.fork(__dirname + '/../child/index.js')
     
     this.main = main;

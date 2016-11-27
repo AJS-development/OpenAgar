@@ -43,6 +43,9 @@ process.on('message',function(msg) {
         case 7: // event
             manager.event(msg)
             break;
+        case 8: // assign/deassign
+            
+            break;
             
     }
     
