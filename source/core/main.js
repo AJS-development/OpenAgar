@@ -107,6 +107,7 @@ module.exports = class Main {
         this.gameMode.event('onChange')
     }
     onRemove() {
+        this.stop()
         this.getWorld().getNodes('map').forEach((node)=>{
             this.removeNode(node)
         })
@@ -116,9 +117,9 @@ module.exports = class Main {
         this.bots.forEach((bot)=>{
             this.removeBot(bot)
         })
-        this.clients = false;
-        this.bots = false;
-        this.minions = false;
+        this.clients = [];
+        this.bots = [];
+        this.minions = [];
         
     }
     addMinions(player,num) {
@@ -527,7 +528,7 @@ module.exports = class Main {
     }
     
     mloop() {
-       setTimeout(function() {this.loop()}.bind(this),5);
+      this.timeout = setTimeout(function() {this.loop()}.bind(this),5);
         let local = Date.now();
         this.timer.tick += (local - this.timer.time);
         this.timer.passed = local - this.timer.time
@@ -784,6 +785,11 @@ module.exports = class Main {
         // initiate server launch
     }
     stop() {
+        try {
+         clearTimeout(this.timeout)   
+        } catch (e) {
+            
+        }
         // stop the server
     }
     pause() {
