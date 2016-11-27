@@ -39,11 +39,9 @@ eval(UID())
  throw e
 }
 var ShellService = require('./shellService.js')
+var Config = require('./configService.js')
 function Controller() {
-        this.config = {
-            serverPort: 8080,
-            socketProtection: true
-        };
+        this.config = Config.loadSConfig(true)
         
         this.globalData = new GlobalData(this.config); 
      this.shellService = new ShellService(this)

@@ -18,26 +18,46 @@ const fs = require("fs");
 const ini = require('../modules/ini.js');
 
 
-module.exports = class ConfigService {
-  constructor(main) {
-    this.config = { 
-     
-    }; 
-   this.main = main;
-  }
+module.exports = {
 
-  load() {
-    this.loadConfig();
-
-  }
- 
-  loadConfig() {
-
-
+ loadSConfig: function(d) {
+    try {
+    var config = ini.parse(fs.readFileSync(__dirname + '/../settings/serverConfig.ini',"utf8"))
+    
+    return config;
+    
+} catch (e) {
+    if (d) {
+        console.log("Error with getting config:")
+        throw e
     }
-  log(a) {
-    this.main.log(a)
-  }
+   return false
+} 
+ },
+  loadConfig: function(dir,d) {
+try {
+    var physics = ini.parse(fs.readFileSync(dir + '/physicsConfig.ini',"utf8"))
+    var config = ini.parse(fs.readFileSync(dir + '/config.ini',"utf8"))
+     var client = ini.parse(fs.readFileSync(dir + '/clientConfig.ini',"utf8"))
+    for (var i in physics) {
+        if (!config[i]) config[i] = physics[i]
+    }
+    for (var i in client) {
+        if (!config[i]) config[i] = client[i]
+    }
+    return config;
+    
+} catch (e) {
+    if (d) {
+        console.log("Error with getting config:")
+        throw e
+    }
+   return false
+}
+      
+
+    },
+
 
   
 };

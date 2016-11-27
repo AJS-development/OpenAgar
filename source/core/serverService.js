@@ -19,62 +19,13 @@
 const Commands = require('../commands')
 const SocketService = require('./socketService.js');
 const Main = require('./main.js');
+const Config = require('./configService.js')
 const request = require('minirequest')
 module.exports = class ServerService {
     constructor(controller,globalData) {
         this.globalData = globalData;
         this.controller = controller;
-    var config = {
-        
-        serverViewBaseX: 1380,
-        serverViewBaseY: 820,
-        startMass: 20,
-        playerMaxMass: 2000,
-        minFood: 600,
-        boundX: 0,
-        boundY: 0,
-        boundWidth: 10000,
-        boundHeight: 10000,
-        playerSpeed: 40,
-        playerMinMass: 10,
-        splitSpeed: 100,
-        splitDecay: 10,
-        playerMaxCells: 16,
-        ejectedMass: 10,
-        ejectedSpeed: 100,
-        ejectedDecay: 5,
-        serverBots: 0,
-        playerMergeMult: -0.05,
-        playerMerge: 8,
-        leaderBoardLen: 10,
-        disconnectTime: 30,
-        maxVirusMass: 1000,
-        virusMass: 100,
-        virusFeedMin: 5,
-        maxVirus: 90,
-        minVirus: 60,
-        virusSpeed: 50,
-        virusDecay: 12,
-        splitMin: 32,
-        gameMode: 0,
-        botMaxSplit: 4,
-        clientSMacro: 0,
-        clientWMacro: 0,
-        clientQMacro: 0,
-        clientEMacro: 0,
-        clientRMacro: 0,
-        clientDarkBG: 1,
-        clientChat: 2,
-        clientSkins: 2,
-        clientGrid: 1,
-        clientAcid: 1,
-        clientColors: 2,
-        clientNames: 2,
-        clientShowMass: 1,
-        clientSmooth: 1,
-        clientMaxName: 15
-        
-    }
+    var config = Config.loadConfig(__dirname + '/../settings',true)
         var serv = new Main(true,0,"Main","Main",globalData,config,function(a) {
             this.controller.shellService.log(0,a)
         }.bind(this));
