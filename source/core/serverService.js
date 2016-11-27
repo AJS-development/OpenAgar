@@ -61,7 +61,7 @@ module.exports = class ServerService {
     select(a,c) {
         
         var server = this.servers.get(a)
-        if (!server) return false
+        if (!server || (this.selected && a == this.selected.id)) return false
             if (this.selected) this.selected.selected = false;
         this.selected = server
         server.selected = true
