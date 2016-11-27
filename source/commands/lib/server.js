@@ -58,7 +58,7 @@ return log("Please provide a name and a screen name")
         log("Successfully switched servers")
     
     })) console.log("Switching servers..."); else
-log("That server doesnt exist!");
+log("That server doesnt exist or is already selected!");
  } else {
   log("Please specify a command! (list, select,remove,create)");
  }
