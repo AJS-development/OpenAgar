@@ -11,7 +11,7 @@ module.exports = function(str,main,log) {
     str = str.split(" ")
     if (str[1] == "players") {
       
-        if (main.clients.length == 0) return log("There are no players in the game!")
+        if (main.clients.length == 0) return log("cya{[OpenAgar]} There are no players in the game!".styleMe())
         // 50
         log("|------------------------------------Players-----------------------------------|")
         log("| Id  | Ip         | Name           | ChatName         | LBrank | posX  | posY |")
@@ -36,7 +36,7 @@ module.exports = function(str,main,log) {
         })
         
     } else if (str[1] == "bots") {
-              if (main.bots.length == 0) return log("There are no bots in the game!")
+              if (main.bots.length == 0) return log("cya{[OpenAgar]} There are no bots in the game!".styleMe())
            log("|-------------------------------------Bots-------------------------------------|")
         log("| Id  | BotId | Name           | LBrank |  posX   |  posY   |  Alive  | Mass   |")
         main.bots.forEach((client)=>{
@@ -63,7 +63,7 @@ module.exports = function(str,main,log) {
           log("|" + fill(client.id.toString(),5) + "|" + fill(client.botid.toString(),7) + "|" + fill(name,16) + "|" + fill(rank.toString(),8) + "|" + fill(center.x.toString(),9) + "|" + fill(center.y.toString(),9) + "|" + fill(alive.toString(),9) + "|" + fill(client.mass.toString(),8) + "|") 
         })
     } else if (str[1] == "minions") {
-        if (main.minions.length == 0) return log("There are no minions in the game!")
+        if (main.minions.length == 0) return log("cya{[OpenAgar]} There are no minions in the game!".styleMe())
             log("|-----------------------------------Minions------------------------------------|")
         log("| Id  | BotId | Name           | LBrank |  posX   |  posY   | OwnerId | Mass   |")
         main.minions.forEach((client)=>{
@@ -95,7 +95,7 @@ module.exports = function(str,main,log) {
         log("|help    | Displays a list of actions     |")
         log("|-----------------------------------------|")
     } else {
-     log("Action not found, please do list help to see a list of actions" ) 
+     log("cya{[OpenAgar]} Action not found, please do list help to see a list of actions".styleMe()) 
         
     }
     

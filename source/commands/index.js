@@ -2,6 +2,7 @@ module.exports = {
 
         list: {
          addbot: require('./lib/addBot.js'),
+        kick: require('./lib/kick.js'),
         list: require('./lib/list.js'),
             help: function(str,main,log) {
             log("|-----------------Available Commands------------------|")

@@ -54,6 +54,9 @@ module.exports = class Bot {
       this.cells.push(cell)
      
     }
+    kick() {
+        this.server.removeBot(this)
+    }
   
    onDeath() {
       this.mass = 0;

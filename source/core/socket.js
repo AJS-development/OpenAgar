@@ -36,7 +36,11 @@ if (~idx && ~socket._remoteAddress.indexOf('.'))
        
         this.socket.emit('delnodes',tex) 
     }
-    
+disconnect() {
+    socket._diconnect = true;
+            socket.disconnect()
+            
+}
     emit(a,b) {
         
         this.socket.emit(a,b)

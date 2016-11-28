@@ -112,6 +112,12 @@ module.exports = class Player {
         
         
     }
+    kick(reason) {
+        if (!reason) reason = "You have been kicked from the server";
+         this.socket.emit('kicked',reason)
+            this.socket.disconnect()
+        
+    }
     onChat(msg) {
         this.server.addChat(this,msg)
         

@@ -2,7 +2,7 @@ module.exports = function (str,ss, log) {
   var split = str.split(" ")
   
  if (split[1] == "list") {
- log("Listing servers...")
+ log("gre{[OpenAgar]} Listing servers...".styleMe())
   var servers = ss.servers
    log("|------------------------------------Servers-----------------------------------|")
    log("| Id  | Name          | ScreenName     | Players | Bots | Uptime | Status      |")
@@ -37,30 +37,30 @@ module.exports = function (str,ss, log) {
   var sc = split.slice(3).join(" ")
 if (!name || !sc) {
 
-return log("Please provide a name and a screen name")
+return log("cya{[OpenAgar]} Please provide a name and a screen name".styleMe())
 }
-     if (ss.createServer(name,sc,ss.defconfig,false)) log("Server succesfully created"); else return log("Could not create server")
+     if (ss.createServer(name,sc,ss.defconfig,false)) log("gre{[OpenAgar]} Server succesfully created".styleMe()); else return log("yel{[OpenAgar]} Could not create server".styleMe())
      
      ss.reloadInfoP()
      
  } else if (split[1] == "remove") {
   var id = parseInt(split[2])
-  if (isNaN(id)) return log("Please specify a server id!")
+  if (isNaN(id)) return log("cya{[OpenAgar]} Please specify a server id!".styleMe())
   
-  if (ss.removeServer(id)) log("Removed server"); else return log("Failed to remove server. Check to make sure it is not main or is not selected.")
+  if (ss.removeServer(id)) log("gre{[OpenAgar]} Removed server".styleMe()); else return log("yel{[OpenAgar]} Failed to remove server. Check to make sure it is not main or is not selected.".styleMe())
     ss.reloadInfoP()
  } else if (split[1] == "select") {
    if (!split[2]) {
-     log("[Console] Please specify a server ids");
+     log("cya{[OpenAgar]}  Please specify a server ids".styleMe());
      return;
    }
     if (ss.select(parseInt(split[2]),function() {
-        log("Successfully switched servers")
+        log("gre{[OpenAgar]} Successfully switched servers".styleMe())
     
-    })) console.log("Switching servers..."); else
-log("That server doesnt exist or is already selected!");
+    })) console.log("gre{[OpenAgar]} Switching servers...".styleMe()); else
+log("yel{[OpenAgar]} That server doesnt exist or is already selected!".styleMe());
  } else {
-  log("Please specify a command! (list, select,remove,create)");
+  log("cya{[OpenAgar]} Please specify a command! (list, select,remove,create)".styleMe());
  }
   
   

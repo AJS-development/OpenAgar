@@ -44,8 +44,8 @@ var ShellService = require('./shellService.js')
 var Config = require('./configService.js')
 function Controller() {
         this.config = Config.loadSConfig(true)
-        
-        this.globalData = new GlobalData(this.config); 
+        var ban = Config.loadBan()
+        this.globalData = new GlobalData(this.config,ban); 
      this.shellService = new ShellService(this)
         this.serverService = new ServerService(this,this.globalData);
    

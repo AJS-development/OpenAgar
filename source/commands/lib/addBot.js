@@ -1,7 +1,8 @@
 module.exports = function(str,main,log) {
     str = str.split(" ")
    var amount = parseInt(str[1])
-   if (isNaN(amount)) return log("Please enter a valid amount")
+   
+   if (isNaN(amount)) amount = 1
     main.addBots(amount)
-    log( amount + " bots added")
+    log("gre{[OpenAgar]} ".styleMe() + amount + " bots added")
 }

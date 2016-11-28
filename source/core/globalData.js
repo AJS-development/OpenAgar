@@ -17,11 +17,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = class GlobalData {
-    constructor(config) {
+    constructor(config,ban) {
         this.data = {};
         this.config = config;
           this.id = 1;
-
+        this.ban = ban
     }
     getNextId() {
         return this.id ++;

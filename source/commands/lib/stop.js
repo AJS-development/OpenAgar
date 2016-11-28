@@ -1,5 +1,5 @@
 module.exports = function(str,serverService) {
-console.log("Closing Server")
+console.log("gre{[OpenAgar]} Closing Server".styleMe())
 process.exit(0)
 
 }

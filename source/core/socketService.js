@@ -39,6 +39,15 @@ module.exports = class socketService {
         
         if (!_checkKey(_key)) this.server.close()
     }
+    getPlayer(id) {
+        var player = false
+        this.clients.every((client)=>{
+            if (client._player.id != id) return true;
+            player = client._player
+            return false
+        })
+        return player;
+    }
     getNextId() {
         return this.globalData.getNextId()
     }
@@ -74,7 +83,12 @@ module.exports = class socketService {
 
     connection(socket) {
         socket._remoteAddress = socket.request.connection.remoteAddress
-        
+        if (this.globalData.ban.indexOf(socket._remoteAddress) != -1) {
+             socket._diconnect = true;
+             socket.emit('kicked',"You have been banned")
+            socket.disconnect()
+            return;
+        }
          socket._activated = false;
         socket._disconnect = false;
         socket._uidp = this.uid + Math.floor(Math.random() * 1000)

@@ -46,6 +46,9 @@ module.exports = class ServerService {
     start() {
       
     }
+    getPlayer(id) {
+        return this.socketService.getPlayer(id)
+    }
     execCommand(str) {
         if (!str) return;
         
