@@ -52,7 +52,7 @@ module.exports = class ChildHolder {
         this.assigned --;
     }
     stop() {
-         this.child.send({type:"stop"})
+         this.child.send({type:6})
         delete this.child
         
     }
