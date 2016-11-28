@@ -34,7 +34,7 @@ module.exports = class childManager {
               child.stop()
           }) 
            console.log("Killed all processes") 
-        });
+        }.bind(this));
     }
     assignChild(sid) {
         if (this.childs.length < this.cpus.length) {
