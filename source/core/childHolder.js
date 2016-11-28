@@ -53,6 +53,8 @@ module.exports = class ChildHolder {
     }
     stop() {
          this.child.send({type:"stop"})
+        delete this.child
+        
     }
     on(id,func) {
         this.listeners[id] = func
