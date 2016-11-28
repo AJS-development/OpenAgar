@@ -38,7 +38,11 @@ module.exports = class PluginService {
     
  
     } 
-    
+    stop() {
+      this.plugins.forEach((plugin)=>{
+      if (plugin.stop) plugin.stop()
+      })
+    }
     init() {
         this.parser.init()  
         this.plugins = this.parser.getPlugins()
