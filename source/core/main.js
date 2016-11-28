@@ -24,6 +24,7 @@ const Bot = require('../ai/fakePlayer.js');
 const CollisionHandler = require('./collisionHandler.js')
 const LZString = require('../modules/LZString.js')
 const Minion = require('../ai/Minion.js')
+
 const Commands = require('../commands').list
 const ChatCommands = require('../commands').chat
 const QuickMap = require('quickmap')

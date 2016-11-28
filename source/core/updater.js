@@ -48,6 +48,7 @@ module.exports = class Updater {
         }.bind(this))
     }
     writeFileSafe(dir,file,data,call) {
+       
   file = file.split("/")
   if (!file[0]) {
       file = file.slice(1)
@@ -68,12 +69,15 @@ module.exports = class Updater {
       }
   }
   }
+       
          fs.writeFile(dir + "/" + file.join("/"),data,function() {call()})
   
     }
     downloadFile(data,call) {
         var src = data.src
         var url = this.dir + data.url
+        console.log(url)
+        
         request(data.url,function(e,r,b) {
             if (!e && r.statusCode == 200) {
                 
@@ -81,7 +85,7 @@ module.exports = class Updater {
              
                 
             } else {
-                call("Could not locate " + data.url)
+                call("Could not locate " + this.dir + data.url)
             }
             
         }.bind(this)) 
