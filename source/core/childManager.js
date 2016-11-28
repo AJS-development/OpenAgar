@@ -58,7 +58,7 @@ module.exports = class childManager {
         if (!child) throw "ERR: Cannot deassign child that doesnt exsist!"
   
         child.deAssign(sid)
-        if (child.assign <= 0) {
+        if (child.assigned <= 0) {
             child.stop()
             this.childs.delete(id)
         }
