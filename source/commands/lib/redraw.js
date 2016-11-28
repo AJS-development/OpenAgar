@@ -1,7 +1,7 @@
 module.exports = function(str,ss,log) {
-    log("Redrawing...")
+    log("gre{[OpenAgar]} Redrawing...".styleMe())
     ss.controller.shellService.writeLog(function() {
-        log("Done")
+        log("gre{[OpenAgar]} Done".styleMe())
     })
     
 }

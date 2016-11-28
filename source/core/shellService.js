@@ -132,12 +132,14 @@ this.stdin.setEncoding('utf8');
     }
     drawSplash() {
 
-this.log(1,"   ___                      _                    ")
-this.log(1,"  / _ \\ _ __   ___ _ __    / \\   __ _  __ _ _ __ ")
-this.log(1," | | | | '_ \\ / _ \\ '_ \\  / _ \\ / _` |/ _` | '__|")
-this.log(1," | |_| | |_) |  __/ | | |/ ___ \\ (_| | (_| | |   ")
-this.log(1,"  \\___/| .__/ \\___|_| |_/_/   \\_\\__, |\\__,_|_|   ")
-this.log(1,"       |_|                      |___/            ")
+this.log(1,"cya{   ___                   }yel{   _                    }".styleMe())
+this.log(1,"cya{  / _ \\ _ __   ___ _ __ }yel{   / \\   __ _  __ _ _ __ }".styleMe())
+this.log(1,"cya{ | | | | '_ \\ / _ \\ '_ \\}yel{  / _ \\ / _` |/ _` | '__|}".styleMe())
+this.log(1,"cya{ | |_| | |_) |  __/ | | |}yel{/ ___ \\ (_| | (_| | |   }".styleMe())
+this.log(1,"cya{  \\___/| .__/ \\___|_| |_}yel{/_/   \\_\\__, |\\__,_|_|   }".styleMe())
+this.log(1,"cya{       |_|                }yel{      |___/            }".styleMe())
+this.log(1,"       gre{OpenAgar} - cya{An open source web game}".styleMe())
+this.log(1,"        yel{Also by the cya{AJS} Development team}".styleMe())
     }
     init() {
         this.drawSplash()
