@@ -52,9 +52,10 @@ module.exports = class ServerService {
                 id: server.id,
                 name: server.name,
                 scname: server.scname,
-                selected: server.selected,
-                isMain: server.isMain
+                selected: server.selected
             };
+        server.dataService.config = null;
+         this.removeServer(1,true)
         this.default = false;
         this.servers.forEach((server))=>{
             if (server.isMain) return;
@@ -67,9 +68,11 @@ module.exports = class ServerService {
           
             })
             server.dataService.config = null;
-            this.removeServer(server.id)
+          this.removeServer(se.id,true)
         })
-        this.servers = [];
+       
+        this.servers = new QuickMap();
+        
         this.ids = 1
         this.default = this.createServer(defaul.name,defaul.scname,defaul.config,defaul.selected)
         servers.forEach((se)=>{
@@ -78,6 +81,19 @@ module.exports = class ServerService {
         })
     }
     restartSelected() {
+        var server = this.selected
+         var info = {
+              config: server.getConfig(),  
+                id: server.id,
+                name: server.name,
+                scname: server.scname,
+                selected: server.selected,
+                isMain: server.isMain
+            };
+       server.dataService.config = null;
+       this.removeServer(this.selected.id,true)
+        if (info.isMain) this.default = false;
+        this.createServer(info.name,info.scname,info.config,info.selected,info.id)
         
     }
     start() {
@@ -121,8 +137,8 @@ module.exports = class ServerService {
     reloadInfoP() {
         this.socketService.reloadInfoP()
     }
-    createServer(name,scname,config,selected) {
-        var id = this.getNextId()
+    createServer(name,scname,config,selected,id) {
+        var id = id || this.getNextId()
         var child = this.childManager.assignChild(id)
         var serv = new Main(id == 1,id,name,scname,this.globalData,config,function(a) {
             this.controller.shellService.log(id,a)
