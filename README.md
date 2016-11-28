@@ -39,6 +39,7 @@ There are commands you can type in command line.
 |plugin     |Plugin command, the core feature of OpenAgar|
 |list       |List the players/bots/minions in the game|
 |server     |Create servers, remove servers, select servers, and list them |
+|update     |Updates the software|
 |stop       |Stops the server|
 
 
