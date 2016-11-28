@@ -44,6 +44,40 @@ module.exports = class ServerService {
     getNextId() {
         return this.ids ++;
     }
+    restartAll() {
+        var servers = [];
+        var server = this.default
+        var defaul = {
+              config: server.getConfig(),  
+                id: server.id,
+                name: server.name,
+                scname: server.scname,
+                selected: server.selected,
+                isMain: server.isMain
+            };
+        this.default = false;
+        this.servers.forEach((server))=>{
+            if (server.isMain) return;
+            servers.push({
+              config: server.getConfig(),  
+                id: server.id,
+                name: server.name,
+                scname: server.scname,
+                selected: server.selected
+          
+            })
+            server.dataService.config = null;
+            this.removeServer(server.id)
+        })
+        
+        servers.forEach((se)=>{
+        
+        
+        })
+    }
+    restartSelected() {
+        
+    }
     start() {
       this.socketService.start()
     }
@@ -98,9 +132,9 @@ module.exports = class ServerService {
         serv.start()
         return serv
     }
-    removeServer(id) {
+    removeServer(id,force) {
         var server = this.servers.get(id)
-        if (!server || server.isMain || server.selected) return false;
+        if (!server || ((server.isMain || server.selected) && !force)) return false;
         server.clients.forEach((client)=>{ // evacuate players
             client.changeServers(this.default.id,this)
         })
