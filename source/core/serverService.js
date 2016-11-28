@@ -69,9 +69,11 @@ module.exports = class ServerService {
             server.dataService.config = null;
             this.removeServer(server.id)
         })
-        
+        this.servers = [];
+        this.ids = 1
+        this.default = this.createServer(defaul.name,defaul.scname,defaul.config,defaul.selected)
         servers.forEach((se)=>{
-        
+        this.createServer(se.name,se.scname,se.config,se.selected)
         
         })
     }
