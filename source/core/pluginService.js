@@ -39,9 +39,12 @@ module.exports = class PluginService {
  
     } 
     stop() {
-      this.plugins.forEach((plugin)=>{
+   for (var i in this.plugins) {
+       var plugin = this.plugins[i]
       if (plugin.stop) plugin.stop()
-      })
+      }
+   this.plugins = {};
+        this.pdata = {};
     }
     init() {
         this.parser.init()  

@@ -110,6 +110,8 @@ module.exports = class Main {
     onRemove() {
         this.stop()
         this.destroyed = true;
+        this.childService.stop()
+         this.pluginService.stop()
         this.getWorld().getNodes('map').forEach((node)=>{
             this.removeNode(node)
         })

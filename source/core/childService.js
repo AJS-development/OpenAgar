@@ -80,13 +80,9 @@ module.exports = class childService {
     event(event,data) {
         if (this.events[event]) this.events[event](data)
     }
-    destroy() {
-     this.child.removeListener(main.id)
-      this.child = null;
-        
-    }
+    
     onData(data) {
-        if (this.main.destroyed) return this.destroy()
+        if (this.main.destroyed) return 
         if (data.p) {
    
            var world = this.main.getWorld().getNodes('map')
@@ -123,7 +119,9 @@ module.exports = class childService {
         })
     }
     stop() {
-   
+    this.child.removeListener(this.main.id)
+      delete this.child
+        
     }
     send(type,data) {
         data.type = type;
