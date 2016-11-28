@@ -5,6 +5,7 @@ var exec = require('child_process').exec
 module.exports = class Updater {
     constructor(ss) {
         this.ss = ss;
+        this.dir = 'https://raw.githubusercontent.com/AJS-development/OpenAgar'
     }
     updateDone() {
         console.log("done. Installing modules..")
@@ -72,7 +73,7 @@ module.exports = class Updater {
     }
     downloadFile(data,call) {
         var src = data.src
-        var url = data.url
+        var url = this.dir + data.url
         request(data.url,function(e,r,b) {
             if (!e && r.statusCode == 200) {
                 
