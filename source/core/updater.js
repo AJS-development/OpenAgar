@@ -6,11 +6,13 @@ module.exports = class Updater {
     constructor(ss) {
         this.ss = ss;
         this.dir = 'https://raw.githubusercontent.com/AJS-development/OpenAgar/master'
+      this.tobe = 0;
+    this.dow = 0;
     }
     updateDone() {
-        console.log("done. Installing modules..")
+       this.loading("done. Installing modules..")
         this.install(function(e) {
-            if (e) console.log("ERROR: " + e); else console.log("Done")
+            if (e) throw e; else this.loading("done. Installing modules..")
         })
         
     }
@@ -20,7 +22,9 @@ module.exports = class Updater {
     });
     }
     update() {
-        console.log("updating...")
+        this.dow = 0;
+        this.tobe = 2;
+        console.log("gre{[Update]} Updating...".styleMe())
         request('https://raw.githubusercontent.com/AJS-development/OpAgMS/master/files.json',function(e,r,b) {
             try{
                     if (!e && r.statusCode == 200) {
@@ -29,7 +33,8 @@ module.exports = class Updater {
                         data.forEach((dt)=>{
                             if (!dt) return;
                             this.count ++;
-                            console.log("Downloading " + dt.name)
+                            this.tobe ++;
+                          
                             this.downloadFile(dt,function(e) {
                                 if (e) throw e
                                 
@@ -43,7 +48,7 @@ module.exports = class Updater {
                         
                     }
             } catch (e) {
-                console.log("ERROR:" + e)
+           throw e
             }
         }.bind(this))
     }
@@ -73,14 +78,30 @@ module.exports = class Updater {
          fs.writeFile(dir + "/" + file.join("/"),data,function() {call()})
   
     }
+    loading() {
+    this.dow ++;
+    var percent = Math.round(this.dow/this.tobe*10)
+    var bar = ""
+    for(var i = 0; i < percent; i++) {
+      bar = bar + "===";
+    }
+    if (percent == 10) bar = bar + "="; else bar = bar + ">";
+    var extras = 31 - bar.length;
+    var extra = "";
+    for (var i = 0; i < extras; i++) extra = extra + " ";
+    process.stdout.write("gre{[Update]} [".styleMe() + bar + extra + "] " +  percent*10 + "% " + action + "\r");
+    
+    
+  
+    }
     downloadFile(data,call) {
         var src = data.src
         var url = this.dir + data.url
-        console.log(url)
+
         
         request(url,function(e,r,b) {
             if (!e && r.statusCode == 200) {
-                
+                  this.loading("Downloading");
                 this.writeFileSafe(__dirname + "/../../",src,b,call)
              
                 
