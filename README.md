@@ -105,5 +105,3 @@ Yes, but note that we are very very strict. So many pull requests wont be accept
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
 
-## PS
-This program runs more than one process. The child processes are made to kill themselves when their parent is dead (I know that sounds very unethical), but sometimes, they refuse to die. So you may want to take a look at all your processes via process managers. All of the processes are named node. On my mac, I use `sudo killall node`.
