@@ -47,6 +47,7 @@ module.exports = class Main {
         this.food = 0;
         this.updateCode = 0;
         this.chatId = 1;
+        this.destroyed = false
         this.chat = [];
         this.tbd = [];
         this.bots = new QuickMap();
@@ -108,6 +109,7 @@ module.exports = class Main {
     }
     onRemove() {
         this.stop()
+        this.destroyed = true;
         this.getWorld().getNodes('map').forEach((node)=>{
             this.removeNode(node)
         })
