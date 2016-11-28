@@ -78,7 +78,7 @@ module.exports = class Updater {
          fs.writeFile(dir + "/" + file.join("/"),data,function() {call()})
   
     }
-    loading() {
+    loading(action) {
     this.dow ++;
     var percent = Math.round(this.dow/this.tobe*10)
     var bar = ""
