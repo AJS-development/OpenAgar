@@ -3,6 +3,7 @@ module.exports = {
         list: {
          addbot: require('./lib/addBot.js'),
         kick: require('./lib/kick.js'),
+        ban: require('./lib/ban.js'),
         list: require('./lib/list.js'),
             help: function(str,main,log) {
             log("|-----------------Available Commands------------------|")
@@ -18,7 +19,8 @@ module.exports = {
             startv: require('./lib/startv.js'),
             stop: require('./lib/stop.js'),
             redraw: require('./lib/redraw.js'),
-            plugin: require('./lib/plugin.js')
+            plugin: require('./lib/plugin.js'),
+            update: require('./lib/update.js')
             
         },
     chat: {
