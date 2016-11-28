@@ -78,13 +78,14 @@ module.exports = class Updater {
         var url = this.dir + data.url
         console.log(url)
         
-        request(data.url,function(e,r,b) {
+        request(url,function(e,r,b) {
             if (!e && r.statusCode == 200) {
                 
-                this.writeFileSafe(__dirname + "/../../",data.src,b,call)
+                this.writeFileSafe(__dirname + "/../../",src,b,call)
              
                 
             } else {
+         
                 call("Could not locate " + this.dir + data.url)
             }
             
