@@ -100,7 +100,7 @@ module.exports = class Updater {
 
         
         request(url,function(e,r,b) {
-            if (!e && r.statusCode == 200) {
+            if (!e && r.statusCode == 200 && b) {
                   this.loading("Downloading");
                 this.writeFileSafe(__dirname + "/../../",src,b,call)
              
