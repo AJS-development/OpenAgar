@@ -25,6 +25,16 @@ module.exports = class childManager {
         this.cpus = require('os').cpus()
         this.childs = new QuickMap();
         this.cid = 0
+        this.init()
+    }
+    init() {
+        
+        process.on('exit', function () {
+          this.childs.forEach((child)=>{
+              child.stop()
+          }) 
+           console.log("Killed all processes") 
+        });
     }
     assignChild(sid) {
         if (this.childs.length < this.cpus.length) {
