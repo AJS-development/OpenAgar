@@ -5,7 +5,7 @@ var exec = require('child_process').exec
 module.exports = class Updater {
     constructor(ss) {
         this.ss = ss;
-        this.dir = 'https://raw.githubusercontent.com/AJS-development/OpenAgar'
+        this.dir = 'https://raw.githubusercontent.com/AJS-development/OpenAgar/master'
     }
     updateDone() {
         console.log("done. Installing modules..")
