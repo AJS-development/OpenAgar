@@ -33,7 +33,7 @@ module.exports = class childManager {
           this.childs.forEach((child)=>{
               child.stop()
           }) 
-           console.log("gre{[OpenAgar]} Killed all processes".styleMe()) 
+           console.log("\ngre{[OpenAgar]} Killed all processes".styleMe()) 
         }.bind(this));
     }
     assignChild(sid) {
