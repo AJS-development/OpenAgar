@@ -40,6 +40,9 @@ module.exports = class ChildHolder {
             
         }
     }
+    removeListener(id) {
+        delete this.listeners[id]
+    }
     assign(sid) {
     
         this.assigned ++;
