@@ -52,8 +52,10 @@ module.exports = class ServerService {
                 id: server.id,
                 name: server.name,
                 scname: server.scname,
-                selected: server.selected
+                selected: server.selected,
+                players: server.clients
             };
+        server.clients = null;
         server.dataService.config = null;
          this.removeServer(1,true)
         this.default = false;
@@ -64,9 +66,11 @@ module.exports = class ServerService {
                 id: server.id,
                 name: server.name,
                 scname: server.scname,
-                selected: server.selected
+                selected: server.selected,
+                players: server.clients
           
             })
+            server.clients = null
             server.dataService.config = null;
           this.removeServer(se.id,true)
         })
@@ -74,9 +78,10 @@ module.exports = class ServerService {
         this.servers = new QuickMap();
         
         this.ids = 1
-        this.default = this.createServer(defaul.name,defaul.scname,defaul.config,defaul.selected)
+        this.default = this.createServer(defaul.name,defaul.scname,defaul.config,defaul.selected,false,defaul.players)
+        
         servers.forEach((se)=>{
-        this.createServer(se.name,se.scname,se.config,se.selected)
+        this.createServer(se.name,se.scname,se.config,se.selected,false,defaul.players)
         
         })
     }
@@ -153,10 +158,11 @@ module.exports = class ServerService {
     removeServer(id,force) {
         var server = this.servers.get(id)
         if (!server || ((server.isMain || server.selected) && !force)) return false;
+       if (this.default) {
         server.clients.forEach((client)=>{ // evacuate players
             client.changeServers(this.default.id,this)
         })
-        
+       }
         
         server.onRemove() // destroy server
         this.childManager.deAssignChild(server.childid,id)
