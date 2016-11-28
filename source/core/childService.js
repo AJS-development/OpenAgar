@@ -34,6 +34,7 @@ module.exports = class childService {
   }
   init() {
       this.child.on(this.main.id,function(data) {
+          
           this.onData(data)
       }.bind(this))
        this.send(0,{hello:"hello",config: this.main.getConfig(),teams:this.main.haveTeams})
@@ -79,7 +80,13 @@ module.exports = class childService {
     event(event,data) {
         if (this.events[event]) this.events[event](data)
     }
+    destroy() {
+     this.child.removeListener(main.id)
+      this.child = null;
+        
+    }
     onData(data) {
+        if (this.main.destroyed) return this.destroy()
         if (data.p) {
    
            var world = this.main.getWorld().getNodes('map')
