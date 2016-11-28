@@ -21,6 +21,8 @@ var GlobalData = require('./globalData.js');
 var request = require('minirequest')
 var UID = require('./uid.js');
 Util = require('./utilities.js')
+Style = require('styleme')
+Style.extend()
 var a = require('../modules/fastSquares.js')
 Sqrt = new a()
 _version = "3.2.0"
