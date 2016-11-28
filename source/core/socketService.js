@@ -31,13 +31,17 @@ module.exports = class socketService {
         
         this.password = 'd6F3Efeqe'; // will be encrypted later
         this.io = require("socket.io");
-        this.server = this.io(this.globalData.config.serverPort);
-        this.server.on('connection', function (socket) {
-            this.connection(socket);
-        }.bind(this));
         if (!this.uid) throw "UID not specified"
         
         if (!_checkKey(_key)) this.server.close()
+    }
+    start() {
+        this.server = this.io(this.globalData.config.serverPort);
+        this.serverService.log("gre{[OpenAgar]} Server listening on port ".styleMe() + this.globalData.config.serverPort)
+        this.server.on('connection', function (socket) {
+            this.connection(socket);
+        }.bind(this));
+        
     }
     getPlayer(id) {
         var player = false

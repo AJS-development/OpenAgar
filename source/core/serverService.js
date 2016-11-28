@@ -44,7 +44,7 @@ module.exports = class ServerService {
         return this.ids ++;
     }
     start() {
-      
+      this.socketService.start()
     }
     getPlayer(id) {
         return this.socketService.getPlayer(id)

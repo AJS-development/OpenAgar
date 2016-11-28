@@ -52,9 +52,9 @@ function Controller() {
     }
      
     Controller.prototype.start = function() {
-    
+     this.shellService.init()
         this.serverService.start();
-        this.shellService.init()
+       
     }
     Controller.prototype.execCommand = function(str) {
         this.serverService.execCommand(str)
