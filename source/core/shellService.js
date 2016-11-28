@@ -180,7 +180,7 @@ this.log(1,"       |_|                      |___/            ")
                     process.stdout.write('\r>' + this.text);
                    return;
                    
-        } else if ((key == '\u007F' || key == '\u008F') && this.text.length > 0) {
+        } else if ((key == '\u007F' || key == '\u0008') && this.text.length > 0) {
             this.ind = this.commands.length
             this.text = this.text.substr(0,this.text.length - 1)
             process.stdout.write('\r                                   ');
