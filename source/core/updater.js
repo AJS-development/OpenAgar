@@ -12,7 +12,10 @@ module.exports = class Updater {
     updateDone() {
        this.loading("done. Installing modules..")
         this.install(function(e) {
-            if (e) throw e; else this.loading("done. Installing modules..")
+            if (e) throw e; else {
+                this.loading("done. Restarting...");
+                process.exit(0);
+            }
         }.bind(this))
         
     }
