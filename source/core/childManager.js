@@ -28,7 +28,7 @@ module.exports = class childManager {
         this.init()
     }
     init() {
-        
+        if (this.cpus.length <= 1) throw "Your computer must have more than one core in order to run this program"
         process.on('exit', function () {
           this.childs.forEach((child)=>{
               child.stop()
@@ -37,7 +37,7 @@ module.exports = class childManager {
         }.bind(this));
     }
     assignChild(sid) {
-        if (this.childs.length < this.cpus.length) {
+        if (this.childs.length < this.cpus.length - 1) {
            var child = this.createNewChild()
             child.assign(sid)
            return child
