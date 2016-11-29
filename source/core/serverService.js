@@ -47,27 +47,37 @@ module.exports = class ServerService {
     restartAll() {
         var servers = [];
         var server = this.default
+        
+        var players = [];
+        server.clients.forEach((client)=>{
+            players.push(client)
+        })
         var defaul = {
               config: server.getConfig(),  
                 id: server.id,
                 name: server.name,
                 scname: server.scname,
                 selected: server.selected,
-                players: server.clients
+                players: players
             };
      
         server.dataService.config = null;
+         this.default = false;
          this.removeServer(1,true)
-        this.default = false;
-        this.servers.forEach((server)=>{
+       
+        servers.forEach((server)=>{
             if (server.isMain) return;
+            var players = [];
+        this.server.clients.forEach((client)=>{
+            players.push(client)
+        })
             servers.push({
               config: server.getConfig(),  
                 id: server.id,
                 name: server.name,
                 scname: server.scname,
                 selected: server.selected,
-                players: server.clients
+                players: splayers
           
             })
      
@@ -87,6 +97,10 @@ module.exports = class ServerService {
     }
     restartSelected() {
         var server = this.selected
+        var players = [];
+        server.clients.forEach((client)=>{
+            players.push(client)
+        })
          var info = {
               config: server.getConfig(),  
                 id: server.id,
@@ -94,12 +108,13 @@ module.exports = class ServerService {
                 scname: server.scname,
                 selected: server.selected,
                 isMain: server.isMain,
-             players: server.clients
+             players: players
             };
        
        server.dataService.config = null;
+          if (info.isMain) this.default = false;
        this.removeServer(this.selected.id,true)
-        if (info.isMain) this.default = false;
+      
         this.createServer(info.name,info.scname,info.config,info.selected,info.id,info.players)
         
     }
@@ -145,6 +160,7 @@ module.exports = class ServerService {
         this.socketService.reloadInfoP()
     }
     createServer(name,scname,config,selected,id,players) {
+  
         var id = id || this.getNextId()
         var child = this.childManager.assignChild(id)
         var serv = new Main(id == 1,id,name,scname,this.globalData,config,function(a) {
@@ -156,7 +172,7 @@ module.exports = class ServerService {
         serv.init()
         serv.start()
         if (players) {
-            players.forEach((player)=>{player.changeServers(this.selected.id,this)})
+            players.forEach((player)=>{player.changeServers(serv.id,this)})
         }
         return serv
     }
@@ -170,6 +186,7 @@ module.exports = class ServerService {
        } else {
              server.clients.forEach((client)=>{ // evacuate players
            server.removeClient(client)
+           client.server = false;
         })
        }
         

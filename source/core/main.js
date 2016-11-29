@@ -377,6 +377,7 @@ module.exports = class Main {
     }
     
     spawn(player) {
+      
        if (!this.pluginService.send('beforeSpawn',{player:player,main:this})) return
        if (!this.gameMode.event('onPlayerSpawn',{player:player})) return
        if (!player.isBot) player.gameData.chatName = this.getChatName(player)

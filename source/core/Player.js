@@ -131,8 +131,9 @@ module.exports = class Player {
         return false;
     }
         if (this.server) this.server.removeClient(this)
-        this.reset()
+      
         this.server = servers.servers.get(id);
+          this.reset()
         this.server.addClient(this)
         this.init()
     }
