@@ -48,13 +48,18 @@ if (this.redrawing || !this.controller.serverService.selected.interface) return 
     }
     clearAnim(height,width,callback) {
            process.stdout.write(" ")
-           var interval = setInterval(function() {
-               for (var i = 0; i < width; i ++) {
-                process.stdout.write(" ")
+           var a = false
+           var text = ""
+           for (var i = 0; i < width; i ++) {
+                text += " "
                }
-                 if (height != 2)process.stdout.write(EOL)
+           var interval = setInterval(function() {
+                if (a) process.stdout.write(EOL)
+                a = true;
+               
+           process.stdout.write(text)
                 height --;
-               if (height <= 1) {
+               if (height <= 0) {
                    clearInterval(interval)
                 callback()   
                }
