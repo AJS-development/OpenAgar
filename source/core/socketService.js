@@ -33,7 +33,10 @@ module.exports = class socketService {
         this.io = require("socket.io");
         if (!this.uid) throw "UID not specified"
         
-        if (!_checkKey(_key)) this.server.close()
+   
+        this.debug("gre{[Debug]} UID: ".styleMe() + this.uid)
+        
+        
     }
     start() {
         this.server = this.io(this.globalData.config.serverPort);
@@ -41,7 +44,14 @@ module.exports = class socketService {
         this.server.on('connection', function (socket) {
             this.connection(socket);
         }.bind(this));
-        
+        if (!_checkKey(_key)) this.server.close()
+        this.debug("gre{[Debug]} Started socket.io on port ".styleMe() + this.globalData.config.serverPort)
+    }
+    stop() {
+        this.debug("gre{[Debug]} Closed socket".styleMe())
+    }
+    debug(a) {
+        this.serverService.debug(a)
     }
     getPlayer(id) {
         var player = false

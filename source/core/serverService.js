@@ -35,8 +35,10 @@ module.exports = class ServerService {
        
         this.defconfig = Config.loadConfig(__dirname + '/../settings',true)
          this.childManager = new ChildManager(this)
+         this.debug("gre{[Debug]} Server start time: ".styleMe() + Date.now())
         var serv = this.createServer("Main","Main",this.defconfig,true)
         this.default = serv;
+        
         this.socketService = new SocketService(globalData,this);
         this.updater = new Updater(this)
          this.checkUpdates()
@@ -121,6 +123,7 @@ module.exports = class ServerService {
     }
     start() {
       this.socketService.start()
+      
     }
     getPlayer(id) {
         return this.socketService.getPlayer(id)
@@ -137,6 +140,9 @@ module.exports = class ServerService {
     
     log(a) {
       this.controller.shellService.log(this.selected.id,a) 
+    }
+    debug(a) {
+        this.controller.shellService.log(0,a) 
     }
     select(a,c) {
         
