@@ -59,7 +59,7 @@ module.exports = class ServerService {
         server.dataService.config = null;
          this.removeServer(1,true)
         this.default = false;
-        this.servers.forEach((server))=>{
+        this.servers.forEach((server)=>{
             if (server.isMain) return;
             servers.push({
               config: server.getConfig(),  
