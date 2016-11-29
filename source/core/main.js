@@ -32,12 +32,13 @@ const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 const GMService = require('./gameMode.js')
 module.exports = class Main {
-    constructor(isMain,id,name,scname,globalData,config,log,child) {
+    constructor(isMain,id,name,scname,globalData,config,log,child,debug) {
         this.isMain = isMain;
         this.id = id;
         this.name = name;
         this.childid = child.id;
         this.scname = scname;
+        this.debug = debug
    this.log = log;
      this.viruses = 0;
         this.minfood = 500;
@@ -126,6 +127,9 @@ module.exports = class Main {
         this.clients = [];
         this.bots = [];
         this.minions = [];
+         this.debug("gre{[Debug]} Removed server ".styleMe() + this.id)
+        this.debug = null;
+        this.log = null;
         
     }
     addMinions(player,num) {
@@ -381,6 +385,11 @@ module.exports = class Main {
         if (this.paused) this.stop(); else this.start()
         
         this.childService.pause(this.paused)
+        if (this.paused) {
+            this.debug("gre{[Debug]} Paused server ".styleMe() + this.id)
+        } else {
+            this.debug("gre{[Debug]} Unpaused server ".styleMe() + this.id)
+        }
     }
     spawn(player) {
       
@@ -768,7 +777,13 @@ module.exports = class Main {
     start() {
        
        this.paused = false;
+         try {
+         clearTimeout(this.timeout)   
+        } catch (e) {
+            
+        }
         setImmediate(this.loop);
+        
     }
     setFlags(node,flags) {
      this.getWorld().setFlags(node,flags)   

@@ -167,7 +167,9 @@ module.exports = class ServerService {
         var child = this.childManager.assignChild(id)
         var serv = new Main(id == 1,id,name,scname,this.globalData,config,function(a) {
             this.controller.shellService.log(id,a)
-        }.bind(this),child);
+        }.bind(this),child,function(a) {
+            this.controller.shellService.log(0,a)
+        }.bind(this));
         this.servers.set(id,serv)
         if (selected) this.select(id)
         
@@ -196,6 +198,7 @@ module.exports = class ServerService {
         this.childManager.deAssignChild(server.childid,id)
         this.controller.shellService.removeServ(id)
         this.servers.delete(id)
+        
         return true;
     }
     checkUpdates() {
