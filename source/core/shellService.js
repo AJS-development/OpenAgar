@@ -16,26 +16,25 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+const AsyncConsole = require('asyncconsole')
 module.exports = class ShellService {
     constructor(controlservice) {
         this.controller = controlservice;
         this.text = ""
         this.commands = [];
         this.redrawing = false
-        this.stdin = process.stdin;
+        this.input = new AsyncConsole(">",function(command) {
+            this.parseCommands(command)
+        }.bind(this),function(key) {
+if (this.redrawing || !this.controller.serverService.selected.interface) return false;
+            return true;
+            
+        }.bind(this))
         this.ind = 0;
         this.console = []
-this.stdin.setRawMode(true);
-        this.selected = 0;
-this.stdin.resume();
-this.stdin.setEncoding('utf8');
-        this.stdin.on('data', function(key){
-            if (key == '\u0003') { process.exit(); }    // ctrl-c
-   this.prompt(key)
-   
 
-  
-}.bind(this));
+        this.selected = 0;
+
 
     }
     select(id,c) {
@@ -145,65 +144,15 @@ this.log(1,"        yel{Also by the cya{AJS} Development team}".styleMe())
     }
     init() {
         this.drawSplash()
-       process.stdout.write('\n>')
+  
     }
-    escapeChar(a) {
- var allowed = "` 1 2 3 4 5 6 7 8 9 0 - = q w e r t y u i o p [ ] | a s d f g h j k l ; ' z x c v b n m , . / ~ ! @ # $ % ^ & * ( ) _ + Q W E R T Y U I O P { } A S D F G H J K L : \\ \" Z X C V B N M < > ?"
- var allow = allowed.split(" ");
- if (a == " ") return true;
- if (allow.indexOf(a) == -1) return false;
- return true;
-}
-    prompt(key) {
- 
-         if (this.redrawing || !this.controller.serverService.selected.interface) return;
-        if (key == '\u000D') { //enter
-             process.stdout.write('\n')
-        if (this.text) {this.parseCommands(this.text)
-        this.commands.push(this.text)
-                       }
-       
-        this.text = ""
-        this.ind = this.commands.length
-        if (!this.redrawing) process.stdout.write('>')
-        
-            return;
-        } else if (key == '\u001B\u005B\u0041') { // up
-      
-            if (this.ind > 0) this.ind --;
-                this.text = this.commands[this.ind] || ""
-                process.stdout.write('\r                                   ');
-                    process.stdout.write('\r>' + this.text);
-            return
-       
-               } else if (key == '\u001B\u005B\u0042') { // down
-              
-                   if (this.ind < this.commands.length) this.ind ++;
-                   this.text = this.commands[this.ind] || ""
-                   process.stdout.write('\r                                   ');
-                    process.stdout.write('\r>' + this.text);
-                   return;
-                   
-        } else if ((key == '\u007F' || key == '\u0008') && this.text.length > 0) {
-            this.ind = this.commands.length
-            this.text = this.text.substr(0,this.text.length - 1)
-            process.stdout.write('\r                                   ');
-            process.stdout.write('\r>' + this.text);
-            return
-        } else {
-       if (!this.escapeChar(key)) return
-       this.ind = this.commands.length
-       this.text += key
-       
-       process.stdout.write(key.toString())
-        }
-    }
+    
 
     parseCommands(str) {
         
       //  this.controller.logger.onCommand(str);
         if (str === '') return;
-        this.log(this.selected,">" + str,true)
+
         this.controller.execCommand(str)
     }
 };

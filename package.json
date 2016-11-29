@@ -15,7 +15,8 @@
     "styleme": "latest",
     "socket.io": "latest",
     "node-cryptojs-aes":"latest",
-    "minirequest": "latest"
+    "minirequest": "latest",
+    "asyncconsole": "latest"
   },
   "devDependencies": {},
   "scripts": {
