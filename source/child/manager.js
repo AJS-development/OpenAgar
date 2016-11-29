@@ -22,6 +22,7 @@ module.exports = class Manager {
     constructor(id) {
        this.id = id;
         this.addedHash = [];
+       
          this.nodes = new HashBounds(500,true);
         this.toSend = [];
         this.map = new QuickMap()

@@ -55,6 +55,7 @@ module.exports = class Main {
         this.paused = false;
         this.bots = new QuickMap();
         this.deleteR = "";
+        this.lag = 0
         this.chatNames = [];
         this.interface = true;
         this.botid = 0;
@@ -579,6 +580,7 @@ module.exports = class Main {
             players: this.clients.length,
             bots: this.bots.length,
             minions: this.minions.length,
+            nodes: this.getWorld().getNodes('map').length,
             uptime: upt
         
             
@@ -603,7 +605,7 @@ module.exports = class Main {
           // 0.05 seconds
 
             if (this.timer.updatePN >= 50) { 
-                
+                this.checkLag()
                 this.updatePlayerNodes();
                 this.updateMovingCells();
                 this.updateBots()
@@ -674,16 +676,25 @@ module.exports = class Main {
     getWorld() {
         return this.dataService.world; 
     }
-    
+    checkLag() {
+         if (this.lag > 0) return this.lag --;
+         if (this.timer.passed > 80) {
+          this.lag = 30
+          this.lagtime = this.timer.passed 
+          this.debug("gre{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').length)
+         }
+        
+    }
     // update nodes quickly (0)
     updatePlayerNodes() { 
         var shift = 0;
      
-        if (this.timer.passed > 50) { // lag detection
+        if (this.lag > 0) { // lag detection
          //  console.log(this.timer.passed)
             shift = 1
             this.timer.pn = !this.timer.pn
             if (this.timer.pn) return
+          
         }
         this.getWorld().getNodes("player").forEach((player)=>{
            if (player.owner.frozen) return;

@@ -23,6 +23,7 @@ module.exports = class childService {
     
     this.main = main;
       this.toSend = [];
+      this.buf = 0;
       this.updHash = {};
       this.movHash = {};
     this.movCode = [];
@@ -173,6 +174,14 @@ this.send(5,{id: bot.id, bot: bot.botid})
         
     }
     update() {
+        if (this.main.lag > 0) {
+            if (this.buf > 5) {
+            this.buf = 0
+            
+        } else {
+            this.buf ++;
+        }
+    }
         var nodes = this.main.getWorld().getNodes('player')
         
         nodes.forEach((node)=>{
