@@ -72,7 +72,7 @@ module.exports = class ServerService {
             })
      
             server.dataService.config = null;
-          this.removeServer(se.id,true)
+          this.removeServer(server.id,true)
         })
        
         this.servers = new QuickMap();
