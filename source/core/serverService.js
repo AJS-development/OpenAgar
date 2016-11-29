@@ -81,7 +81,7 @@ module.exports = class ServerService {
         this.default = this.createServer(defaul.name,defaul.scname,defaul.config,defaul.selected,false,defaul.players)
         
         servers.forEach((se)=>{
-        this.createServer(se.name,se.scname,se.config,se.selected,false,defaul.players)
+        this.createServer(se.name,se.scname,se.config,se.selected,false,se.players)
         
         })
     }
@@ -93,12 +93,14 @@ module.exports = class ServerService {
                 name: server.name,
                 scname: server.scname,
                 selected: server.selected,
-                isMain: server.isMain
+                isMain: server.isMain,
+             players: server.clients
             };
+        server.clients = null
        server.dataService.config = null;
        this.removeServer(this.selected.id,true)
         if (info.isMain) this.default = false;
-        this.createServer(info.name,info.scname,info.config,info.selected,info.id)
+        this.createServer(info.name,info.scname,info.config,info.selected,info.id,info.players)
         
     }
     start() {
@@ -142,7 +144,7 @@ module.exports = class ServerService {
     reloadInfoP() {
         this.socketService.reloadInfoP()
     }
-    createServer(name,scname,config,selected,id) {
+    createServer(name,scname,config,selected,id,players) {
         var id = id || this.getNextId()
         var child = this.childManager.assignChild(id)
         var serv = new Main(id == 1,id,name,scname,this.globalData,config,function(a) {
@@ -153,6 +155,9 @@ module.exports = class ServerService {
         
         serv.init()
         serv.start()
+        if (players) {
+            players.forEach((player)=>{player.changeServers(this.selected.id,this)})
+        }
         return serv
     }
     removeServer(id,force) {
@@ -161,6 +166,10 @@ module.exports = class ServerService {
        if (this.default) {
         server.clients.forEach((client)=>{ // evacuate players
             client.changeServers(this.default.id,this)
+        })
+       } else {
+             server.clients.forEach((client)=>{ // evacuate players
+           server.removeClient(client)
         })
        }
         
