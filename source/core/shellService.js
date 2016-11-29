@@ -141,6 +141,7 @@ this.log(1,"cya{  \\___/| .__/ \\___|_| |_}yel{/_/   \\_\\__, |\\__,_|_|   }".st
 this.log(1,"cya{       |_|                }yel{      |___/            }".styleMe())
 this.log(1,"       gre{OpenAgar} - cya{An open source web game}".styleMe())
 this.log(1,"        yel{Also by the cya{AJS} Development team}".styleMe())
+process.stdout.write('\n>')
     }
     init() {
         this.drawSplash()
