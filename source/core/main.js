@@ -189,6 +189,11 @@ module.exports = class Main {
             if (client.recievePublicChat && client.mutePlayers.indexOf(player.id) == -1) client.socket.emit('chat',data)
         })
     }
+    broadcast(msg,name,color) {
+   this.clients.forEach((client)=>{
+           client.msg(msg,name,color)
+        })
+    }
   parseChatCommand(player,msg) {
       msg = msg.substr(1)
     if (!msg) return false;
