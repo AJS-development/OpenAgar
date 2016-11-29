@@ -52,7 +52,7 @@ if (this.redrawing || !this.controller.serverService.selected.interface) return 
                for (var i = 0; i < width; i ++) {
                 process.stdout.write(" ")
                }
-                 process.stdout.write(EOL)
+                 if (height == 2)process.stdout.write(EOL)
                 height --;
                if (height <= 1) {
                    clearInterval(interval)
