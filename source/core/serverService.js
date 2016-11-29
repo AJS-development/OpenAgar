@@ -32,8 +32,9 @@ module.exports = class ServerService {
         this.ids = 1;
        
         this.selected = false;
-        this.childManager = new ChildManager()
+       
         this.defconfig = Config.loadConfig(__dirname + '/../settings',true)
+         this.childManager = new ChildManager(this)
         var serv = this.createServer("Main","Main",this.defconfig,true)
         this.default = serv;
         this.socketService = new SocketService(globalData,this);
@@ -133,6 +134,7 @@ module.exports = class ServerService {
         if (!this.selected) return;
         if (!this.selected.execCommand(str)) this.log("The command " + cmd[0] + " was not found! Type 'help' to view a list of commands.")
     }
+    
     log(a) {
       this.controller.shellService.log(this.selected.id,a) 
     }

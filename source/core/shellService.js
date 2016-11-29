@@ -45,16 +45,18 @@ this.stdin.setEncoding('utf8');
     removeServ(id) {
         delete this.console[id]
     }
-    clearAnim(amount,callback) {
+    clearAnim(height,width,callback) {
            process.stdout.write(" ")
            var interval = setInterval(function() {
+               for (var i = 0; i < width; i ++) {
                 process.stdout.write(" ")
-                amount --;
-               if (amount <= 1) {
+               }
+                height --;
+               if (height <= 1) {
                    clearInterval(interval)
                 callback()   
                }
-           }.bind(this),1)
+           }.bind(this),30)
     }
     interval(num,func,call,time) {
         var int = setInterval(function() {
@@ -77,7 +79,7 @@ this.stdin.setEncoding('utf8');
         process.stdout.write('\u001B[H\u001B[2r')
       this.redrawing = true;
      
-      this.clearAnim(height * width,function() {
+      this.clearAnim(height , width,function() {
           process.stdout.write("\x1b[K")
           
                this.interval(height,function() {process.stdout.write("\x1b[1A")},function() {
@@ -104,12 +106,12 @@ this.stdin.setEncoding('utf8');
                              if (cbk) cbk()
                              self.redrawing = false
                           }
-                      },5)
+                      },3)
                       }
                     
                       set()
-                  }.bind(this),15)
-               }.bind(this),20)
+                  }.bind(this),6)
+               }.bind(this),15)
            
       
    

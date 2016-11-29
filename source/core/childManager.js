@@ -21,18 +21,27 @@ var Child = require('child_process')
 var QuickMap = require('quickmap')
 var ChildHolder = require('./childHolder.js')
 module.exports = class childManager {
-    constructor() {
+    constructor(ss) {
+        this.ss = ss;
         this.cpus = require('os').cpus()
         this.childs = new QuickMap();
         this.cid = 0
         this.init()
+  
+    }
+    debug(a) {
+        this.ss.controller.shellService.log(0,a)
     }
     init() {
+        this.debug("gre{[Debug]} Number of computer cores detected: ".styleMe() + this.cpus.length)
         if (this.cpus.length <= 1) throw "Your computer must have more than one core in order to run this program"
         process.on('exit', function () {
+            var count = 0;
           this.childs.forEach((child)=>{
               child.stop()
+              count ++;
           }) 
+          this.debug("gre{[Debug]} Killed ".styleMe() + count + " processes")
            console.log("\ngre{[OpenAgar]} Killed all processes".styleMe()) 
         }.bind(this));
     }
@@ -40,6 +49,7 @@ module.exports = class childManager {
         if (this.childs.length < this.cpus.length - 1) {
            var child = this.createNewChild()
             child.assign(sid)
+            this.debug("gre{[Debug]} Created new child (ID: ".styleMe() + child.id + ") and assigned server " + sid + " to it.")
            return child
         } 
     var lowest = false;
@@ -50,6 +60,7 @@ module.exports = class childManager {
             if (!lowest) throw "ERR: Child was not found"
          
         lowest.assign(sid)
+        this.debug("gre{[Debug]} Assigned server ".styleMe() + sid + " to child (ID: " + lowest.id + " ASSIGNED: " + lowest.assigned + ")")
             return lowest
         
             }
@@ -58,9 +69,11 @@ module.exports = class childManager {
         if (!child) throw "ERR: Cannot deassign child that doesnt exsist!"
   
         child.deAssign(sid)
+    this.debug("gre{[Debug]} Deassigned server ".styleMe() + sid + " to child (ID: " + child.id + " ASSIGNED: " + child.assigned + ")")
         if (child.assigned <= 0) {
             child.stop()
             this.childs.delete(id)
+             this.debug("gre{[Debug]} Killed child (ID: ".styleMe() + id + ")")
         }
         
     }

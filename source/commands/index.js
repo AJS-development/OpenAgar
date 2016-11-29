@@ -22,7 +22,8 @@ module.exports = {
             redraw: require('./lib/redraw.js'),
             plugin: require('./lib/plugin.js'),
             update: require('./lib/update.js'),
-            restart: require('./lib/restart.js')
+            restart: require('./lib/restart.js'),
+            debug: require('./lib/debug.js')
         },
     chat: {
         help: function(str,main,player,log) {
