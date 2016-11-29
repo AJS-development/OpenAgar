@@ -25,7 +25,7 @@ Style = require('styleme')
 Style.extend()
 var a = require('../modules/fastSquares.js')
 Sqrt = new a()
-_version = "3.2.0"
+_version = "3.2.5"
 _key = ""
 try {
     try {_key = parseInt(require('fs').readFileSync(__dirname + '/../../key.txt',"utf8"))} catch(j){
