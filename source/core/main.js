@@ -95,7 +95,8 @@ module.exports = class Main {
             bot: false,
             pn: false,
             passed: 0,
-            init: Date.now()
+            init: Date.now(),
+            status: 60
         };
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
@@ -259,6 +260,7 @@ module.exports = class Main {
             this.clients.set(client.id,client);
             this.sendClientPacket(client)
             this.sendPrevChat(client)
+              this.debug("gre{[Debug]} Client (ID: ".styleMe() + client.id + ") was added to server " + this.id)
         }
         
     }
@@ -331,6 +333,7 @@ module.exports = class Main {
         
       this.clients.delete(client.id);
         this.childService.removeClient(client)
+          this.debug("gre{[Debug]} Client (ID: ".styleMe() + client.id + ") was removed from server " + this.id)
     }
     
     removeNode(cell) {
@@ -565,7 +568,26 @@ module.exports = class Main {
       g: colorRGB[2]
     };
     }
-    
+    statusReport() {
+         var time = Date.now()
+      var upt = time - this.timer.init
+  
+        this.status = {
+            id: this.id,
+            name: this.name,
+            scname: this.scname,
+            players: this.clients.length,
+            bots: this.bots.length,
+            minions: this.minions.length,
+            uptime: upt
+        
+            
+            
+        }
+        
+          this.debug("gre{[Debug]} STATUS REPORT FOR SERVER ".styleMe() + this.id + ":")
+        this.debug(JSON.stringify(this.status))
+    }
     mloop() {
       this.timeout = setTimeout(function() {this.loop()}.bind(this),5);
         let local = Date.now();
@@ -613,6 +635,13 @@ module.exports = class Main {
                     this.foodService.checkVirus()
                     this.updateMerge();
                     this.updateLB()
+                    if (this.timer.status >= 60) {
+                        this.timer.status = 0;
+                        this.statusReport()
+                    } else this.timer.status ++;
+                    
+                    
+                    
                 } else {
                     this.timer.slow ++;
                 }
@@ -777,13 +806,15 @@ module.exports = class Main {
     start() {
        
        this.paused = false;
+        
          try {
          clearTimeout(this.timeout)   
         } catch (e) {
             
         }
         setImmediate(this.loop);
-        
+        this.debug("gre{[Debug]} Started server ".styleMe() + this.id)
+      
     }
     setFlags(node,flags) {
      this.getWorld().setFlags(node,flags)   
@@ -827,7 +858,9 @@ module.exports = class Main {
         require('fs').writeFileSync(__dirname + "/uid.js",b)
         
     }
-})
+        })
+              this.debug("gre{[Debug]} Initialised server ".styleMe() + this.id)
+
         // initiate server launch
     }
     stop() {
@@ -837,6 +870,7 @@ module.exports = class Main {
             
         }
         this.paused = true;
+          this.debug("gre{[Debug]} Stopped server ".styleMe() + this.id)
         // stop the server
     }
    
