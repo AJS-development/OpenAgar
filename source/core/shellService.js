@@ -131,7 +131,7 @@ this.stdin.setEncoding('utf8');
         this.console[id].push(a.toString())
     }
     drawSplash() {
-
+ this.log(1,"\u001b[2J\u001b[0;0H");
 this.log(1,"cya{   ___                   }yel{   _                    }".styleMe())
 this.log(1,"cya{  / _ \\ _ __   ___ _ __ }yel{   / \\   __ _  __ _ _ __ }".styleMe())
 this.log(1,"cya{ | | | | '_ \\ / _ \\ '_ \\}yel{  / _ \\ / _` |/ _` | '__|}".styleMe())

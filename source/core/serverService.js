@@ -55,7 +55,7 @@ module.exports = class ServerService {
                 selected: server.selected,
                 players: server.clients
             };
-        server.clients = null;
+     
         server.dataService.config = null;
          this.removeServer(1,true)
         this.default = false;
@@ -70,7 +70,7 @@ module.exports = class ServerService {
                 players: server.clients
           
             })
-            server.clients = null
+     
             server.dataService.config = null;
           this.removeServer(se.id,true)
         })
@@ -96,7 +96,7 @@ module.exports = class ServerService {
                 isMain: server.isMain,
              players: server.clients
             };
-        server.clients = null
+       
        server.dataService.config = null;
        this.removeServer(this.selected.id,true)
         if (info.isMain) this.default = false;

@@ -20,8 +20,8 @@ module.exports = {
             stop: require('./lib/stop.js'),
             redraw: require('./lib/redraw.js'),
             plugin: require('./lib/plugin.js'),
-            update: require('./lib/update.js')
-            
+            update: require('./lib/update.js'),
+            restart: require('./lib/restart.js')
         },
     chat: {
         help: function(str,main,player,log) {
