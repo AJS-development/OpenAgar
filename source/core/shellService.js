@@ -128,7 +128,7 @@ if (this.redrawing || !this.controller.serverService.selected.interface) return 
          
     }
      log(id,a,log) {
-         if (id == this.selected && !log) console.log(a)
+         if (id == this.selected && !log && !this.redrawing) console.log(a)
         if (!this.console[id]) this.console[id] = [];
         this.console[id].push(a.toString())
     }
