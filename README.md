@@ -39,6 +39,9 @@ There are commands you can type in command line.
 |plugin     |Plugin command, the core feature of OpenAgar|
 |list       |List the players/bots/minions in the game|
 |server     |Create servers, remove servers, select servers, and list them |
+|pause      |Pause/unpause the game|
+|restart    |Restart. Use just like you would use in command prompt. Do restart all [time] to restart all servers|
+|debug      |Toggle the debug console|
 |update     |Updates the software|
 |stop       |Stops the server|
 
