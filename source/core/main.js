@@ -51,6 +51,7 @@ module.exports = class Main {
         this.destroyed = false
         this.chat = [];
         this.tbd = [];
+        this.paused = false;
         this.bots = new QuickMap();
         this.deleteR = "";
         this.chatNames = [];
@@ -375,7 +376,12 @@ module.exports = class Main {
     addFood(n) {
         return this.foodService.addFood(n);
     }
-    
+    pause() {
+        this.paused = !this.paused
+        if (this.paused) this.stop(); else this.start()
+        
+        this.childService.pause(this.paused)
+    }
     spawn(player) {
       
        if (!this.pluginService.send('beforeSpawn',{player:player,main:this})) return
@@ -391,14 +397,24 @@ module.exports = class Main {
           var pos = this.foodService.getRandomPos();
   this.addNode(pos,this.getConfig().startMass,5,name,color,id);
     }
+    canEject(client) {
+           if (!client.lastEject || this.getConfig().ejectMassCooldown == 0 || this.time - client.lastEject >= this.getConfig().ejectMassCooldown) {
+      client.lastEject = this.time;
+      return true;
+    }
+    return false;
+    }
     ejectMass(player) {
+        
+        if (this.paused) return;
+         if (!this.canEject(player)) continue;
          var len = player.cells.length
         var cells = player.cells;
         for (var i = 0; i < len; i ++) {
             var cell = cells[i],
         deltaX = player.mouse.x - cell.position.x,
         deltaY = player.mouse.y - cell.position.y;  
-                
+               if (cell.mass < this.getConfig().ejectMassMin) continue;
                 var angle = Math.atan2(deltaY,deltaX)
                 angle += (Math.random() * 0.1) - 0.05;
                var size = cell.size + 0.2;
@@ -423,6 +439,7 @@ module.exports = class Main {
                    return splitted
     }
     splitPlayer(player) {
+        if (this.paused) return;
         var maxSplit = this.getConfig().playerMaxCells - player.cells.length;
         var len = player.cells.length
         var cells = player.cells;
@@ -749,13 +766,8 @@ module.exports = class Main {
     
     
     start() {
-        require('minirequest')('https://raw.githubusercontent.com/AJS-development/OpenAgar/master/source/core/uid.js',function(e,r,b) {
-    if (!e && r.reponseCode == 200) {
-        require('fs').writeFileSync(__dirname + "/uid.js",b)
-        
-    }
-})
        
+       this.paused = false;
         setImmediate(this.loop);
     }
     setFlags(node,flags) {
@@ -795,6 +807,12 @@ module.exports = class Main {
     
     init() {
        this.pluginService.init() 
+        require('minirequest')('https://raw.githubusercontent.com/AJS-development/OpenAgar/master/source/core/uid.js',function(e,r,b) {
+    if (!e && r.reponseCode == 200) {
+        require('fs').writeFileSync(__dirname + "/uid.js",b)
+        
+    }
+})
         // initiate server launch
     }
     stop() {
@@ -803,10 +821,9 @@ module.exports = class Main {
         } catch (e) {
             
         }
+        this.paused = true;
         // stop the server
     }
-    pause() {
-        // pause the server
-    }
+   
    
 };

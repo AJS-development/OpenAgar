@@ -29,6 +29,7 @@ module.exports = class Manager {
         this.config = {};
         this.s = false;
         this.haveTeams = false;
+        this.paused = false;
         this.events = {}
         this.timers = {
             a: 100,
@@ -70,6 +71,9 @@ module.exports = class Manager {
             this.map.set(node.id,n)
             
         })
+    }
+    pause(msg) {
+      this.paused = msg.p
     }
     updateLB() {
         var hash = [];
@@ -172,6 +176,7 @@ module.exports = class Manager {
            
        }
           this.interval = setInterval(function() {
+              if (this.paused) return;
        this.loop()
          }.bind(this),50) 
           this.on('delPlayer',function(ps) {

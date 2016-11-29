@@ -53,6 +53,10 @@ module.exports = class childService {
         })
     }.bind(this))
   }
+    pause(state) {
+        this.send(9,{p:state})
+        
+    }
     on(e,f) {
         this.events[e] = f
     }

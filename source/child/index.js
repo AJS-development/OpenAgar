@@ -65,6 +65,10 @@ process.on('message',function(msg) {
             
             
             break;
+        case 9: // pause;
+            
+            manager.pause(msg)
+            break;
             
     }
     
