@@ -407,7 +407,7 @@ module.exports = class Main {
     ejectMass(player) {
         
         if (this.paused) return;
-         if (!this.canEject(player)) continue;
+         if (!this.canEject(player)) return;
          var len = player.cells.length
         var cells = player.cells;
         for (var i = 0; i < len; i ++) {
