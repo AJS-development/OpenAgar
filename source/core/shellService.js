@@ -17,6 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 const AsyncConsole = require('asyncconsole')
+const EOL = require('os').EOL
 module.exports = class ShellService {
     constructor(controlservice) {
         this.controller = controlservice;
@@ -51,6 +52,7 @@ if (this.redrawing || !this.controller.serverService.selected.interface) return 
                for (var i = 0; i < width; i ++) {
                 process.stdout.write(" ")
                }
+                 process.stdout.write(EOL)
                 height --;
                if (height <= 1) {
                    clearInterval(interval)
@@ -79,7 +81,7 @@ if (this.redrawing || !this.controller.serverService.selected.interface) return 
         process.stdout.write('\u001B[H\u001B[2r')
       this.redrawing = true;
      
-      this.clearAnim(height , width,function() {
+      this.clearAnim(height , width - 1,function() {
           process.stdout.write("\x1b[K")
           
                this.interval(height,function() {process.stdout.write("\x1b[1A")},function() {
