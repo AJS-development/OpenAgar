@@ -20,11 +20,20 @@ var template = require('./template.js');
 module.exports = class bullet extends template {
     constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
-
-        this.color = {
-            r: 200,
-            g: 200,
-            b: 200
+        if (this.owner.golden) {
+            this.golden = true;
+            this.color = {
+                r: 200,
+                g: 200,
+                b: 20
+            }
+        } else {
+            this.golden = false;
+            this.color = {
+                r: 200,
+                g: 200,
+                b: 200
+            }
         }
         this.fed = 0;
         this.type = 5;
@@ -77,7 +86,22 @@ module.exports = class bullet extends template {
         return this.size * -0.5;
 
     }
+    explodeCell(node, main) {
 
+
+        while (node.mass > 10) {
+            node.mass.addMass(-main.getConfig().ejectedMass);
+
+            var ejected = this.addNode(startPos, 12, 5, player, [], "m")
+            ejected.setEngine1(6.28 * Math.random(), this.getConfig().ejectedSpeed, this.getConfig().ejectedDecay)
+            ejected.setCurve(10)
+
+
+
+        }
+
+
+    }
     collide(node, main) {
         if (this.owner == node.owner || node.owner.mass <= 500) {
 
@@ -85,6 +109,10 @@ module.exports = class bullet extends template {
             node.addMass(2)
             node.owner.bulletsleft++;
             return;
+        }
+        if (this.golden) {
+            this.explodeCell(node, main)
+            return
         }
         var split = main.getConfig().playerMaxCells - node.owner.cells.length;
 

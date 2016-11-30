@@ -55,6 +55,7 @@ module.exports = class Player {
             view: 0,
             second: 0
         }
+        this.golden = false;
         this.gameData = {
             name: "",
             color: server.getRandomColor(),
@@ -352,6 +353,7 @@ module.exports = class Player {
             if (this.playing) return;
             this.sendData = true;
             this.bulletsleft = 3
+            this.golden = false;
             this.setName(msg.name || "");
 
             this.server.spawn(this)

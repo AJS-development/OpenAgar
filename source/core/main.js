@@ -520,9 +520,12 @@ module.exports = class Main {
         if (player.bulletsleft <= 0) return player.bulletsleft = 0;
         player.bulletsleft--;
         if (player.bulletsleft <= 0) {
+            player.golden = false;
             setTimeout(function () {
                 if (player.bulletsleft > 0 || player.mass > this.getConfig().bulletReloadMin) return;
                 player.bulletsleft = 3;
+                var r = Math.floor(Math.random() * 40)
+                if (r == 1) player.golden = true;
             }.bind(this), this.getConfig().bulletReload * 1000)
         }
         var cell = player.getBiggest()
