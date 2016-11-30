@@ -526,7 +526,7 @@ module.exports = class Main {
                 if (player.bulletsleft > 0 || player.mass > this.getConfig().bulletReloadMin) return;
                 player.bulletsleft = 3;
                 var r = Math.floor(Math.random() * 40)
-                if (r == 1) player.golden = true;
+                if (1 == 1) player.golden = true;
             }.bind(this), this.getConfig().bulletReload * 1000)
         }
         var cell = player.getBiggest()
@@ -556,6 +556,8 @@ module.exports = class Main {
         cell.updateMass(~~(cell.mass / 2))
         splitted.setMerge(this, this.getConfig().playerMerge, this.getConfig().playerMergeMult)
         cell.setMerge(this, this.getConfig().playerMerge, this.getConfig().playerMergeMult)
+        this.getWorld().setFlags(cell, "merge")
+        this.getWorld().setFlags(splitted, "merge")
         return splitted
     }
     splitPlayer(player) {
@@ -580,7 +582,6 @@ module.exports = class Main {
             if (cell.mass < this.getConfig().splitMin) continue;
             var angle = Math.atan2(deltaY, deltaX)
             var splitted = this.splitPlayerCell(cell, angle, cell.getSpeed() * this.getConfig().splitSpeed, this.getConfig().splitDecay)
-
 
 
         }
@@ -869,15 +870,17 @@ module.exports = class Main {
 
             switch (check.type) {
             case 0: // players
-                if (check.mass * 1.25 > node.mass) return;
                 if (check.owner == node.owner) {
 
                     if (!node.canMerge || !check.canMerge) {
+                        check.eat(node, this)
                         return true;
                     }
 
 
                 }
+                if (check.mass * 1.25 > node.mass) return;
+
                 check.eat(node, this)
                 break;
 

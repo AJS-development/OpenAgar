@@ -36,7 +36,7 @@ module.exports = class ShellService {
         this.ind = 0;
         this.console = []
 
-        this.selected = 0;
+        this.selected = 1;
 
 
     }

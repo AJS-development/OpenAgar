@@ -47,7 +47,7 @@ module.exports = class wormhole extends template {
         if (node.mass > this.mass) {
             return this.size * -0.4;
         } else {
-            return this.size;
+            return this.size - node.size;
         }
 
     }
@@ -86,8 +86,10 @@ module.exports = class wormhole extends template {
         var g = ~~(split.length / 2)
         for (var i = 0; i < split + 3; i++) {
             var mass = (i == 0) ? medium : defaultmass;
-            main.splitCell(node, angle, main.getConfig().splitSpeed, main.getConfig().splitDecay, mass)
-
+            var a = main.splitCell(node, angle, main.getConfig().splitSpeed, main.getConfig().splitDecay, mass)
+            a.setMerge(main, main.getConfig().playerMerge, main.getConfig().playerMergeMult)
+            main.getWorld().setFlags(a, "merge")
+            main.getWorld().setFlags(node, "merge")
             angle += increment + (Math.random() * 0.03)
             if (angle > 6.28318530718) angle += -6.28318530718 // radians dims 0 < x < 2PI
         }

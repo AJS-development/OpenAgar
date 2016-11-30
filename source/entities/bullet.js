@@ -120,7 +120,7 @@ module.exports = class bullet extends template {
         }
         var split = main.getConfig().playerMaxCells - node.owner.cells.length;
 
-        var defaultmass = ~~(node.mass / (split + 5))
+        var defaultmass = ~~(node.mass / (split + 15))
         var big = defaultmass * 3
         var medium = defaultmass / 2 + defaultmass * 2
         var angle = (Math.random() * 6.28318530718) // Math.floor(Math.random() * max) + min
@@ -131,10 +131,11 @@ module.exports = class bullet extends template {
         // 360 degrees -> 2PI radians -> 6.28318530718
         var increment = 6.28318530718 / (split + 1) // want to add some randomness
         var g = ~~(split.length / 2)
-        for (var i = 0; i < split + 1; i++) {
+        for (var i = 0; i < split + 10; i++) {
             var mass = (i == 0) ? medium : defaultmass;
-            main.splitCell(node, angle, main.getConfig().splitSpeed, main.getConfig().splitDecay, mass)
-
+            var a = main.splitCell(node, angle, main.getConfig().splitSpeed, main.getConfig().splitDecay, mass)
+            main.getWorld().setFlags(a, "merge")
+            main.getWorld().setFlags(node, "merge")
             angle += increment + (Math.random() * 0.03)
             if (angle > 6.28318530718) angle += -6.28318530718 // radians dims 0 < x < 2PI
         }
