@@ -26,39 +26,42 @@ module.exports = class EjectedMass extends template {
         this.up = false
         owner.owning.push(this)
     }
-      move(main,speed) { // Speed code: 0 = 0.05, 1 = 0.1, 2 = 0.2
-      if (this.moveEngine2.useEngine) this.calcMove2(main,speed)
-    if (this.moveEngine.useEngine) this.calcMove(main,speed)
-    
+    move(main, speed) { // Speed code: 0 = 0.05, 1 = 0.1, 2 = 0.2
+        if (this.moveEngine2.useEngine) this.calcMove2(main, speed)
+        if (this.moveEngine.useEngine) this.calcMove(main, speed)
 
-    this.checkGameBorders(main)
-    this.checkVirus(main)
-    main.updateHash(this)
-    
-   this.movCode()
-    
-  }
+
+        this.checkGameBorders(main)
+        this.checkVirus(main)
+        main.updateHash(this)
+
+        this.movCode()
+
+    }
     checkVirus(main) {
         this.up = !this.up
         if (this.up)
-       this.viruses = main.getWorld().getNodes('hash').getNodes(this.bounds)
-        
-       this.viruses.every((virus)=>{
+            this.viruses = main.getWorld().getNodes('hash').getNodes(this.bounds)
+
+        this.viruses.every((virus) => {
             if (virus.type == 2) {
-         
-           if (!virus.collisionCheckCircle(this,true)) return true;
-           virus.feed(this,main)
-         
-           return false
-           } 
-           if (virus.type == 0) {
-               if (!virus.collisionCheckCircle(this)) return true;
-               this.eat(virus,main)
-               return false;
-           }
-          
-           return true;
-           
-       })
+
+                if (!virus.collisionCheckCircle(this, true)) return true;
+                virus.feed(this, main)
+
+                return false
+            } else
+            if (virus.type == 5) {
+                virus.feed(this, main)
+            } else
+            if (virus.type == 0) {
+                if (!virus.collisionCheckCircle(this)) return true;
+                this.eat(virus, main)
+                return false;
+            }
+
+            return true;
+
+        })
     }
 };

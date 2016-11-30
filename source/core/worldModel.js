@@ -30,6 +30,7 @@ module.exports = class WorldModel {
         this.mergeNodes = new QuickMap()
         this.lastID = 2;
        this.rainbowNodes = new QuickMap()
+       this.bulletNodes = new QuickMap()
     }
     
     getNodes(s) {
@@ -55,6 +56,9 @@ module.exports = class WorldModel {
                return this.ejectedNodes;
            case "merge":
                return this.mergeNodes;
+               break;
+           case "bullet":
+               return this.bulletNodes;
                break;
            default:
                return this.nodes.allnodes;
@@ -97,6 +101,9 @@ module.exports = class WorldModel {
                 this.ejectedNodes.set(id,node);
                 break;
             case 4: // food
+                break;
+            case 5: // bullets
+                this.bulletNodes.set(id,node)
                 break;
         } 
         
@@ -161,10 +168,14 @@ module.exports = class WorldModel {
       this.rainbowNodes.delete(node.id)
         this.mapnodes.delete(node.id);
      this.movingNodes.delete(node.id);
-         this.mergeNodes.delete(node.id)
+        
         node.moving = false
-        this.ejectedNodes.delete(node.id);
-        if (this.playerNodes.delete(node.id)) return this.main.gameMode.event('onCellRemove',{cell:node});
+        this.ejectedNodes.delete(node.id); 
+        if (this.playerNodes.delete(node.id)) {
+            this.main.gameMode.event('onCellRemove',{cell:node});
+            return this.mergeNodes.delete(node.id)
+        }
+        if (this.bulletNodes.delete(node.id)) return;
         if (this.virusNodes.delete(node.id)) return;
     }
 };

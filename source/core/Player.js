@@ -24,6 +24,7 @@ module.exports = class Player {
         this.id = id;
 
         this.server = server;
+
         this.mouse = {
             x: 0,
             y: 0
@@ -36,7 +37,8 @@ module.exports = class Player {
             e: false,
             r: false,
             t: false,
-            q: false
+            q: false,
+            f: false
         }
         this.pausem = false;
         this.frozen = false;
@@ -63,6 +65,7 @@ module.exports = class Player {
             chatBan: false,
             reservedNamesMap: []
         }
+        this.bulletsleft = 3
         this.killer = false;
         this.globalData = globalData
         this.view = {
@@ -282,6 +285,16 @@ module.exports = class Player {
                 player: this
             })
         }
+        if (this.keys.f) {
+            this.keys.f = false;
+            if (this.PEvent('onPressF', {
+                    player: this
+                }) && this.GMEvent('pressF', {
+                    player: this
+                })) {}
+
+            this.server.shootBullet(this)
+        }
     }
     PEvent(e, d) {
         if (!this.server) return true;
@@ -294,6 +307,7 @@ module.exports = class Player {
     pressKey(id) {
         // console.log(id)
         id = parseInt(id)
+
         switch (id) {
         case 32: // space
             this.keys.space = true
@@ -314,12 +328,21 @@ module.exports = class Player {
             this.keys.t = true;
             break;
         case 27: // esc
-
+            break;
+        case 70: // f
+            this.keys.f = true;
             break;
 
         }
 
 
+    }
+    getBiggest() {
+        var cell = false;
+        for (var i = 0; i < this.cells.length; i++) {
+            if (!cell || this.cells[i].mass > cell.mass) cell = this.cells[i]
+        }
+        return cell;
     }
     onmsg(msg, servers) {
         if (!msg || !msg.type) return;
@@ -328,6 +351,7 @@ module.exports = class Player {
 
             if (this.playing) return;
             this.sendData = true;
+            this.bulletsleft = 3
             this.setName(msg.name || "");
 
             this.server.spawn(this)

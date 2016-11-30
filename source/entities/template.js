@@ -260,6 +260,7 @@ module.exports = class template {
 
         var angle = Math.atan2(deltaY, deltaX)
         var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
+        this.m.velocity = Velocity
         if (speed == -1) {
             m.deltaT += 0.5
             Velocity *= 0.5
@@ -296,6 +297,7 @@ module.exports = class template {
         var m = this.moveEngine
 
         var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
+       m.velocity = Velocity
         var dx = 0;
         if (speed == -1) {
             Velocity *= 0.5

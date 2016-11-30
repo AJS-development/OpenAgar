@@ -515,6 +515,38 @@ module.exports = class Main {
         }
 
     }
+    shootBullet(player) {
+        if (this.paused) return;
+        if (player.bulletsleft <= 0) return player.bulletsleft = 0;
+        player.bulletsleft--;
+        if (player.bulletsleft <= 0) {
+            setTimeout(function () {
+                if (player.bulletsleft > 0 || player.mass > this.getConfig().bulletReloadMin) return;
+                player.bulletsleft = 3;
+            }.bind(this), this.getConfig().bulletReload * 1000)
+        }
+        var cell = player.getBiggest()
+
+
+        var deltaX = player.mouse.x - cell.position.x,
+            deltaY = player.mouse.y - cell.position.y;
+
+        var angle = Math.atan2(deltaY, deltaX)
+        angle += (Math.random() * 0.1) - 0.05;
+        var size = cell.size + 0.2;
+        var startPos = {
+            x: cell.position.x + ((size + 12) * Math.cos(angle)),
+            y: cell.position.y + ((size + 12) * Math.sin(angle))
+        };
+
+
+
+        var ejected = this.addNode(startPos, 12, 5, player, [], "m")
+        ejected.setEngine1(angle, this.getConfig().bulletSpeed, this.getConfig().bulletDecay)
+            // ejected.setCurve(10)
+
+
+    }
     splitPlayerCell(cell, angle, speed, decay) {
         var splitted = this.splitCell(cell, angle, speed, decay, ~~(cell.mass / 2))
         cell.updateMass(~~(cell.mass / 2))
@@ -829,7 +861,7 @@ module.exports = class Main {
 
             switch (check.type) {
             case 0: // players
-                if (check == node || check.mass * 1.25 > node.mass) return;
+                if (check.mass * 1.25 > node.mass) return;
                 if (check.owner == node.owner) {
 
                     if (!node.canMerge || !check.canMerge) {
@@ -846,18 +878,22 @@ module.exports = class Main {
                 check.eat(node, this)
                 break;
             case 2: // virus
-                if (check == node || check.mass * 1.33 > node.mass) return true
+                if (check.mass * 1.33 > node.mass) return true
                 check.collide(node, this)
                 return;
                 break;
             case 3: // ejectedmass
-                if (check == node) return true
+
                 if (check.getAge(this) > 300)
                     check.eat(node, this)
 
                 break;
             case 4: // food
                 check.eat(node, this)
+                break;
+            case 5: // bullets
+
+                check.collide(node, this)
                 break;
             default:
                 return true;
@@ -931,8 +967,8 @@ module.exports = class Main {
             var a = new Entities.food(position, mass, type, null, others);
             a.color = this.getRandomColor()
             break;
-        case 5: // bots
-            var a = new Entities.botCell(position, mass, type, owner, others);
+        case 5: // bullets
+            var a = new Entities.bullet(position, mass, type, owner, others);
             break;
         }
         a.onCreation(this);
