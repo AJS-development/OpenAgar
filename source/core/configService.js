@@ -1,4 +1,3 @@
-
 'use strict';
 /*
     OpenAgar - Open source web game
@@ -20,69 +19,69 @@ const ini = require('../modules/ini.js');
 
 module.exports = {
 
- loadSConfig: function(d) {
-    try {
-    var config = ini.parse(fs.readFileSync(__dirname + '/../settings/serverConfig.ini',"utf8"))
-    console.log("gre{[OpenAgar]} Loaded server configs".styleMe())
-    return config;
-    
-} catch (e) {
-    if (d) {
-        console.log("red{[OpenAgar]} Error with getting config:".styleMe())
-        throw e
-    }
-   return false
-} 
- },
-  loadBan: function() {
-      var ban = [];
-      try {
-         var file = fs.readFileSync(__dirname + '/../../ban.txt',"utf8")
-          console.log("gre{[OpenAgar]} Loaded ban file and cleaned it".styleMe())
-          if (!file) return ban
-         file = file.split("\n")
-          
-          file.forEach((b)=>{
+    loadSConfig: function (d) {
+        try {
+            var config = ini.parse(fs.readFileSync(__dirname + '/../settings/serverConfig.ini', "utf8"))
+            console.log("gre{[OpenAgar]} Loaded server configs".styleMe())
+            return config;
+
+        } catch (e) {
+            if (d) {
+                console.log("red{[OpenAgar]} Error with getting config:".styleMe())
+                throw e
+            }
+            return false
+        }
+    },
+    loadBan: function () {
+        var ban = [];
+        try {
+            var file = fs.readFileSync(__dirname + '/../../ban.txt', "utf8")
+            console.log("gre{[OpenAgar]} Loaded ban file and cleaned it".styleMe())
+            if (!file) return ban
+            file = file.split("\n")
+
+            file.forEach((b) => {
                 if (b) {
-            b = b.replace(/\s/g,"")
-          
-               ban.push(b) 
-            } 
-          })
-          
-          fs.writeFileSync(__dirname + '/../../ban.txt',ban.join("\n"))
-      } catch (e) {
-          
-          console.log("yel{[OpenAgar]} Ban file not found. Generating...".styleMe())
-          fs.writeFileSync(__dirname + '/../../ban.txt',"")
-      }
-      return ban
-  },
-  loadConfig: function(dir,d) {
-try {
-    var physics = ini.parse(fs.readFileSync(dir + '/physicsConfig.ini',"utf8"))
-    var config = ini.parse(fs.readFileSync(dir + '/config.ini',"utf8"))
-     var client = ini.parse(fs.readFileSync(dir + '/clientConfig.ini',"utf8"))
-    for (var i in physics) {
-        if (!config[i]) config[i] = physics[i]
-    }
-    for (var i in client) {
-        if (!config[i]) config[i] = client[i]
-    }
-      console.log("gre{[OpenAgar]} Loaded game server configs".styleMe())
-    return config;
-    
-} catch (e) {
-    if (d) {
-        console.log("red{[OpenAgar]} Error with getting config:".styleMe())
-        throw e
-    }
-   return false
-}
-      
+                    b = b.replace(/\s/g, "")
+
+                    ban.push(b)
+                }
+            })
+
+            fs.writeFileSync(__dirname + '/../../ban.txt', ban.join("\n"))
+        } catch (e) {
+
+            console.log("yel{[OpenAgar]} Ban file not found. Generating...".styleMe())
+            fs.writeFileSync(__dirname + '/../../ban.txt', "")
+        }
+        return ban
+    },
+    loadConfig: function (dir, d) {
+        try {
+            var physics = ini.parse(fs.readFileSync(dir + '/physicsConfig.ini', "utf8"))
+            var config = ini.parse(fs.readFileSync(dir + '/config.ini', "utf8"))
+            var client = ini.parse(fs.readFileSync(dir + '/clientConfig.ini', "utf8"))
+            for (var i in physics) {
+                if (!config[i]) config[i] = physics[i]
+            }
+            for (var i in client) {
+                if (!config[i]) config[i] = client[i]
+            }
+            console.log("gre{[OpenAgar]} Loaded game server configs".styleMe())
+            return config;
+
+        } catch (e) {
+            if (d) {
+                console.log("red{[OpenAgar]} Error with getting config:".styleMe())
+                throw e
+            }
+            return false
+        }
+
 
     },
 
 
-  
+
 };

@@ -20,10 +20,10 @@ var Bot = require('../ai/Bot.js')
 var Player = require('./Player.js')
 module.exports = class Manager {
     constructor(id) {
-       this.id = id;
+        this.id = id;
         this.addedHash = [];
-       
-         this.nodes = new HashBounds(500,true);
+
+        this.nodes = new HashBounds(500, true);
         this.toSend = [];
         this.map = new QuickMap()
         this.bots = new QuickMap()
@@ -40,167 +40,168 @@ module.exports = class Manager {
     }
     addNodes(nodes) {
 
-        nodes.forEach((node)=>{
-    
-           if (this.addedHash[node.id]) {
-               
-           var n = this.map.get(node.id)
-               n.set(node)
-                      this.nodes.update(n)
-               return;
-               
-               };
-            
+        nodes.forEach((node) => {
+
+            if (this.addedHash[node.id]) {
+
+                var n = this.map.get(node.id)
+                n.set(node)
+                this.nodes.update(n)
+                return;
+
+            };
+
             this.addedHash[node.id] = true;
             var owner = false
             if (node.owner && node.type == 0) {
-                owner = this.bots.get(node.owner) 
+                owner = this.bots.get(node.owner)
                 if (!owner) {
                     owner = this.players.get(node.owner)
                     if (!owner) {
-                        owner = new Player(node.owner,this)
-                        this.players.set(node.owner,owner)
+                        owner = new Player(node.owner, this)
+                        this.players.set(node.owner, owner)
                     }
                 }
-                
+
             }
-            
-            
-            var n = new Node(node,owner)
-       
+
+
+            var n = new Node(node, owner)
+
             this.nodes.insert(n)
-            this.map.set(node.id,n)
-            
+            this.map.set(node.id, n)
+
         })
     }
     pause(msg) {
-      this.paused = msg.p
+        this.paused = msg.p
     }
     updateLB() {
         var hash = [];
+
         function insert(p) {
             p.getScore()
-          
-            if (!hash[p.mass]) hash[p.mass] = []; 
+
+            if (!hash[p.mass]) hash[p.mass] = [];
             hash[p.mass].push(p)
-            
+
         }
-        this.bots.forEach((bot)=>{
-          insert(bot)
+        this.bots.forEach((bot) => {
+            insert(bot)
         })
-        this.players.forEach((player)=>{
-            
+        this.players.forEach((player) => {
+
             insert(player)
         })
-         var amount = this.getConfig().leaderBoardLen;
-         var rank = 1;
+        var amount = this.getConfig().leaderBoardLen;
+        var rank = 1;
         var lb = [];
-        for (var i = hash.length; i > 0; i-- ) {
-           if (!hash[i]) continue;
-          if (!hash[i].every((h)=>{
-            
-         lb.push({
-          r: rank++,
-             i: h.id
-         })
-         amount --;
-           if (amount <= 0) return false;
-              return true;
-          })) break;
+        for (var i = hash.length; i > 0; i--) {
+            if (!hash[i]) continue;
+            if (!hash[i].every((h) => {
+
+                    lb.push({
+                        r: rank++,
+                        i: h.id
+                    })
+                    amount--;
+                    if (amount <= 0) return false;
+                    return true;
+                })) break;
         }
-       
+
         return lb
     }
-    
+
     spawn(bot) {
         this.toSend.push({
             id: bot.id,
             action: 1
         })
-        
+
     }
     ejectMass(bot) {
-         this.toSend.push({
+        this.toSend.push({
             id: bot.id,
             action: 2
         })
     }
-     splitPlayer(bot) {
-         this.toSend.push({
+    splitPlayer(bot) {
+        this.toSend.push({
             id: bot.id,
             action: 3
         })
     }
-   removeNode(node) {
+    removeNode(node) {
         node.destroyed = true;
         node.dead = true;
-         this.nodes.delete(node)
-          this.map.delete(node.id)
-           this.addedHash[node.id] = false;
-          node.onDelete(this)
+        this.nodes.delete(node)
+        this.map.delete(node.id)
+        this.addedHash[node.id] = false;
+        node.onDelete(this)
     }
-    
-  removeNodes(nodes) {
-        nodes.forEach((node)=>{
+
+    removeNodes(nodes) {
+        nodes.forEach((node) => {
             var n = this.map.get(node.id)
             if (n) this.removeNode(n)
         })
-        
+
     }
     asign() {
-        
+
     }
     getConfig() {
         return this.config
     }
     moveCode(nodes) {
-      
-        nodes.forEach((node)=>{
+
+        nodes.forEach((node) => {
             var n = this.map.get(node.id)
             if (n) {
-               
-             n.position.x = node.x
+
+                n.position.x = node.x
                 n.position.y = node.y
                 this.nodes.update(n)
             }
         })
     }
-    
+
     init(msg) {
-        
-       this.config = msg.config
-       this.haveTeams = msg.teams
-       try {
-           
-           clearInterval(this.interval)
-       } catch (e) {
-           
-       }
-          this.interval = setInterval(function() {
-              if (this.paused) return;
-       this.loop()
-         }.bind(this),50) 
-          this.on('delPlayer',function(ps) {
-          
-               this.removeClient(ps)
-               
-           
-          }.bind(this))
+
+        this.config = msg.config
+        this.haveTeams = msg.teams
+        try {
+
+            clearInterval(this.interval)
+        } catch (e) {
+
+        }
+        this.interval = setInterval(function () {
+            if (this.paused) return;
+            this.loop()
+        }.bind(this), 50)
+        this.on('delPlayer', function (ps) {
+
+            this.removeClient(ps)
+
+
+        }.bind(this))
     }
     onRemove() {
         try {
-         clearInterval(this.interval)
+            clearInterval(this.interval)
         } catch (e) {
-            
+
         }
-        this.bots.forEach((b)=>{
+        this.bots.forEach((b) => {
             b.onRemove(this)
         })
-        this.players.forEach((b)=>{
+        this.players.forEach((b) => {
             b.onRemove(this)
         })
-         this.addedHash = false;
-         this.nodes = false
+        this.addedHash = false;
+        this.nodes = false
         this.toSend = false;
         this.map = false
         this.bots = false
@@ -210,9 +211,9 @@ module.exports = class Manager {
         this.events = false
         this.timers = false
         this.players = false
-         
+
     }
-    
+
     removeClient(id) {
         var a = this.bots.get(id)
         if (a) {
@@ -220,95 +221,105 @@ module.exports = class Manager {
             a.onRemove(this)
             return;
         }
-         var a = this.players.get(id)
+        var a = this.players.get(id)
         if (a) {
             this.players.delete(id)
             a.onRemove(this)
             return;
         }
     }
-    addBot(id,bot) {
-        this.bots.set(id,new Bot(id,this,bot))
+    addBot(id, bot) {
+        this.bots.set(id, new Bot(id, this, bot))
     }
-    emit(event,data) {
-    var a = {
-        e: event,
-        d: data
-    }
+    emit(event, data) {
+        var a = {
+            e: event,
+            d: data
+        }
         this.toSend.push(a)
     }
     event(msg) {
-       var e = msg.e
-       var d = msg.d
-       if (this.events[e]) this.events[e](d)
+        var e = msg.e
+        var d = msg.d
+        if (this.events[e]) this.events[e](d)
     }
-    on(e,f) {
-        
+    on(e, f) {
+
         this.events[e] = f
     }
     clearEvents() {
         this.events = {};
     }
+
     loop() { // 0.005 s
         if (this.timers.a <= 0) {
             var lb = this.updateLB()
             this.checkMass()
-            if (lb.length != 0) this.emit('lb',lb)
-            
+            if (lb.length != 0) this.emit('lb', lb)
+
             this.timers.a = 100;
         } else this.timers.a--;
-        
-        
+
+
         if (this.timers.b <= 0) {
-            this.bots.forEach((bot)=>{
-                setTimeout(function() {
-                 bot.update()
-                },1)
-                 if (bot.shouldSend()) this.toSend.push({i:bot.id,m:bot.mouse})
-             })
-           
-                 
-             if (this.toSend[0]) this.send(this.toSend)
-           
-             this.toSend = [];
+            this.bots.forEach((bot) => {
+                setTimeout(function () {
+                    bot.update()
+                }, 1)
+                if (bot.shouldSend()) this.toSend.push({
+                    i: bot.id,
+                    m: bot.mouse
+                })
+            })
+
+
+            if (this.toSend[0]) this.send(this.toSend)
+
+            this.toSend = [];
             this.timers.b = 10;
         } else this.timers.b--;
-       
+
         this.updatePlayers()
-       
-        
-            
+
+
+
     }
     updatePlayers() {
         var final = [];
-        this.players.forEach((player)=>{
+        this.players.forEach((player) => {
             if (player.cells.length == 0) return;
-            player.cells.forEach((cell)=>{
-               var nodes = this.nodes.getNodes(cell.bounds)
-               var list = [];
-                nodes.forEach((node)=>{
+            player.cells.forEach((cell) => {
+                var nodes = this.nodes.getNodes(cell.bounds)
+                var list = [];
+                nodes.forEach((node) => {
                     if (node.id != cell.id) {
-                        
+
                         if (cell.collisionCheck(node)) list.push(node.id)
-                        
+
                     }
                 })
-                final.push({i:cell.id,l:list})
+                final.push({
+                    i: cell.id,
+                    l: list
+                })
             })
         })
-         this.bots.forEach((player)=>{
+        this.bots.forEach((player) => {
             if (player.cells.length == 0) return;
-            player.cells.forEach((cell)=>{
-               var nodes = this.nodes.getNodes(cell.bounds)
-               var list = [];
-                nodes.forEach((node)=>{
+            player.cells.forEach((cell) => {
+                var nodes = this.nodes.getNodes(cell.bounds)
+                var list = [];
+                nodes.forEach((node) => {
                     if (node.id != cell.id) {
-                        
-                      if (cell.collisionCheck(node)) list.push(node.id)
+
+                        if (cell.collisionCheck(node)) list.push(node.id)
                     }
                 })
-                
-                final.push({i:cell.id,l:list})
+
+                final.push({
+                    i: cell.id,
+                    l: list
+                })
             })
         })
         if (final.length == 0) return;
@@ -316,15 +327,18 @@ module.exports = class Manager {
             d: final,
             p: true
         }
-        
+
         this.send(a)
-        
+
     }
     send(data) {
-        
+
         try {
-            process.send({id:this.id,data:data})
-            
+            process.send({
+                id: this.id,
+                data: data
+            })
+
         } catch (e) {
             process.exit(0)
         }
@@ -332,24 +346,24 @@ module.exports = class Manager {
     checkMass() {
         var list = [];
         var max = this.config.playerMaxMass
-        this.players.forEach((player)=>{
-            player.cells.forEach((cell)=>{
+        this.players.forEach((player) => {
+            player.cells.forEach((cell) => {
                 if (cell.mass > max) list.push(cell.id)
             })
-            
+
         })
-        this.bots.forEach((player)=>{
-            player.cells.forEach((cell)=>{
+        this.bots.forEach((player) => {
+            player.cells.forEach((cell) => {
                 if (cell.mass > max) list.push(cell.id)
             })
-            
+
         })
         if (list.length == 0) return;
-        this.emit('mass',list)
+        this.emit('mass', list)
     }
-    
+
     other() {
-        
+
     }
-    
+
 }

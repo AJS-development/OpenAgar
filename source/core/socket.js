@@ -19,32 +19,32 @@
 const RSON = require('rson')
 const LZString = require('../modules/LZString.js')
 module.exports = class Socket {
-    constructor(socket,player) {
+    constructor(socket, player) {
         this.player = player;
         this.socket = socket
-        
-                    var idx = socket._remoteAddress.lastIndexOf(':');
-if (~idx && ~socket._remoteAddress.indexOf('.'))
-  this.remoteAddress = socket._remoteAddress.slice(idx + 1);
+
+        var idx = socket._remoteAddress.lastIndexOf(':');
+        if (~idx && ~socket._remoteAddress.indexOf('.'))
+            this.remoteAddress = socket._remoteAddress.slice(idx + 1);
         this.IPv6 = socket._remoteAddress
     }
     sendNodes(obj) {
-        
-        this.socket.emit('nodes',obj)
+
+        this.socket.emit('nodes', obj)
     }
     sendDelete(tex) {
-       
-        this.socket.emit('delnodes',tex) 
+
+        this.socket.emit('delnodes', tex)
     }
-disconnect() {
-    socket._diconnect = true;
-            socket.disconnect()
-            
-}
-    emit(a,b) {
-        
-        this.socket.emit(a,b)
+    disconnect() {
+        socket._diconnect = true;
+        socket.disconnect()
+
     }
-    
-    
+    emit(a, b) {
+
+        this.socket.emit(a, b)
+    }
+
+
 }

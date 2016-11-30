@@ -16,154 +16,168 @@
 var Child = require('child_process')
 var QuickMap = require('quickmap')
 module.exports = class childService {
-  constructor(main,child) {
-    this.cpus = require('os').cpus().length
-  
-    this.child = child
-    
-    this.main = main;
-      this.toSend = [];
-      this.buf = 0;
-      this.updHash = {};
-      this.movHash = {};
-    this.movCode = [];
-      this.hash = [];
-      this.events = {}
-      this.lb = [];
- 
-   this.init()
-  }
-  init() {
-      this.child.on(this.main.id,function(data) {
-          
-          this.onData(data)
-      }.bind(this))
-       this.send(0,{hello:"hello",config: this.main.getConfig(),teams:this.main.haveTeams})
-    this.on('lb',function(lb) {
-        this.lb = lb
-    }.bind(this))
-    this.on('mass',function(m) {
-        var nodes = this.main.getWorld().getNodes('player'),
-            max = this.main.getConfig().playerMaxMass;
-        m.forEach((k)=>{
-        var node = nodes.get(k)
-        if (node) {
-            node.mass = Math.min(node.mass,max)
-            node.updCode()
-        } 
-        })
-    }.bind(this))
-  }
-    pause(state) {
-        this.send(9,{p:state})
-        
+    constructor(main, child) {
+        this.cpus = require('os').cpus().length
+
+        this.child = child
+
+        this.main = main;
+        this.toSend = [];
+        this.buf = 0;
+        this.updHash = {};
+        this.movHash = {};
+        this.movCode = [];
+        this.hash = [];
+        this.events = {}
+        this.lb = [];
+
+        this.init()
     }
-    on(e,f) {
+    init() {
+        this.child.on(this.main.id, function (data) {
+
+            this.onData(data)
+        }.bind(this))
+        this.send(0, {
+            hello: "hello",
+            config: this.main.getConfig(),
+            teams: this.main.haveTeams
+        })
+        this.on('lb', function (lb) {
+            this.lb = lb
+        }.bind(this))
+        this.on('mass', function (m) {
+            var nodes = this.main.getWorld().getNodes('player'),
+                max = this.main.getConfig().playerMaxMass;
+            m.forEach((k) => {
+                var node = nodes.get(k)
+                if (node) {
+                    node.mass = Math.min(node.mass, max)
+                    node.updCode()
+                }
+            })
+        }.bind(this))
+    }
+    pause(state) {
+        this.send(9, {
+            p: state
+        })
+
+    }
+    on(e, f) {
         this.events[e] = f
     }
-    emit(e,d) {
-        this.send(7,{e:e,d:d})
+    emit(e, d) {
+        this.send(7, {
+            e: e,
+            d: d
+        })
     }
     clearEvents() {
-       this.events = {} 
+        this.events = {}
     }
-    action(bot,action,data) {
+    action(bot, action, data) {
         switch (action) {
-            case 1: // spawn
-                bot.onSpawn()
-                this.main.spawn(bot)
-                
-                break;
-            case 2: // eject
-                this.main.ejectMass(bot)
-                break;
-            case 3: // split
-                  this.main.splitPlayer(bot)
-                break;
+        case 1: // spawn
+            bot.onSpawn()
+            this.main.spawn(bot)
+
+            break;
+        case 2: // eject
+            this.main.ejectMass(bot)
+            break;
+        case 3: // split
+            this.main.splitPlayer(bot)
+            break;
         }
     }
-    event(event,data) {
+    event(event, data) {
         if (this.events[event]) this.events[event](data)
     }
-    
+
     onData(data) {
-        if (this.main.destroyed) return 
+        if (this.main.destroyed) return
         if (data.p) {
-   
-           var world = this.main.getWorld().getNodes('map')
-           data.d.forEach((c)=>{
-               var cell = world.get(c.i)
-               if (!cell) return;
-               cell.nearby = []
-               c.l.forEach((n)=>{
-                          
-                var node = world.get(n)
-              
-                if (node) cell.nearby.push(node)
-               })
-           })
+
+            var world = this.main.getWorld().getNodes('map')
+            data.d.forEach((c) => {
+                var cell = world.get(c.i)
+                if (!cell) return;
+                cell.nearby = []
+                c.l.forEach((n) => {
+
+                    var node = world.get(n)
+
+                    if (node) cell.nearby.push(node)
+                })
+            })
             return;
         }
-      
-     
-     // console.log(data)
-        data.forEach((bot)=>{
-               if (bot.e) {
-            this.event(bot.e,bot.d)
-        } else
+
+
+        // console.log(data)
+        data.forEach((bot) => {
+            if (bot.e) {
+                this.event(bot.e, bot.d)
+            } else
             if (bot.action) {
-                   var b =this.main.bots.get(bot.id)
-                   if (!b) return
-                   this.action(b,bot.action,bot)
+                var b = this.main.bots.get(bot.id)
+                if (!b) return
+                this.action(b, bot.action, bot)
             } else {
-            var b =this.main.bots.get(bot.i)
-                     if (!b) return
-            b.mouse.x = bot.m.x
-            b.mouse.y = bot.m.y
+                var b = this.main.bots.get(bot.i)
+                if (!b) return
+                b.mouse.x = bot.m.x
+                b.mouse.y = bot.m.y
             }
         })
     }
     stop() {
-    this.child.removeListener(this.main.id)
-      delete this.child
-        
+        this.child.removeListener(this.main.id)
+        delete this.child
+
     }
-    send(type,data) {
+    send(type, data) {
         data.type = type;
-      try {
-      this.child.send(this.main.id,data)
-      } catch (e) {
-  
-      }
+        try {
+            this.child.send(this.main.id, data)
+        } catch (e) {
+
+        }
     }
-  addBot(bot) {
-   
-this.send(5,{id: bot.id, bot: bot.botid})
-  }
+    addBot(bot) {
+
+        this.send(5, {
+            id: bot.id,
+            bot: bot.botid
+        })
+    }
     removeClient(client) {
-        this.emit('delPlayer',client.id)
+        this.emit('delPlayer', client.id)
     }
-  addNode(node) {
-      if (this.hash[node.id]) return;
-      this.toSend.push({
-          id: node.id,
-          size: node.size,
-          type: node.type,
-          bounds: node.bounds,
-          position: node.position,
-          owner: (node.owner) ? node.owner.id : false,
-          mass: node.mass,
-          speed: node.speed
-          
-          
-      })
-      this.hash[node.id] = true;
-      
-  }
+    addNode(node) {
+        if (this.hash[node.id]) return;
+        this.toSend.push({
+            id: node.id,
+            size: node.size,
+            type: node.type,
+            bounds: node.bounds,
+            position: node.position,
+            owner: (node.owner) ? node.owner.id : false,
+            mass: node.mass,
+            speed: node.speed
+
+
+        })
+        this.hash[node.id] = true;
+
+    }
     deleteNodes(nodes) {
         if (nodes[0])
-        this.send(2,{nodes:nodes})
-       
+            this.send(2, {
+                nodes: nodes
+            })
+
     }
     sendMove(node) {
         this.movCode.push({
@@ -171,45 +185,50 @@ this.send(5,{id: bot.id, bot: bot.botid})
             x: node.position.x,
             y: node.position.y
         })
-        
+
     }
     update() {
         if (this.main.lag > 0) {
             if (this.buf > 5) {
-            this.buf = 0
-            
-        } else {
-            this.buf ++;
+                this.buf = 0
+
+            } else {
+                this.buf++;
+            }
         }
-    }
+
         var nodes = this.main.getWorld().getNodes('player')
-        
-        nodes.forEach((node)=>{
-         
+
+        nodes.forEach((node) => {
+
             if (node.updateCode != this.updHash[node.id]) {
-              this.hash[node.id] = false;
+                this.hash[node.id] = false;
                 this.updHash[node.id] = node.updateCode
                 this.addNode(node)
             } else if (node.moveCode != this.movHash[node.id]) {
-                
+
                 this.movHash[node.id] = node.moveCode
-            this.movCode.push({
-                id: node.id,
-                x: node.position.x,
-                y: node.position.y
-            })
+                this.movCode.push({
+                    id: node.id,
+                    x: node.position.x,
+                    y: node.position.y
+                })
             }
-            
+
         })
-         if (this.movCode[0]) this.send(3,{nodes:this.movCode})
-         this.movCode = [];
-        
+        if (this.movCode[0]) this.send(3, {
+            nodes: this.movCode
+        })
+        this.movCode = [];
+
     }
-    
-  sendNodes() {
-      if (!this.toSend[0]) return
-      this.send(1,{nodes:this.toSend})
-      this.toSend = [];
-  }
-  
+
+    sendNodes() {
+        if (!this.toSend[0]) return
+        this.send(1, {
+            nodes: this.toSend
+        })
+        this.toSend = [];
+    }
+
 }
