@@ -156,6 +156,7 @@ module.exports = class childService {
         this.emit('delPlayer', client.id)
     }
     addNode(node) {
+
         if (this.hash[node.id]) return;
         this.toSend.push({
             id: node.id,
@@ -224,10 +225,11 @@ module.exports = class childService {
     }
 
     sendNodes() {
-        if (!this.toSend[0]) return
+        if (this.toSend.length == 0) return
         this.send(1, {
             nodes: this.toSend
         })
+
         this.toSend = [];
     }
 

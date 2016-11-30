@@ -186,8 +186,10 @@ module.exports = class template {
 
     }
     collisionCheckCircle(node, no) {
+
         var distance = this.getDistance(node.position.x, node.position.y);
-        var s = (no) ? node.size : node.getEatRange()
+
+        var s = (no) ? node.size : node.getEatRange(node)
         if (distance <= this.size + s) return true;
         return false;
     }
@@ -297,7 +299,7 @@ module.exports = class template {
         var m = this.moveEngine
 
         var Velocity = m.velocityInit + (m.deltaT * m.acceleration)
-       m.velocity = Velocity
+        m.velocity = Velocity
         var dx = 0;
         if (speed == -1) {
             Velocity *= 0.5

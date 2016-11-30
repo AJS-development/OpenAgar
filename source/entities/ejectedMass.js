@@ -58,6 +58,8 @@ module.exports = class EjectedMass extends template {
                 if (!virus.collisionCheckCircle(this)) return true;
                 this.eat(virus, main)
                 return false;
+            } else if (virus.type == 6) {
+                virus.feed(this, main)
             }
 
             return true;

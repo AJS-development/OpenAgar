@@ -25,35 +25,53 @@ module.exports = class FoodService {
         if (this.main.food < this.main.getConfig().minFood) {
             this.addFood(this.main.getConfig().minFood - this.main.food);
         } else {
-        // console.log(this.main.dataService.world.getNodes())
+            // console.log(this.main.dataService.world.getNodes())
         }
-    
+
     }
     getRandomPos() {
         var x = Math.floor(this.main.bounds.width * Math.random());
         var y = Math.floor(Math.random() * this.main.bounds.height);
-        return {x:x, y:y};
+        return {
+            x: x,
+            y: y
+        };
     }
     addFood(m) {
-        for (var i = 0; i < m; i ++) {
+        for (var i = 0; i < m; i++) {
             var pos = this.getRandomPos();
             // console.log(pos)
-            this.main.addNode(pos,2,4);
+            this.main.addNode(pos, 2, 4);
         }
     }
     checkVirus() {
-          if (this.main.viruses < this.main.getConfig().minVirus) {
-            this.addVirus(this.main.getConfig().minVirus- this.main.viruses);
+        if (this.main.viruses < this.main.getConfig().minVirus) {
+            this.addVirus(this.main.getConfig().minVirus - this.main.viruses);
         } else {
-        // console.log(this.main.dataService.world.getNodes())
+            // console.log(this.main.dataService.world.getNodes())
+        }
+    }
+    addWormHole(m) {
+        for (var i = 0; i < m; i++) {
+            var pos = this.getRandomPos();
+            // console.log(pos)
+            var mass = Math.floor(Math.random() * 500) + 100
+            this.main.addNode(pos, mass, 6);
+        }
+    }
+    checkWormHole() {
+        if (this.main.wormHoles < this.main.getConfig().minWormHole) {
+            this.addWormHole(this.main.getConfig().minWormHole - this.main.wormHoles);
+        } else {
+            // console.log(this.main.dataService.world.getNodes())
         }
     }
     addVirus(m) {
-  
-         for (var i = 0; i < m; i ++) {
+
+        for (var i = 0; i < m; i++) {
             var pos = this.getRandomPos();
             // console.log(pos)
-            this.main.addNode(pos,this.main.getConfig().virusMass,2);
+            this.main.addNode(pos, this.main.getConfig().virusMass, 2);
         }
     }
 };

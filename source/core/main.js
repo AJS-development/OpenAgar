@@ -52,6 +52,7 @@ module.exports = class Main {
         this.destroyed = false
         this.chat = [];
         this.tbd = [];
+        this.wormHoles = 0;
         this.paused = false;
         this.bots = new QuickMap();
         this.deleteR = "";
@@ -717,11 +718,12 @@ module.exports = class Main {
         // 0.05 seconds
 
         if (this.timer.updatePN >= 50) {
-            this.checkLag()
+
             this.updatePlayerNodes();
             this.updateMovingCells();
             this.updateBots()
             this.timer.updatePN = 0;
+            this.checkLag()
         }
 
 
@@ -747,6 +749,7 @@ module.exports = class Main {
                     this.timer.slow = 0;
                     this.checkFood();
                     this.foodService.checkVirus()
+                    this.foodService.checkWormHole()
                     this.updateMerge();
                     this.updateLB()
                     if (this.timer.status >= 60) {
@@ -793,7 +796,8 @@ module.exports = class Main {
             if (this.timer.passed > 80) {
                 this.lag = 30
                 this.lagtime = this.timer.passed
-                this.debug("gre{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').length)
+                this.debug("yel{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').length)
+                this.debug("yel{[Debug]} Mitigating lag...".styleMe())
             }
 
         }
@@ -849,6 +853,7 @@ module.exports = class Main {
 
 
         hashnodes.every((check) => {
+
             if (check == node || check.dead) return true;
             if (check.moveEngine.collision == "circle") {
                 if (!node.collisionCheckCircle(check)) return true
@@ -895,6 +900,10 @@ module.exports = class Main {
                 check.eat(node, this)
                 break;
             case 5: // bullets
+
+                check.collide(node, this)
+                break;
+            case 6: //  wormholes
 
                 check.collide(node, this)
                 break;
@@ -972,6 +981,9 @@ module.exports = class Main {
             break;
         case 5: // bullets
             var a = new Entities.bullet(position, mass, type, owner, others);
+            break;
+        case 6: // wormholes
+            var a = new Entities.wormHole(position, mass, type, null, others);
             break;
         }
         a.onCreation(this);
