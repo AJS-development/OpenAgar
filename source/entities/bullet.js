@@ -79,7 +79,7 @@ module.exports = class bullet extends template {
     }
 
     collide(node, main) {
-        if (this.owner == node.owner || node.owner.mass <= 1000) {
+        if (this.owner == node.owner || node.owner.mass <= 500) {
 
             this.eat(node, main)
             node.addMass(2)
