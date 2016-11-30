@@ -531,7 +531,7 @@ module.exports = class Main {
         }
         var cell = player.getBiggest()
 
-
+        if (!cell) return;
         var deltaX = player.mouse.x - cell.position.x,
             deltaY = player.mouse.y - cell.position.y;
 

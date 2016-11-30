@@ -65,6 +65,7 @@ module.exports = class wormhole extends template {
         var a = main.getWorld().getNodes('wormhole').toArray()
 
         a = a[Math.floor(Math.random() * a.length)]
+
         if (a) {
             a.tpa(node, main)
         }
