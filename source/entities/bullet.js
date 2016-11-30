@@ -91,9 +91,13 @@ module.exports = class bullet extends template {
 
         while (node.mass > 10) {
             node.addMass(-main.getConfig().ejectedMass);
+            var pos = {
+                x: node.position.x + Math.floor(Math.random() * 1000) - 500,
+                y: node.position.y + Math.floor(Math.random() * 1000) - 500
 
-            var ejected = this.addNode(startPos, 12, 5, player, [], "m")
-            ejected.setEngine1(6.28 * Math.random(), this.getConfig().ejectedSpeed, this.getConfig().ejectedDecay)
+            }
+            var ejected = main.addNode(pos, main.getConfig().ejectedMass, 3, node.owner, [], "m")
+            ejected.setEngine1(6.28 * Math.random(), main.getConfig().ejectedSpeed, main.getConfig().ejectedDecay)
             ejected.setCurve(10)
 
 
