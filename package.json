@@ -7,17 +7,17 @@
     "node": "5.9.0"
   },
   "dependencies": {
-    "cli-gui": "latest", // Graphical Command Line Interface (by AJS Dev)
-    "quickmap": "latest", // Quick key-value map with self cleaning (by AJS Dev)
-    "SmartConfig": "latest", // Not used but is a smart way to have configs (by AJS Dev)
-    "rson": "latest", // Recursive Simplified Object Notation, does things JSON cannot (by AJS Dev)
-    "hashbounds": "latest", // A fast spatial hash system (by AJS Dev)
-    "styleme": "latest", // A cool styling module to add colors and other things (by AJS Dev)
-    "socket.io": "latest", // A simple way to communicate between server and client (not by AJS)
-    "node-cryptojs-aes":"latest", // A cryptography module (not by AJS)
-    "minirequest": "latest", // A simple way to get the html contents from a url (by AJS Dev)
-    "asyncconsole": "latest", // A simple, yet advanced way to have a async promtp (by AJS Dev)
-    "nodesounds": "latest" // A simple module to play sounds (by AJS Dev)
+    "cli-gui": "latest",
+    "quickmap": "latest", 
+    "SmartConfig": "latest", 
+    "rson": "latest", 
+    "hashbounds": "latest", 
+    "styleme": "latest",
+    "socket.io": "latest",
+    "node-cryptojs-aes":"latest",
+    "minirequest": "latest",
+    "asyncconsole": "latest",
+    "nodesounds": "latest"
   },
   "devDependencies": {},
   "scripts": {
