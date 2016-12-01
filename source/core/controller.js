@@ -42,7 +42,9 @@ eval(UID())
 } catch (e) {
     if (e == "12") {
         Sounds.play('alert')
- e = "Invalid key!, make sure you have the right key! Your id is: " + _uid()
+ console.log("red{[OpenAgar]}Invalid key!, make sure you have the right key! Your id is: ".styleMe() + _uid())
+    process.exit(0)
+    return;
     } 
     
  throw e
