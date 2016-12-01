@@ -146,6 +146,7 @@ module.exports = class ShellService {
         this.console[id].push(a.toString())
     }
     drawSplash() {
+        Sounds.play('start')
         this.log(1, "\u001b[2J\u001b[0;0H");
         this.log(1, "cya{   ___                   }yel{   _                    }".styleMe())
         this.log(1, "cya{  / _ \\ _ __   ___ _ __ }yel{   / \\   __ _  __ _ _ __ }".styleMe())
