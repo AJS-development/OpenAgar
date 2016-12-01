@@ -27,6 +27,8 @@ var a = require('../modules/fastSquares.js')
 Sqrt = new a()
 var a = require('nodesounds')
 Sounds = new a(__dirname + '/../sounds')
+Sounds.add('start','start.mp3')
+Sounds.add('alert','alert.mp3')
 _version = "3.2.5"
 _key = ""
 try {
