@@ -31,7 +31,7 @@ Sounds.add('start','start.mp3')
 Sounds.add('alert','alert.mp3')
 Sounds.add('tone','tone.mp3')
 
-_version = "3.2.5"
+_version = "3.3.0"
 _key = ""
 try {
     try {_key = parseInt(require('fs').readFileSync(__dirname + '/../../key.txt',"utf8"))} catch(j){
