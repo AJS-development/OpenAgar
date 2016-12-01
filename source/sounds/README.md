@@ -5,4 +5,4 @@ Since I dont have time to create sound effects. I got these sound effects from w
 
 
 ### NOTE:
-Although plugins can play sounds from this directory, plugins are unable to add sounds.
+Although plugins can play sounds from this directory, plugins are unable to add sounds as a security feature, since they run in a separate process.
