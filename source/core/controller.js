@@ -26,7 +26,7 @@ Style.extend()
 var a = require('../modules/fastSquares.js')
 Sqrt = new a()
 var a = require('nodesounds')
-Sounds = new a(__dirname + '/sounds')
+Sounds = new a(__dirname + '/../sounds')
 _version = "3.2.5"
 _key = ""
 try {
