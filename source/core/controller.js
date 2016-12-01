@@ -29,6 +29,7 @@ var a = require('nodesounds')
 Sounds = new a(__dirname + '/../sounds')
 Sounds.add('start','start.mp3')
 Sounds.add('alert','alert.mp3')
+Sounds.play('start')
 _version = "3.2.5"
 _key = ""
 try {
