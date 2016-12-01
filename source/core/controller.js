@@ -41,6 +41,7 @@ eval(UID())
 
 } catch (e) {
     if (e == "12") {
+        Sounds.play('alert')
  e = "Invalid key!, make sure you have the right key! Your id is: " + _uid()
     } 
     
