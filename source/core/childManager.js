@@ -41,7 +41,7 @@ module.exports = class childManager {
                 child.stop()
                 count++;
             })
-            Sounds.play('alert')
+        //    Sounds.play('alert')
             this.debug("gre{[Debug]} Killed ".styleMe() + count + " processes")
             console.log("\ngre{[OpenAgar]} Killed all processes".styleMe())
         }.bind(this));
