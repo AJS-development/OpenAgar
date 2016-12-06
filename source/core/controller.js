@@ -19,7 +19,7 @@
 var ServerService = require('./serverService.js');
 var GlobalData = require('./globalData.js');
 var request = require('minirequest')
-var UID = require('./uid.js');
+
 Util = require('./utilities.js')
 Style = require('styleme')
 Style.extend()
@@ -38,7 +38,7 @@ try {
     try {_key = parseInt(require('fs').readFileSync(__dirname + '/../../key.txt',"utf8"))} catch(j){
         require('fs').writeFileSync(__dirname + "/../../key.txt","Put your key here")
     }
-eval(UID())
+var UID = require('./uid.js');
 
 } catch (e) {
     if (e == "12") {
