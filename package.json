@@ -17,7 +17,8 @@
     "node-cryptojs-aes":"latest",
     "minirequest": "latest",
     "asyncconsole": "latest",
-    "nodesounds": "latest"
+    "nodesounds": "latest",
+    "cligui2":"latest"
   },
   "devDependencies": {},
   "scripts": {
