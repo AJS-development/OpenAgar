@@ -357,6 +357,7 @@ module.exports = class Player {
             this.sendData = true;
             this.bulletsleft = 3
             this.golden = false;
+            this.resetView()
             var name = msg.name || ""
             if (!msg.skin) name = this.skinHandler.setSkin(name);
             else if (msg.skin > 0)
@@ -482,7 +483,7 @@ module.exports = class Player {
         setTimeout(function () { // let the player see who killed them
             if (this.playing) return
             this.sendData = false;
-            this.resetView()
+
         }.bind(this), 10000)
     }
     send() {
