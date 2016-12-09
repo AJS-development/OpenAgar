@@ -15,8 +15,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-module.exports = function(node, main) {
-    
+module.exports = function (node, player) {
+
     var a = {
         id: node.id,
         owId: (node.owner) ? node.owner.id : 0,
@@ -29,8 +29,8 @@ module.exports = function(node, main) {
     };
     node.name && (a.name = node.name)
     node.agit && (a.agit = 1)
-    node.skin && (a.skin = node.skin)
-  
+    node.skin && (a.skin = player.skinHandler.getSend(node.skin))
+
     node.spiked && (a.spiked = 1);
     return a;
 };

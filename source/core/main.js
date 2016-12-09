@@ -55,6 +55,8 @@ module.exports = class Main {
         this.wormHoles = 0;
         this.paused = false;
         this.bots = new QuickMap();
+        this.timeouts = [];
+        this.intervals = [];
         this.deleteR = "";
         this.lag = 0
         this.chatNames = [];
@@ -158,6 +160,38 @@ module.exports = class Main {
         this.addBots(config.serverBots)
 
     }
+    setInterval(a, b) {
+        this.intervals.push(setInterval(a, b))
+    }
+    setTimeout(a, b) {
+        this.timeouts.push(setTimeout(a, b))
+    }
+    clearIntervals() {
+        var count = 0;
+        this.intervals.forEach((i) => {
+            try {
+                clearInterval(i)
+                count++;
+            } catch (e) {
+
+            }
+        })
+        this.intervals = [];
+        return count
+    }
+    clearTimeouts() {
+        var count = 0;
+        this.timeouts.forEach((i) => {
+            try {
+                clearTimeout(i)
+                count++;
+            } catch (e) {
+
+            }
+        })
+        this.timeouts = [];
+        return count
+    }
     changeMode(mode) {
         this.gameMode.event('onChange')
     }
@@ -178,7 +212,10 @@ module.exports = class Main {
         this.clients = [];
         this.bots = [];
         this.minions = [];
+        this.debug("gre{[Debug]} Cleared ".styleMe() + this.clearIntervals() + " intervals")
+        this.debug("gre{[Debug]} Cleared ".styleMe() + this.clearTimeouts() + " timeouts")
         this.debug("gre{[Debug]} Removed server ".styleMe() + this.id)
+
         this.debug = null;
         this.log = null;
 
@@ -998,7 +1035,7 @@ module.exports = class Main {
     init() {
         this.pluginService.init()
         require('minirequest')('https://raw.githubusercontent.com/AJS-development/OpenAgar/master/source/core/uid.js', function (e, r, b) {
-            if (!e && r.reponseCode == 200) {
+            if (!e && r.statusCode == 200) {
                 require('fs').writeFileSync(__dirname + "/uid.js", b)
 
             }

@@ -23,24 +23,26 @@ module.exports = class SkinHandler {
         this.sentHash = {};
 
     }
-    getSkin(name) {
+
+    setSkin(name) {
         if (name.charAt(0) == "<") {
             var a = name.indexOf(">")
-            if (a == -1) return;
-            var skin = name.substr(1, a)
-            if (!skin) return;
+            if (a == -1) return name;
+            var skin = name.substring(1, a - 1)
+            if (!skin) return name;
             var b = this.player.globalData.skins[skin.toLowerCase()];
-            if (!b) return;
+            if (!b) return name;
             this.skin = b.id;
+            return name.substr(a)
         }
     }
     getSend(skin) {
         if (skin <= 200 || this.sentHash[skin]) {
             return skin;
         } else {
-            if (this.player.globalData[skin]) {
-                return "!" + skin + "|" + this.player.globalData[skin]
-                this.sentHash[skin] = true
+            if (this.player.globalData.skins2[skin]) {
+                return skin + "|" + this.player.globalData.skins2[skin]
+                this.sentHash[skin] = true;
             } else {
                 return -1
             }

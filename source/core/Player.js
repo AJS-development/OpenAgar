@@ -19,6 +19,7 @@
 
 const FormatNode = require('./formatNode.js')
 const Socket = require('./socket.js')
+const SkinHandler = require('./skinHandler.js')
 module.exports = class Player {
     constructor(id, socket, server, globalData) {
         this.id = id;
@@ -66,6 +67,7 @@ module.exports = class Player {
             chatBan: false,
             reservedNamesMap: []
         }
+
         this.bulletsleft = 3
         this.killer = false;
         this.globalData = globalData
@@ -87,6 +89,7 @@ module.exports = class Player {
         this.cells = [];
         this.playing = false;
         this.socket = new Socket(socket, this)
+        this.skinHandler = new SkinHandler(this)
         this.server.addClient(this)
         this.sendData = true;
 
@@ -354,7 +357,11 @@ module.exports = class Player {
             this.sendData = true;
             this.bulletsleft = 3
             this.golden = false;
-            this.setName(msg.name || "");
+            var name = msg.name || ""
+            if (!msg.skin) name = this.skinHandler.setSkin(name);
+            else if (msg.skin <= 200)
+                this.skinHandler.skin = msg.skin
+            this.setName(name);
 
             this.server.spawn(this)
             this.resetView()
@@ -433,7 +440,7 @@ module.exports = class Player {
     }
     sendNode(node, main) {
 
-        var n = FormatNode(node, main)
+        var n = FormatNode(node, this)
 
         // this.visSimple.push(n)
 
