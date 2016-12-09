@@ -32,7 +32,7 @@ Sounds.add('start', 'start.mp3')
 Sounds.add('alert', 'alert.mp3')
 Sounds.add('tone', 'tone.mp3')
 
-_version = "3.6.5"
+_version = "3.7.0"
 _key = ""
 try {
     try {
