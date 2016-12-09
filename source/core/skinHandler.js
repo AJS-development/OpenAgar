@@ -19,33 +19,38 @@
 module.exports = class SkinHandler {
     constructor(player) {
         this.player = player
-        this.skin = "";
+        this.skin = 0;
         this.sentHash = {};
 
     }
 
     setSkin(name) {
+
         if (name.charAt(0) == "<") {
             var a = name.indexOf(">")
             if (a == -1) return name;
-            var skin = name.substring(1, a - 1)
-            if (!skin) return name;
+            var skin = name.substring(1, a)
+            if (!skin) return name.substr(a + 1);
+
             var b = this.player.globalData.skins[skin.toLowerCase()];
-            if (!b) return name;
+            if (!b) return name.substr(a + 1);
             this.skin = b.id;
-            return name.substr(a)
+            return name.substr(a + 1)
         }
         return name;
     }
     getSend(skin) {
+
         if (skin <= 200 || this.sentHash[skin]) {
             return skin;
         } else {
             if (this.player.globalData.skins2[skin]) {
-                return skin + "|" + this.player.globalData.skins2[skin]
                 this.sentHash[skin] = true;
+
+                return skin + "|" + this.player.globalData.skins2[skin]
+
             } else {
-                return -1
+                return 0
             }
         }
     }

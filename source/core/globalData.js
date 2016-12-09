@@ -20,7 +20,7 @@ module.exports = class GlobalData {
     constructor(config, ban, skins) {
         this.data = {};
         var fin = {};
-        var id = 200
+        var id = 201
         var f = [];
         for (var i in skins) {
             fin[i] = {
@@ -29,6 +29,7 @@ module.exports = class GlobalData {
             }
             f[id++] = skins[i]
         }
+
         this.skins = fin;
         this.skins2 = f
         this.config = config;
