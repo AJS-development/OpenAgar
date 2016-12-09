@@ -41,7 +41,7 @@ module.exports = class SkinHandler {
     }
     getSend(skin) {
 
-        if (skin <= 200 || this.sentHash[skin]) {
+        if (skin > 0 || this.sentHash[skin]) {
             return skin;
         } else {
             if (this.player.globalData.skins2[skin]) {
