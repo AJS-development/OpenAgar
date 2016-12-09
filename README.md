@@ -21,13 +21,13 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 3. Make sure all the dependancies are installed
 4. Install npm dependancies `npm install`
 5. Run index.js using node `node index.js`
-6. Record the ID given and get the appropriete key from staff.
+6. Record the ID given and get the appropriete key by going here: http://opnagar.us.
 7. Paste your key into `key.txt` (command line: `nano key.txt`)
 8. Run index.js again
 9. Connect using `play.ogarul.io/new` (development client, real one will be at ogarul.io)
 
 #### The key system
-In order to use this, you must have a key. This is so this project isnt overwhelmed with people. However, you can get your key from us. We will never charge or demand anything for it.
+In order to use this, you must have a key. This is so this project isnt overwhelmed with people. However, you can get your key from us via http://opnagar.us. We will never charge or demand anything for it. However, we are limiting the amount of keys given out, to maintain this projects semi-private status.
 
 ## Commands
 There are commands you can type in command line.
