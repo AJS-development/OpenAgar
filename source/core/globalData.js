@@ -17,20 +17,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = class GlobalData {
-    constructor(config,ban) {
+    constructor(config, ban, skins) {
         this.data = {};
+        var fin = {};
+        var id = 200
+        var f = [];
+        for (var i in skins) {
+            fin[i] = {
+                skin: skins[i],
+                id: id
+            }
+            f[id++] = skins[i]
+        }
+        this.skins = fin;
+        this.skins2 = f
         this.config = config;
-          this.id = 1;
+        this.id = 1;
         this.ban = ban
     }
     getNextId() {
-        return this.id ++;
+        return this.id++;
     }
-   
+
     getData() {
         return this.data;
     }
-    addData(name,value) {
+    addData(name, value) {
         this.data[name] = value;
     }
     removeData(name) {
