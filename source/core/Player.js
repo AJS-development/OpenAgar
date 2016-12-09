@@ -359,7 +359,7 @@ module.exports = class Player {
             this.golden = false;
             var name = msg.name || ""
             if (!msg.skin) name = this.skinHandler.setSkin(name);
-            else if (msg.skin <= 200)
+            else if (msg.skin > 0)
                 this.skinHandler.skin = msg.skin
             this.setName(name);
 

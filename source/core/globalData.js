@@ -20,14 +20,14 @@ module.exports = class GlobalData {
     constructor(config, ban, skins) {
         this.data = {};
         var fin = {};
-        var id = 201
+        var id = -1
         var f = [];
         for (var i in skins) {
             fin[i] = {
                 skin: skins[i],
                 id: id
             }
-            f[id++] = skins[i]
+            f[id--] = skins[i]
         }
 
         this.skins = fin;
