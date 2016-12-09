@@ -33,8 +33,9 @@ module.exports = class Manager {
         this.paused = false;
         this.events = {}
         this.timers = {
-            a: 100,
-            b: 10
+            a: 0,
+            b: 0,
+            c: 0
         }
         this.players = new QuickMap();
     }
@@ -181,6 +182,9 @@ module.exports = class Manager {
             if (this.paused) return;
             this.loop()
         }.bind(this), 50)
+        this.slowInt = setInterval(function () {
+            this.slowLoop()
+        }.bind(this), 5000)
         this.on('delPlayer', function (ps) {
 
             this.removeClient(ps)
@@ -191,6 +195,11 @@ module.exports = class Manager {
     onRemove() {
         try {
             clearInterval(this.interval)
+        } catch (e) {
+
+        }
+        try {
+            clearInterval(this.slowInt)
         } catch (e) {
 
         }
@@ -250,42 +259,59 @@ module.exports = class Manager {
     clearEvents() {
         this.events = {};
     }
+    slowLoop() { // 5 s
+        if (this.timers.c >= 1) {
+            var mass = this.getTotalMass()
 
+            this.emit('totmass', mass)
+
+            this.timers.c = 12
+        } else this.timers.c++;
+    }
     loop() { // 0.005 s
-        if (this.timers.a <= 0) {
+
+        setTimeout(function () {
+            this.updatePlayers()
+        }.bind(this), 1)
+
+
+        if (this.timers.a >= 100) {
             var lb = this.updateLB()
             this.checkMass()
             if (lb.length != 0) this.emit('lb', lb)
 
-            this.timers.a = 100;
-        } else this.timers.a--;
+            this.timers.a = 0;
+        } else this.timers.a++;
 
 
-        if (this.timers.b <= 0) {
-            this.bots.forEach((bot) => {
-                setTimeout(function () {
-                    bot.update()
-                }, 1)
-                if (bot.shouldSend()) this.toSend.push({
-                    i: bot.id,
-                    m: bot.mouse
+        if (this.timers.b >= 10) {
+            if (this.bots.length > 0) {
+                this.bots.forEach((bot) => {
+                    setTimeout(function () {
+                        bot.update()
+                    }, 1)
+                    if (bot.shouldSend()) this.toSend.push({
+                        i: bot.id,
+                        m: bot.mouse
+                    })
                 })
-            })
+            }
 
 
             if (this.toSend[0]) this.send(this.toSend)
 
             this.toSend = [];
-            this.timers.b = 10;
-        } else this.timers.b--;
+            this.timers.b = 0;
+        } else this.timers.b++;
 
-        this.updatePlayers()
+
 
 
 
     }
     updatePlayers() {
         var final = [];
+        if (this.players.length == 0 && this.bots.length == 0) return;
         this.players.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {
@@ -342,6 +368,20 @@ module.exports = class Manager {
         } catch (e) {
             process.exit(0)
         }
+    }
+    getTotalMass() {
+        var amount = 0;
+
+        this.map.forEach((node, i) => {
+            if (node.dead) {
+                this.nodes.delete(i)
+                this.map.delete(i)
+                this.addedHash[node.id] = false;
+                return;
+            }
+            amount += node.mass
+        })
+        return amount;
     }
     checkMass() {
         var list = [];

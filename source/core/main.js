@@ -730,7 +730,8 @@ module.exports = class Main {
             bots: this.bots.length,
             minions: this.minions.length,
             nodes: this.getWorld().getNodes('map').length,
-            uptime: upt
+            uptime: upt,
+            totalMass: this.childService.totalMass
 
 
 

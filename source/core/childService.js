@@ -22,6 +22,7 @@ module.exports = class childService {
         this.child = child
 
         this.main = main;
+        this.totalMass = 0;
         this.toSend = [];
         this.buf = 0;
         this.updHash = {};
@@ -56,6 +57,9 @@ module.exports = class childService {
                     node.updCode()
                 }
             })
+        }.bind(this))
+        this.on('totmass', function (m) {
+            this.totalMass = m;
         }.bind(this))
     }
     pause(state) {
