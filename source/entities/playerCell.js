@@ -22,7 +22,7 @@ module.exports = class cell extends template {
         super(position, mass, type, owner);
         this.name = owner.gameData.name;
         this.color = owner.gameData.color;
-        this.skin = owner.skinHandler.skin;
+        if (owner.skinHandler) this.skin = owner.skinHandler.skin;
         this.mergeage = 0;
         this.canMerge = false;
         this.mergeMult = 1;
