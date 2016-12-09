@@ -482,7 +482,7 @@ module.exports = class Player {
         setTimeout(function () { // let the player see who killed them
             if (this.playing) return
             this.sendData = false;
-
+            this.resetView()
         }.bind(this), 10000)
     }
     send() {
