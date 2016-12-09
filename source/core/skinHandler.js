@@ -35,6 +35,7 @@ module.exports = class SkinHandler {
             this.skin = b.id;
             return name.substr(a)
         }
+        return name;
     }
     getSend(skin) {
         if (skin <= 200 || this.sentHash[skin]) {
