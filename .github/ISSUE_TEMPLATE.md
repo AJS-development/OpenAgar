@@ -8,4 +8,4 @@ Before posting your issue, please take a look at these things
 6. Must include the error, and the file in which it occurs. Otherwise, your issue will be closed immediatly
 7. Please keep OpenAgar's issues just for OpenAgar. Other projects like ogar, ogarul, multiogar, cigar, and etc is not supported here.
 8. No profanity whatsoever. Doing so will be very very bad for you.
-9. Post things that violate rule 1,3,4,5,6, and 7 here: http://forum.ogarul.io
+9. Post things that violate rule 1,3,4,5,6, and/or 7 here: http://forum.ogarul.io
