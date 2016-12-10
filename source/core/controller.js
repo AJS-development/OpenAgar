@@ -58,7 +58,7 @@ var Config = require('./configService.js')
 function Controller() {
     this.config = Config.loadSConfig(true)
     var ban = Config.loadBan()
-    var skins = Config.loadSkins()
+    var skins = Config.loadSkins(true)
 
     this.globalData = new GlobalData(this.config, ban, skins);
     this.shellService = new ShellService(this)
