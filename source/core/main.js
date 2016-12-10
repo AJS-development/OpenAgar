@@ -405,18 +405,17 @@ module.exports = class Main {
     removeClient(client) {
 
         //  setTimeout(function() {
-        for (var i = 0; i < client.cells.length; i++) {
-            var cell = client.cells[i]
-            if (!cell) continue;
+        client.cells.forEach((cell) => {
             this.removeNode(cell);
-            i--;
-        };
-        for (var i = 0; i < client.owning.length; i++) {
-            var cell = client.owning[i]
-            if (!cell) continue;
+        })
+
+
+        client.owning.forEach((cell) => {
+
+
             this.removeNode(cell);
-            i--;
-        };
+
+        })
 
         client.cells = [];
         //    }.bind(this),this.getConfig().disconnectTime * 1000)
@@ -530,8 +529,9 @@ module.exports = class Main {
 
         if (this.paused) return;
         if (!this.canEject(player)) return;
-        var len = player.cells.length
-        var cells = player.cells;
+
+        var cells = player.cells.toArray();
+        var len = cells.length
         for (var i = 0; i < len; i++) {
             var cell = cells[i],
                 deltaX = player.mouse.x - cell.position.x,
@@ -599,9 +599,10 @@ module.exports = class Main {
     }
     splitPlayer(player) {
         if (this.paused) return;
-        var maxSplit = this.getConfig().playerMaxCells - player.cells.length;
-        var len = player.cells.length
-        var cells = player.cells;
+        var cells = player.cells.toArray();
+        var len = cells.length
+        var maxSplit = this.getConfig().playerMaxCells - len;
+
         for (var i = 0; i < len; i++) {
             if (i >= maxSplit) break;
             var cell = cells[i],
@@ -1027,9 +1028,10 @@ module.exports = class Main {
             var a = new Entities.wormHole(position, mass, type, null, others);
             break;
         }
-        a.onCreation(this);
+
         this.dataService.world.addNode(a, type, flags);
         this.childService.addNode(a)
+        a.onCreation(this);
         return a;
     }
 

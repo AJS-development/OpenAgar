@@ -40,6 +40,7 @@ module.exports = class bullet extends template {
 
         this.agit = true;
         this.nearby = [];
+        owner.setOwn(this)
 
     }
     moveDone(main, method) {
@@ -76,10 +77,10 @@ module.exports = class bullet extends template {
     }
 
     onDeletion(main) {
-
+        this.own.removeOwn(this)
     }
     onCreation(main) {
-
+        this.own.setOwn(this)
     }
     getEatRange() {
 

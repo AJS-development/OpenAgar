@@ -24,7 +24,14 @@ module.exports = class EjectedMass extends template {
         this.type = 3;
         this.viruses = [];
         this.up = false
-        owner.owning.push(this)
+        this.own = owner
+
+    }
+    onDeletion(main) {
+        this.own.removeOwn(this)
+    }
+    onCreation(main) {
+        this.own.setOwn(this)
     }
     move(main, speed) { // Speed code: 0 = 0.05, 1 = 0.1, 2 = 0.2
         if (this.moveEngine2.useEngine) this.calcMove2(main, speed)

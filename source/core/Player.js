@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+const QuickMap = require('quickmap')
 const FormatNode = require('./formatNode.js')
 const Socket = require('./socket.js')
 const SkinHandler = require('./skinHandler.js')
@@ -30,7 +30,7 @@ module.exports = class Player {
             x: 0,
             y: 0
         }
-        this.owning = [];
+        this.owning = new QuickMap();
         this.mass = 0;
         this.keys = {
             w: false,
@@ -85,8 +85,8 @@ module.exports = class Player {
         this.toSend = []
         this.visSimple = []
         this.visible = []
-        this.minions = []
-        this.cells = [];
+        this.minions = new QuickMap()
+        this.cells = new QuickMap();
         this.playing = false;
         this.socket = new Socket(socket, this)
         this.skinHandler = new SkinHandler(this)
@@ -96,8 +96,14 @@ module.exports = class Player {
         this.alive = Date.now()
 
     }
+    setOwn(node) {
+        this.owning.set(node.id, node)
+    }
+    removeOwn(node) {
+        this.owning.delete(node.id)
+    }
     addMinion(minion) {
-        this.minions.push(minion)
+        this.minions.set(minion.id, minion)
 
     }
     msg(m, n, c, i) {
@@ -121,8 +127,7 @@ module.exports = class Player {
         })
     }
     removeMinion(minion) {
-        var ind = this.minions.indexOf(minion)
-        if (ind != -1) this.minions.splice(ind, 1)
+        this.minions.delete(minion.id)
     }
     updateMinions() {
 
@@ -155,8 +160,8 @@ module.exports = class Player {
     }
     reset() {
         this.resetView()
-        this.minions = [];
-        this.cells = [];
+        this.minions.clear();
+        this.cells.clear();
         this.visible = [];
         this.gameData = {
             name: "",
@@ -168,7 +173,7 @@ module.exports = class Player {
             chatBan: false,
             reservedNamesMap: []
         }
-        this.owning = []
+        this.owning.clear()
         this.playing = false;
         this.sendData = false;
     }
@@ -193,8 +198,8 @@ module.exports = class Player {
     }
     addCell(cell) {
 
-        if (this.cells.indexOf(cell) != -1) return;
-        this.cells.push(cell)
+        if (this.cellHash[cell.id]) return;
+        this.cells.set(cell.id, cell)
         this.cellHash[cell.id] = true;
         this.socket.emit('mes', {
             type: "addNode",
@@ -219,8 +224,7 @@ module.exports = class Player {
     }
 
     removeCell(cell) {
-        var a = this.cells.indexOf(cell)
-        if (a != -1) this.cells.splice(a, 1)
+        this.cells.delete(cell.id)
         this.cellHash[cell.id] = false;
         if (this.cells.length == 0) this.onDeath(cell.killer)
     }
