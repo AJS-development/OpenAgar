@@ -33,6 +33,20 @@ module.exports = {
             return false
         }
     },
+    loadSkins: function (d) {
+        try {
+            var skins = ini.parse(fs.readFileSync(__dirname + '/../settings/customSkins.ini', "utf8"))
+            console.log("gre{[OpenAgar]} Loaded custom skins".styleMe())
+            return skins;
+
+        } catch (e) {
+            if (d) {
+                console.log("red{[OpenAgar]} Error with getting custom skins:".styleMe())
+                throw e
+            }
+            return false
+        }
+    },
     loadBan: function () {
         var ban = [];
         try {
