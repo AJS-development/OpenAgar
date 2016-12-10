@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+var QuickMap = require('quickmap')
 module.exports = class Bot {
     constructor(server, id, name, botid) {
         this.id = id
@@ -30,7 +31,7 @@ module.exports = class Bot {
             x: 0,
             y: 0
         }
-        this.owning = [];
+        this.owning = new QuickMap();
         this.mass = 0;
 
         this.gameData = {
@@ -43,15 +44,15 @@ module.exports = class Bot {
         this.score = 0;
         var t = new Date()
         this.alive = t.getTime()
-        this.cells = [];
+        this.cells = new QuickMap();
 
     }
     onRemove(main) {
 
     }
     addCell(cell) {
-        if (this.cells.indexOf(cell) != -1) return;
-        this.cells.push(cell)
+      
+        this.cells.set(cell.id,cell)
 
     }
     kick() {
@@ -95,6 +96,12 @@ module.exports = class Bot {
 
 
     }
+    setOwn(node) {
+        this.owning.set(node.id, node)
+    }
+    removeOwn(node) {
+        this.owning.delete(node.id)
+    }
     changeColor(color) {
         this.gameData.color = color
         this.cells.forEach((cell) => {
@@ -110,8 +117,8 @@ module.exports = class Bot {
 
     }
     removeCell(cell) {
-        var a = this.cells.indexOf(cell)
-        if (a != -1) this.cells.splice(a, 1)
+       this.cells.delete(cell.id)
+       
         if (this.cells.length == 0) this.onDeath()
     }
 
