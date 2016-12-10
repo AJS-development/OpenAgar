@@ -58,10 +58,7 @@ var Config = require('./configService.js')
 function Controller() {
     this.config = Config.loadSConfig(true)
     var ban = Config.loadBan()
-    var skins = {
-        andrews54757: 'https://avatars1.githubusercontent.com/u/13282284?v=3&s=460',
-        legitsoulja: 'https://avatars2.githubusercontent.com/u/4976824?v=3&s=400'
-    }
+    var skins = Config.loadSkins()
 
     this.globalData = new GlobalData(this.config, ban, skins);
     this.shellService = new ShellService(this)
