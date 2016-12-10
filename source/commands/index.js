@@ -5,11 +5,23 @@ module.exports = {
         kick: require('./lib/kick.js'),
         ban: require('./lib/ban.js'),
         pause: require('./lib/pause.js'),
+        kickbots: require('./lib/kickbots.js'),
         list: require('./lib/list.js'),
         help: function (str, main, log) {
             log("|-----------------Available Commands------------------|")
             log("| Help                     | Shows help for commands  |")
             log("| Stop                     | Stops the server         |")
+            log("| List                     | List players, bots, etc  |")
+            log("| Plugin                   | Plugin command           |")
+            log("| Kick                     | Kick a player            |")
+            log("| Ban                      | Ban a player             |")
+            log("| Server                   | Multi-Server command     |")
+            log("| Pause                    | Pause the game           |")
+            log("| Addbot                   | Add bots                 |")
+            log("| Debug                    | Toggle debug console     |")
+            log("| Update                   | Update software          |")
+            log("| Restart                  | Schedule restarts        |")
+            log("| Kickbots                 | Kick bots                |")
             main.pluginService.addToHelp.forEach((cmd) => {
                 log(cmd)
             })
