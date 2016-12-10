@@ -41,6 +41,10 @@ There are commands you can type in command line.
 |server     |Create servers, remove servers, select servers, and list them |
 |pause      |Pause/unpause the game|
 |restart    |Restart. Use just like you would use in command prompt. Do restart all [time] to restart all servers|
+|kick       |Kick a player|
+|kickbots   |Kick bots|
+|addbots    |Add bots|
+|ban        |Ban players|
 |debug      |Toggle the debug console|
 |update     |Updates the software|
 |stop       |Stops the server|
