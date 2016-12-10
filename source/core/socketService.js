@@ -68,7 +68,7 @@ module.exports = class socketService {
         socket._activated = true;
         socket.emit('accepted', "Welcome")
         socket.emit('mes', {
-            type: "clearNodes"
+            type: "reset"
         })
         socket.emit('mes', {
             type: "setPid",
@@ -166,7 +166,7 @@ module.exports = class socketService {
             if (!data.id) return;
             socket._player.changeServers(data.id, this.serverService);
             socket.emit('mes', {
-                type: "clearNodes"
+                type: "reset"
             })
 
         }.bind(this));

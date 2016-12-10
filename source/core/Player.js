@@ -363,7 +363,9 @@ module.exports = class Player {
             else if (msg.skin > 0)
                 this.skinHandler.skin = msg.skin
             this.setName(name);
-
+            this.socket.emit('mes', {
+                type: "clearNodes"
+            })
             this.server.spawn(this)
             this.resetView()
             this.playing = true;
@@ -587,14 +589,13 @@ module.exports = class Player {
                 this.moveView.splice(id - buf, 1)
                 buf++;
             })
-            if (this.killer) {
-                this.killer.cells.forEach((node) => {
-                    if (hashtable[node.id]) return;
-
-                    this.visible.push(node)
-                    this.sendNode(node, main)
-                })
-
+            if (this.killer && this.killer.playing && this.killer.cells[0]) {
+                if (this.killer.isBot) {
+                    var a = this.killer.cells[0].position
+                } else {
+                    var a = this.killer.center
+                }
+                this.socket.emit('killer', a)
             }
             this.lastVis = this.visSimple;
             this.visSimple = [];
