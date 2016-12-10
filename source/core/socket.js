@@ -37,8 +37,8 @@ module.exports = class Socket {
         this.socket.emit('delnodes', tex)
     }
     disconnect() {
-        socket._diconnect = true;
-        socket.disconnect()
+        this.socket._diconnect = true;
+        this.socket.disconnect()
 
     }
     emit(a, b) {
