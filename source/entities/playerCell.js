@@ -34,11 +34,10 @@ module.exports = class cell extends template {
         this.owner.mass += mass
     }
 
-    onCreation(main) {}
-    onAdd(id) {
-        this.id = id;
+    onCreation(main) {
         this.owner.addCell(this);
     }
+
     onDeletion(main) {
         this.owner.mass -= this.mass
         this.owner.removeCell(this);
