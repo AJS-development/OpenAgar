@@ -22,13 +22,13 @@ const Main = require('./main.js');
 const Config = require('./configService.js')
 const request = require('minirequest')
 const ChildManager = require('./childManager.js')
-const QuickMap = require('quickmap')
+
 const Updater = require('./updater.js')
 module.exports = class ServerService {
     constructor(controller, globalData) {
         this.globalData = globalData;
         this.controller = controller;
-        this.servers = new QuickMap;
+        this.servers = new Map();
         this.ids = 1;
 
         this.selected = false;
