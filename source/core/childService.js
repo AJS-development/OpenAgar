@@ -14,7 +14,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var Child = require('child_process')
-var QuickMap = require('quickmap')
+
 module.exports = class childService {
     constructor(main, child) {
         this.cpus = require('os').cpus().length
