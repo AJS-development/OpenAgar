@@ -14,8 +14,8 @@
 */
 var Manager = require('./manager.js')
 var manager = new Manager()
-var QuickMap = require('quickmap')
-var managers = new QuickMap();
+
+var managers = new Map()
 // require('../../cpu.js').init('./data')
 process.on('message', function (msg) {
     if (msg.sid || msg.sid == 0) {
