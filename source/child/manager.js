@@ -14,7 +14,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var HashBounds = require('hashbounds')
-var QuickMap = require('quickmap')
+
 var Node = require('./node.js')
 var Bot = require('../ai/Bot.js')
 var Player = require('./Player.js')
@@ -25,8 +25,8 @@ module.exports = class Manager {
 
         this.nodes = new HashBounds(500, true);
         this.toSend = [];
-        this.map = new QuickMap()
-        this.bots = new QuickMap()
+        this.map = new Map()
+        this.bots = new Map()
         this.config = {};
         this.s = false;
         this.haveTeams = false;
@@ -37,7 +37,7 @@ module.exports = class Manager {
             b: 0,
             c: 0
         }
-        this.players = new QuickMap();
+        this.players = new Map();
     }
     addNodes(nodes) {
 
