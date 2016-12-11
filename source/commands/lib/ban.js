@@ -15,6 +15,7 @@ module.exports = function (str, ss, log) {
     }
     var player = ss.getPlayer(id)
     if (!player) return log("cya{[OpenAgar]} That player wasnt found!".styleMe())
+    if (player.isBot) return log("cya{[OpenAgar]} That player is a bot!".styleMe())
     var ip = player.socket.IPv6
     ss.globalData.ban.push(ip)
     var count = 0;
