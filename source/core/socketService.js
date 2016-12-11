@@ -213,6 +213,7 @@ module.exports = class socketService {
                     this.setup(socket)
 
                 } else {
+                    this.cwindow ++;
                     socket.emit('kicked', "Key not valid. You may be a bot!")
                     socket._disconnect = true;
                     socket.disconnect();
