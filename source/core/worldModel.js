@@ -16,22 +16,22 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-const QuickMap = require('quickmap');
+
 const HashBounds = require('hashbounds');
 module.exports = class WorldModel {
     constructor(main) {
         this.nodes = new HashBounds(500, true);
         this.main = main
-        this.mapnodes = new QuickMap();
-        this.playerNodes = new QuickMap();
-        this.virusNodes = new QuickMap();
-        this.ejectedNodes = new QuickMap();
-        this.movingNodes = new QuickMap();
-        this.mergeNodes = new QuickMap()
+        this.mapnodes = new Map();
+        this.playerNodes = new Map();
+        this.virusNodes = new Map();
+        this.ejectedNodes = new Map();
+        this.movingNodes = new Map();
+        this.mergeNodes = new Map();
         this.lastID = 2;
-        this.rainbowNodes = new QuickMap()
-        this.bulletNodes = new QuickMap()
-        this.wormHoleNodes = new QuickMap()
+        this.rainbowNodes = new Map();
+        this.bulletNodes = new Map();
+        this.wormHoleNodes = new Map();
     }
 
     getNodes(s) {
