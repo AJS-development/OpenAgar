@@ -43,7 +43,7 @@ module.exports = class socketService {
     }
     checkDDOSWindow() {
 
-        if (this.cwindow > 40) {
+        if (this.cwindow > 100) {
             this.cwindow = 0;
             return true;
         }
@@ -63,6 +63,7 @@ module.exports = class socketService {
     onDDOS() {
         if (this.ddos) return;
         this.ddos = true;
+         this.ddosbuf = 5
         this.serverService.ddos(true)
         this.clients.forEach((client) => {
             if (client._player.playing) client.emit('ddos')
