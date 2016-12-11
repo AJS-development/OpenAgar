@@ -486,8 +486,10 @@ module.exports = class Main {
     addFood(n) {
         return this.foodService.addFood(n);
     }
-    pause() {
-        this.paused = !this.paused
+    pause(v) {
+
+        if (v == undefined) this.paused = !this.paused;
+        else this.paused = v;
         if (this.paused) this.stop();
         else this.start()
 

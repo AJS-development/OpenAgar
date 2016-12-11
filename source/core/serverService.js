@@ -32,7 +32,7 @@ module.exports = class ServerService {
         this.ids = 1;
 
         this.selected = false;
-
+        this.ddur = 0;
         this.defconfig = Config.loadConfig(__dirname + '/../settings', true)
         this.childManager = new ChildManager(this)
         this.debug("gre{[Debug]} Server start time: ".styleMe() + Date.now())
@@ -45,6 +45,23 @@ module.exports = class ServerService {
         setInterval(function () {
             this.checkUpdates()
         }.bind(this), 60000)
+    }
+    ddos(d) {
+        if (d) {
+            this.ddur = Date.now()
+            this.debug("red{[Debug]} Server is being DDOSed. Paused server".styleMe())
+            this.servers.forEach((server) => {
+                server._p = server.paused
+                server.pause(true)
+            })
+        } else {
+            this.debug("gre{[Debug]} DDOS Attack over. Unpausing. Durationn: ".styleMe() + (Date.now() - this.ddur))
+            this.servers.forEach((server) => {
+
+                server.pause(server._p)
+                server._p = undefined;
+            })
+        }
     }
     getNextId() {
         return this.ids++;

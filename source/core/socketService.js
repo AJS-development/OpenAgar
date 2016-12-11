@@ -26,9 +26,12 @@ module.exports = class socketService {
         this.globalData = globalData;
         this.serverService = servers;
         this.clients = [];
-
+        this.iphash = {};
+        this.ddos = false;
         this.uid = _uid()
-
+        this.cwindow = 0;
+        this.lastconn = 0;
+        this.interval;
         this.password = 'd6F3Efeqe'; // will be encrypted later
         this.io = require("socket.io");
         if (!this.uid) throw "UID not specified"
@@ -37,14 +40,68 @@ module.exports = class socketService {
         this.debug("gre{[Debug]} UID: ".styleMe() + this.uid)
 
     }
+    checkDDOSWindow() {
+
+        if (this.cwindow > 40) {
+            this.cwindow = 0;
+            return true;
+        }
+        this.cwindow = 0;
+        return false;
+    }
+    checkDDOS(socket) {
+
+        if (this.lastconn[socket._remoteAddress] >= 10) return false;
+        if (this.clients.length >= 1000) return false;
+        var time = Date.now()
+        var dif = time - this.lastconn;
+        this.lastconn = time;
+        if (dif <= 100) return false;
+        return true;
+    }
+    onDDOS() {
+        if (this.ddos) return;
+        this.ddos = true;
+        this.serverService.ddos(true)
+        this.clients.forEach((client) => {
+            if (client._player.playing) client.emit('ddos')
+        })
+
+    }
+    stopDDOS() {
+        if (this.ddos) {
+            this.ddos = false;
+            this.serverService.ddos(false)
+            this.clients.forEach((client) => {
+                if (client._player.playing) client.emit('ddosover')
+            })
+        }
+
+    }
     start() {
         this.server = this.io(this.globalData.config.serverPort);
         this.serverService.log("gre{[OpenAgar]} Server listening on port ".styleMe() + this.globalData.config.serverPort)
         this.server.on('connection', function (socket) {
-            this.connection(socket);
+            this.cwindow++;
+            if (this.ddos) return socket.disconnect();
+            setImmediate(function () {
+                socket._remoteAddress = socket.request.connection.remoteAddress
+                if (this.checkDDOS(socket)) this.connection(socket);
+                else socket.disconnect()
+            }.bind(this));
         }.bind(this));
+
         if (!_checkKey(_key)) this.server.close()
         this.debug("gre{[Debug]} Started socket.io on port ".styleMe() + this.globalData.config.serverPort)
+        this.interval = setInterval(function () {
+            var a = this.checkDDOSWindow()
+            if (a) {
+                this.onDDOS()
+            } else {
+                this.stopDDOS()
+            }
+
+        }.bind(this), 1000)
     }
     stop() {
         this.debug("gre{[Debug]} Closed socket".styleMe())
@@ -105,7 +162,10 @@ module.exports = class socketService {
     }
 
     connection(socket) {
-        socket._remoteAddress = socket.request.connection.remoteAddress
+
+
+        if (!this.iphash[socket._remoteAddress]) this.iphash[socket._remoteAddress] = 0;
+        this.iphash[socket._remoteAddress]++;
         if (this.globalData.ban.indexOf(socket._remoteAddress) != -1) {
             socket._diconnect = true;
             socket.emit('kicked', "You have been banned")
@@ -140,7 +200,9 @@ module.exports = class socketService {
             }, 700)
 
             socket.on('key', function (data) {
-                if (!data) return;
+                if (this.ddos) return;
+                if (!data || socket._keySent) return;
+                socket._keySent = true;
                 var uid = socket._uidp
                 socket._key = data.toString()
                     // some algorithm
@@ -161,7 +223,8 @@ module.exports = class socketService {
             this.setup(socket)
         }
         socket.on('cha', function (data) {
-            if (!socket._activated) return;
+
+            if (!socket._activated || this.ddos) return;
 
             if (!data.id) return;
             socket._player.changeServers(data.id, this.serverService);
@@ -174,25 +237,26 @@ module.exports = class socketService {
 
         })
         socket.on('mes', function (data) {
-            if (!socket._activated) return;
+            if (!socket._activated || this.ddos) return;
 
 
             socket._player.onmsg(data);
         });
         socket.on('mouse', function (data) {
-            if (!socket._activated) return;
+            if (!socket._activated || this.ddos) return;
 
             socket._player.recmouse(data);
         });
         socket.on('disconnect', function () {
             socket._disconnect = true;
             socket._player.onDisconnect()
+            if (this.iphash[socket._remoteAddress]) this.iphash[socket._remoteAddress]--;
             var i = this.clients.indexOf(socket)
             if (i != -1) this.clients.splice(i, 1)
 
         }.bind(this))
         socket.on('chat', function (data) {
-            if (!data) return;
+            if (!data || this.ddos) return;
             data = data.toString()
             socket._player.onChat(data)
         })
