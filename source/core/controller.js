@@ -44,8 +44,14 @@ try {
 
 } catch (e) {
     if (e == "12") {
+        var uid = _uid()
         Sounds.play('alert')
-        console.log("red{[OpenAgar]}Invalid key!, make sure you have the right key! Your id is: ".styleMe() + _uid())
+        if (uid) {
+            console.log("red{[OpenAgar]}Invalid key!, make sure you have the right key! Your id is: ".styleMe() + uid)
+        } else {
+            _reset()
+            console.log("red{[OpenAgar]}Something went wrong. So we reset your id. Your new id: ".styleMe() + _uid())
+        }
         process.exit(0)
         return;
     }
