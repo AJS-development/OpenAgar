@@ -27,7 +27,7 @@ const Minion = require('../ai/Minion.js')
 
 const Commands = require('../commands').list
 const ChatCommands = require('../commands').chat
-const QuickMap = require('quickmap')
+
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 const GMService = require('./gameMode.js')
@@ -54,7 +54,7 @@ module.exports = class Main {
         this.tbd = [];
         this.wormHoles = 0;
         this.paused = false;
-        this.bots = new QuickMap();
+        this.bots = new Map();
         this.timeouts = [];
         this.intervals = [];
         this.deleteR = "";
@@ -128,14 +128,14 @@ module.exports = class Main {
                 'b': 255
             },
         ];
-        this.clients = new QuickMap();
+        this.clients = new Map();
         this.bounds = {
             x: config.boundX,
             y: config.boundY,
             width: config.boundWidth,
             height: config.boundHeight
         };
-        this.minions = new QuickMap()
+        this.minions = new Map()
         this.dataService = new DataService(this, globalData, config);
         this.timer = {
             tick: 0,
