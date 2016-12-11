@@ -18,13 +18,13 @@
 */
 
 var Child = require('child_process')
-var QuickMap = require('quickmap')
+
 var ChildHolder = require('./childHolder.js')
 module.exports = class childManager {
     constructor(ss) {
         this.ss = ss;
         this.cpus = require('os').cpus()
-        this.childs = new QuickMap();
+        this.childs = new Map();
         this.cid = 0
         this.init()
 
