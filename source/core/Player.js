@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-const QuickMap = require('quickmap')
+
 const FormatNode = require('./formatNode.js')
 const Socket = require('./socket.js')
 const SkinHandler = require('./skinHandler.js')
@@ -30,7 +30,7 @@ module.exports = class Player {
             x: 0,
             y: 0
         }
-        this.owning = new QuickMap();
+        this.owning = new Map();
         this.mass = 0;
         this.keys = {
             w: false,
@@ -85,8 +85,8 @@ module.exports = class Player {
         this.toSend = []
         this.visSimple = []
         this.visible = []
-        this.minions = new QuickMap()
-        this.cells = new QuickMap();
+        this.minions = new Map()
+        this.cells = new Map();
         this.playing = false;
         this.socket = new Socket(socket, this)
         this.skinHandler = new SkinHandler(this)
