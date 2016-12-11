@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var QuickMap = require('quickmap')
+
 module.exports = class Minion {
   constructor(server,id,name,botid,parent) {
     this.id = id
@@ -31,7 +31,7 @@ module.exports = class Minion {
      x: 0,
         y: 0
     }
-    this.owning = new QuickMap()
+    this.owning = new Map();
     this.mass = 0;
     this.timer = {
         changeDir: 0,
@@ -46,7 +46,7 @@ module.exports = class Minion {
      this.score = 0;
      var t = new Date()
         this.alive = t.getTime()
-    this.cells = new QuickMap();
+    this.cells = new Map();
       this.removed = false;
       this.spawn()
   }
