@@ -29,6 +29,7 @@ module.exports = class socketService {
         this.iphash = {};
         this.ddos = false;
         this.uid = _uid()
+        this.ddosbuf = 0;
         this.cwindow = 0;
         this.lastconn = 0;
         this.interval;
@@ -96,9 +97,16 @@ module.exports = class socketService {
         this.interval = setInterval(function () {
             var a = this.checkDDOSWindow()
             if (a) {
+                this.ddosbuf += 0.1;
                 this.onDDOS()
+
             } else {
-                this.stopDDOS()
+                if (this.ddosbuf <= 0) {
+                    this.ddosbuf = 0;
+                    this.stopDDOS()
+                } else {
+                    this.ddosbuf--;
+                }
             }
 
         }.bind(this), 1000)
@@ -213,7 +221,7 @@ module.exports = class socketService {
                     this.setup(socket)
 
                 } else {
-                    this.cwindow ++;
+                    this.cwindow++;
                     socket.emit('kicked', "Key not valid. You may be a bot!")
                     socket._disconnect = true;
                     socket.disconnect();
