@@ -285,7 +285,7 @@ module.exports = class Manager {
 
 
         if (this.timers.b >= 10) {
-            if (this.bots.length > 0) {
+            if (this.bots.size > 0) {
                 this.bots.forEach((bot) => {
                     setTimeout(function () {
                         bot.update()
@@ -311,7 +311,7 @@ module.exports = class Manager {
     }
     updatePlayers() {
         var final = [];
-        if (this.players.length == 0 && this.bots.length == 0) return;
+        if (this.players.size == 0 && this.bots.size == 0) return;
         this.players.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {

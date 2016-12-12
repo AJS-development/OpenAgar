@@ -729,10 +729,10 @@ module.exports = class Main {
             id: this.id,
             name: this.name,
             scname: this.scname,
-            players: this.clients.length,
-            bots: this.bots.length,
-            minions: this.minions.length,
-            nodes: this.getWorld().getNodes('map').length,
+            players: this.clients.size,
+            bots: this.bots.size,
+            minions: this.minions.size,
+            nodes: this.getWorld().getNodes('map').size,
             uptime: upt,
             totalMass: this.childService.totalMass
 
@@ -814,7 +814,7 @@ module.exports = class Main {
     }
     updateMerge() {
         var nodes = this.getWorld().getNodes('merge')
-        if (nodes.length == 0) return;
+        if (nodes.size == 0) return;
         nodes.forEach((node) => {
             node.calcMerge(this)
         })
@@ -838,7 +838,7 @@ module.exports = class Main {
             if (this.timer.passed > 80) {
                 this.lag = 30
                 this.lagtime = this.timer.passed
-                this.debug("yel{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').length)
+                this.debug("yel{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').size)
                 this.debug("yel{[Debug]} Mitigating lag...".styleMe())
             }
 

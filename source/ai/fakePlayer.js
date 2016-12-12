@@ -51,8 +51,8 @@ module.exports = class Bot {
 
     }
     addCell(cell) {
-      
-        this.cells.set(cell.id,cell)
+
+        this.cells.set(cell.id, cell)
 
     }
     kick() {
@@ -117,9 +117,9 @@ module.exports = class Bot {
 
     }
     removeCell(cell) {
-       this.cells.delete(cell.id)
-       
-        if (this.cells.length == 0) this.onDeath()
+        this.cells.delete(cell.id)
+
+        if (this.cells.size == 0) this.onDeath()
     }
 
 }

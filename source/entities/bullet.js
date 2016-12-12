@@ -119,7 +119,7 @@ module.exports = class bullet extends template {
             this.explodeCell(node, main)
             return
         }
-        var split = main.getConfig().playerMaxCells - node.owner.cells.length;
+        var split = main.getConfig().playerMaxCells - node.owner.cells.size;
 
         var defaultmass = ~~(node.mass / (split + 15))
         var big = defaultmass * 3

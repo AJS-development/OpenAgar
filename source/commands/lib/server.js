@@ -30,7 +30,7 @@ module.exports = function (str, ss, log) {
                 status = "[Main]"
             }
 
-            log("|" + fill(server.id.toString(), 5) + "|" + fill(server.name, 15) + "|" + fill(server.scname, 16) + "|" + fill(server.clients.length.toString(), 9) + "|" + fill(server.bots.length.toString(), 6) + "|" + fill(upt.toString(), 8) + "|" + fill(status, 13) + "|")
+            log("|" + fill(server.id.toString(), 5) + "|" + fill(server.name, 15) + "|" + fill(server.scname, 16) + "|" + fill(server.clients.size.toString(), 9) + "|" + fill(server.bots.size.toString(), 6) + "|" + fill(upt.toString(), 8) + "|" + fill(status, 13) + "|")
         });
 
     } else if (split[1] == "create") {

@@ -41,14 +41,14 @@ module.exports = class childManager {
                 child.stop()
                 count++;
             })
-           Sounds.play('alert')
+            Sounds.play('alert')
             this.debug("gre{[Debug]} Killed ".styleMe() + count + " processes")
             console.log("\ngre{[OpenAgar]} Killed all processes".styleMe())
         }.bind(this));
     }
 
     assignChild(sid) {
-        if (this.childs.length < this.cpus.length - 1) {
+        if (this.childs.size < this.cpus.length - 1) {
             var child = this.createNewChild()
             child.assign(sid)
             this.debug("gre{[Debug]} Created new child (ID: ".styleMe() + child.id + ") and assigned server " + sid + " to it.")

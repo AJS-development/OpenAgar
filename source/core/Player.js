@@ -226,7 +226,7 @@ module.exports = class Player {
     removeCell(cell) {
         this.cells.delete(cell.id)
         this.cellHash[cell.id] = false;
-        if (this.cells.length == 0) this.onDeath(cell.killer)
+        if (this.cells.size == 0) this.onDeath(cell.killer)
     }
     checkKeys(main) {
         if (this.keys.space) {
@@ -347,9 +347,9 @@ module.exports = class Player {
     }
     getBiggest() {
         var cell = false;
-        for (var i = 0; i < this.cells.length; i++) {
-            if (!cell || this.cells[i].mass > cell.mass) cell = this.cells[i]
-        }
+        this.cells.forEach((c) => {
+            if (!cell || c.mass > cell.mass) cell = c
+        })
         return cell;
     }
     onmsg(msg, servers) {
@@ -398,7 +398,7 @@ module.exports = class Player {
 
     calcView() {
 
-        if (this.cells.length == 0) return
+        if (this.cells.size == 0) return
         var totalSize = 1.0;
         var x = 0,
             y = 0;
@@ -408,8 +408,8 @@ module.exports = class Player {
             y += cell.position.y
             totalSize += cell.getSize();
         })
-        this.center.x = x / this.cells.length
-        this.center.y = y / this.cells.length
+        this.center.x = x / this.cells.size
+        this.center.y = y / this.cells.size
         var factor = Math.pow(Math.min(64.0 / totalSize, 1), 0.4);
         this.sightRangeX = this.server.getConfig().serverViewBaseX / factor;
         this.sightRangeY = this.server.getConfig().serverViewBaseY / factor;
@@ -510,7 +510,7 @@ module.exports = class Player {
     update(main) { // every 0.02 sec
 
         if (!this.sendData) return;
-        if (this.cells.length == 0 && this.playing) return;
+        if (this.cells.size == 0 && this.playing) return;
         if (main.toBeDeleted.length > 0) this.deleteNodes(main);
 
         if (this.timer.view >= 5) { // 0.1 sec update clients (6 fps)

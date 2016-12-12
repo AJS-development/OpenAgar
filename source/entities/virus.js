@@ -85,7 +85,7 @@ module.exports = class virus extends template {
     }
     collide(node, main) {
 
-        var split = main.getConfig().playerMaxCells - node.owner.cells.length;
+        var split = main.getConfig().playerMaxCells - node.owner.cells.size;
         if (split == 0) {
             node.addMass(this.mass)
         }

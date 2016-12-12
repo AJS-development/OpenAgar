@@ -71,7 +71,7 @@ module.exports = class wormhole extends template {
         }
     }
     explode(node, main) {
-        var split = main.getConfig().playerMaxCells - node.owner.cells.length;
+        var split = main.getConfig().playerMaxCells - node.owner.cells.size;
 
         var defaultmass = ~~(node.mass / (split + 7))
         var big = defaultmass * 3

@@ -18,113 +18,113 @@
 */
 
 module.exports = class Minion {
-  constructor(server,id,name,botid,parent) {
-    this.id = id
-    this.parent = parent
-    this.botid = botid
-   this.server = server;
-      this.isBot = true;
-      this.isMinion = true;
-  this.mouse = this.parent.mouse
+    constructor(server, id, name, botid, parent) {
+        this.id = id
+        this.parent = parent
+        this.botid = botid
+        this.server = server;
+        this.isBot = true;
+        this.isMinion = true;
+        this.mouse = this.parent.mouse
 
-    this.center = {
-     x: 0,
-        y: 0
-    }
-    this.owning = new Map();
-    this.mass = 0;
-    this.timer = {
-        changeDir: 0,
-    }
-     this.gameData = {
+        this.center = {
+            x: 0,
+            y: 0
+        }
+        this.owning = new Map();
+        this.mass = 0;
+        this.timer = {
+            changeDir: 0,
+        }
+        this.gameData = {
             name: name,
             color: server.getRandomColor(),
             chatname: "",
             reservedChatNames: [],
-           chkDeath: false
+            chkDeath: false
         }
-     this.score = 0;
-     var t = new Date()
+        this.score = 0;
+        var t = new Date()
         this.alive = t.getTime()
-    this.cells = new Map();
-      this.removed = false;
-      this.spawn()
-  }
-     setOwn(node) {
+        this.cells = new Map();
+        this.removed = false;
+        this.spawn()
+    }
+    setOwn(node) {
         this.owning.set(node.id, node)
     }
     removeOwn(node) {
         this.owning.delete(node.id)
     }
-    
+
     onRemove(main) {
         this.parent.removeMinion(this)
         this.removed = true;
     }
     kick() {
-     this.server.removeMinion(this)  
+        this.server.removeMinion(this)
     }
- 
-  addCell(cell) {
-        this.cells.set(cell.id,cell)
-       
+
+    addCell(cell) {
+        this.cells.set(cell.id, cell)
+
     }
-  
-   onDeath() {
-      this.mass = 0;
-       this.score =0;
-      this.alive = this.server.timer.time;
-       this.playing = false;
-       this.spawn()
-   }
+
+    onDeath() {
+        this.mass = 0;
+        this.score = 0;
+        this.alive = this.server.timer.time;
+        this.playing = false;
+        this.spawn()
+    }
     spawn() {
-     if (this.playing || this.removed) return;
-                
-               
-                this.server.spawn(this)
-        
-                this.playing = true;   
+        if (this.playing || this.removed) return;
+
+
+        this.server.spawn(this)
+
+        this.playing = true;
         if (this.parent.pausem) this.frozen = true;
     }
- getScore(re) {
-      
+    getScore(re) {
+
         if (re) {
-        var l = 0;
-        this.cells.forEach((n)=>{
-           l+= n.mass; 
-        })
-        this.mass = l;
-        this.score = Math.max(this.score,l)
-        return l
+            var l = 0;
+            this.cells.forEach((n) => {
+                l += n.mass;
+            })
+            this.mass = l;
+            this.score = Math.max(this.score, l)
+            return l
         }
-        this.score = Math.max(this.score,this.mass)
+        this.score = Math.max(this.score, this.mass)
         return this.score
     }
-    
-setRandom() {
-    if (!this.a) return;
-    var a = this.a
+
+    setRandom() {
+        if (!this.a) return;
+        var a = this.a
         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
-          this.mouse.y = Math.floor(a.height * Math.random()) + a.y   
-}
-  
+        this.mouse.y = Math.floor(a.height * Math.random()) + a.y
+    }
+
     changeColor(color) {
         this.gameData.color = color
-        this.cells.forEach((cell)=>{
+        this.cells.forEach((cell) => {
             cell.color = color
         })
-        
+
     }
     changeName(name) {
-         this.gameData.name = name
-        this.cells.forEach((cell)=>{
+        this.gameData.name = name
+        this.cells.forEach((cell) => {
             cell.name = name
         })
-        
+
     }
     removeCell(cell) {
-       this.cells.delete(cell.id)
-        if (this.cells.length == 0) this.onDeath()
+        this.cells.delete(cell.id)
+        if (this.cells.size == 0) this.onDeath()
     }
-  
+
 }
