@@ -103,7 +103,7 @@ module.exports = class Bot {
 
         //   if (this.center.x == this.mouse.x || this.center.y == this.mouse.y) 
         this.view = a;
-        this.nodes = this.server.nodes.getNodes(this.view)
+        this.nodes = this.server.nodes.toArray(this.view)
         this.ai.update()
 
         // this.checkDeath()

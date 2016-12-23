@@ -48,9 +48,9 @@ module.exports = class EjectedMass extends template {
     checkVirus(main) {
         this.up = !this.up
         if (this.up)
-            this.viruses = main.getWorld().getNodes('hash').getNodes(this.bounds)
 
-        this.viruses.every((virus) => {
+
+            main.getWorld().getNodes('hash').every(this.bounds, (virus) => {
             if (virus.type == 2) {
 
                 if (!virus.collisionCheckCircle(this, true)) return true;

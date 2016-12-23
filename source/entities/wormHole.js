@@ -114,14 +114,14 @@ module.exports = class wormhole extends template {
             }
         }
 
-        if (node.owner.cells.length == 1) {
+        if (node.owner.cells.size == 1) {
             this.teleport(node, main)
         } else {
-            for (var i = 0; i < node.owner.cells.length; i++) {
-                if (node.owner.cells[i] == node) continue;
-                main.removeNode(node.owner.cells[i])
-                i--;
-            }
+            node.owner.cells.forEach((cell) => {
+                if (cell == node) return;
+                main.removeNode(cell)
+
+            })
 
             this.teleport(node, main)
 

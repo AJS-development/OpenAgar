@@ -517,7 +517,7 @@ module.exports = class Player {
             this.checkKeys(main)
             this.calcView()
             var hash = this.server.getWorld().getNodes('hash');
-            this.hashnodes = hash.getNodes(this.view)
+            this.hashnodes = hash.toArray(this.view)
 
 
             this.timer.view = 0;

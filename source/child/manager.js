@@ -23,7 +23,7 @@ module.exports = class Manager {
         this.id = id;
         this.addedHash = [];
 
-        this.nodes = new HashBounds(500, true);
+        this.nodes = new HashBounds(10, 4); // 64 min
         this.toSend = [];
         this.map = new Map()
         this.bots = new Map()
@@ -68,7 +68,12 @@ module.exports = class Manager {
 
 
             var n = new Node(node, owner)
-
+            n.bounds = {
+                x: n.position.x - n.size,
+                y: n.position.y - n.size,
+                width: n.size * 2,
+                height: n.size * 2
+            }
             this.nodes.insert(n)
             this.map.set(node.id, n)
 
@@ -163,6 +168,12 @@ module.exports = class Manager {
 
                 n.position.x = node.x
                 n.position.y = node.y
+                n.bounds = {
+                    x: n.position.x - n.size,
+                    y: n.position.y - n.size,
+                    width: n.size * 2,
+                    height: n.size * 2
+                }
                 this.nodes.update(n)
             }
         })
@@ -315,12 +326,12 @@ module.exports = class Manager {
         this.players.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {
-                var nodes = this.nodes.getNodes(cell.bounds)
+                var nodes = this.nodes.toArray(cell.getCheck())
                 var list = [];
                 nodes.forEach((node) => {
                     if (node.id != cell.id) {
 
-                        if (cell.collisionCheck(node)) list.push(node.id)
+                        if (cell.checkSend(node)) list.push(node.id)
 
                     }
                 })
@@ -333,12 +344,12 @@ module.exports = class Manager {
         this.bots.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {
-                var nodes = this.nodes.getNodes(cell.bounds)
+                var nodes = this.nodes.toArray(cell.getCheck())
                 var list = [];
                 nodes.forEach((node) => {
                     if (node.id != cell.id) {
 
-                        if (cell.collisionCheck(node)) list.push(node.id)
+                        if (cell.checkSend(node)) list.push(node.id)
                     }
                 })
 

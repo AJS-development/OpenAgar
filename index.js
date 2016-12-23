@@ -7,7 +7,8 @@ Map.prototype.every = function (c) {
     while (b = a.next().value) {
         if (!c(b[1], b[0])) return true;
     }
-  return false;
+
+    return false;
 }
 Map.prototype.toArray = function () {
     var array = [];
@@ -16,25 +17,26 @@ Map.prototype.toArray = function () {
     })
     return array
 }
-Map.prototype.map = function(c) {
-  var f = new Map();
- var a = this.entries()
+
+Map.prototype.map = function (c) {
+    var f = new Map();
+    var a = this.entries()
     var b;
     while (b = a.next().value) {
-        f.set(b[0],c(b[1], b[0])) 
+        f.set(b[0], c(b[1], b[0]))
     }
-  return f;
-  
+    return f;
+
 }
-Map.prototype.filter = function(c) {
-  var f = new Map();
- var a = this.entries()
+Map.prototype.filter = function (c) {
+    var f = new Map();
+    var a = this.entries()
     var b;
     while (b = a.next().value) {
-        if (c(b[1], b[0])) f.set(b[0],b[1])
+        if (c(b[1], b[0])) f.set(b[0], b[1])
     }
-  return f;
-  
+    return f;
+
 }
 
 var m = new main()

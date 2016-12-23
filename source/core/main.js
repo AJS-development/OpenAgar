@@ -882,6 +882,12 @@ module.exports = class Main {
     }
 
     updateHash(node) {
+        node.bounds = {
+            x: node.position.x - node.size,
+            y: node.position.y - node.size,
+            width: node.size * 2,
+            height: node.size * 2
+        }
         this.getWorld().update(node);
         //  w.delete(node);
         // w.insert(node);

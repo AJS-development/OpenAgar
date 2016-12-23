@@ -166,7 +166,6 @@ module.exports = class childService {
             id: node.id,
             size: node.size,
             type: node.type,
-            bounds: node.bounds,
             position: node.position,
             owner: (node.owner) ? node.owner.id : false,
             mass: node.mass,

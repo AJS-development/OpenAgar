@@ -20,7 +20,7 @@
 const HashBounds = require('hashbounds');
 module.exports = class WorldModel {
     constructor(main) {
-        this.nodes = new HashBounds(500, true);
+        this.nodes = new HashBounds(10, 3);
         this.main = main
         this.mapnodes = new Map();
         this.playerNodes = new Map();
@@ -84,8 +84,16 @@ module.exports = class WorldModel {
 
     }
     addNode(node, type, flags) {
+
         var id = this.getNextID();
+        node.bounds = {
+            x: node.position.x - node.size,
+            y: node.position.y - node.size,
+            width: node.size * 2,
+            height: node.size * 2
+        }
         node.onAdd(id);
+
         this.nodes.insert(node);
 
         this.mapnodes.set(id, node);
