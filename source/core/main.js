@@ -854,29 +854,33 @@ module.exports = class Main {
             if (this.timer.pn) return
 
         }
+        var upt = [];
         this.getWorld().getNodes("player").forEach((player) => {
             if (player.owner.frozen) return;
             if (player.owner.isBot) {
 
                 if (!this.timer.bot) return // bots update slower
-                setImmediate(function () {
+                setTimeout(function () {
                     player.move(this, 1 + shift)
-                }.bind(this))
+                }.bind(this), 1)
                 this.collisionHandler.collidePlayer(player)
                 player.checkGameBorders(this);
 
                 player.movCode()
+                upt.push(player)
             } else {
                 player.move(this, 0 + shift);
                 this.collisionHandler.collidePlayer(player)
                 player.checkGameBorders(this);
 
                 player.movCode()
+                upt.push(player)
             }
         });
-        this.getWorld().getNodes("player").forEach((player) => {
-            this.updateHash(player)
+        upt.forEach((player) => {
+            this.updateHash(player);
         })
+
 
         this.timer.bot = !this.timer.bot
     }

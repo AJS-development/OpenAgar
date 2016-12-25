@@ -85,7 +85,7 @@ module.exports = class cell extends template {
 
         this.getSize()
 
-        this.speed = Math.pow(this.mass, -1.0 / 4.5) * 50 / 40;
+        this.speed = Math.pow(this.mass, -1.0 / 4.5) * 1.25;
         this.updCode()
     }
     moveToMouse(main, sp) {
@@ -103,7 +103,7 @@ module.exports = class cell extends template {
             distx = mouse.x - this.position.x,
             disty = mouse.y - this.position.y,
             // y^2 = x^2 + b^2 -> y = sq(x^2 + b^2)
-            num = Math.min(distx * distx + disty * disty, 700),
+            num = Math.min(distx * distx + disty * disty, 625),
 
             dist = ~~(Sqrt.sqrt(num));
 
@@ -111,9 +111,9 @@ module.exports = class cell extends template {
         if (!dist) return; // dont want 0
         // want cell to slow down as it gets closer to mouse
         var k = Math.min(Math.abs(dist), 25) / 25, // max is 1
-            // simplify and make x,y either be -1 or 1 or 0
-            x = Math.cos(angle) * speed * k * main.getConfig().playerSpeed,
-            y = Math.sin(angle) * speed * k * main.getConfig().playerSpeed;
+            p = speed * k * main.getConfig().playerSpeed,
+            x = Math.cos(angle) * p,
+            y = Math.sin(angle) * p;
         //  console.log((speed * k * main.getConfig().playerSpeed)/50)
         this.position.x += Math.round(x);
         this.position.y += Math.round(y);
