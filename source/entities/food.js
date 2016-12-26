@@ -17,20 +17,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class food extends template {
+module.exports = class Food extends template {
     constructor(position, mass, type, owner, other) {
         super(position, mass, type, owner, other);
         this.type = 4;
     }
     onDeletion(main) {
-        main.food --;
+        main.food--;
     }
     onCreation(main) {
-        main.food ++;
+        main.food++;
     }
     getEatRange() {
-   
-     return this.size * -0.4;   
-    
-   }
+
+        return this.size;
+
+    }
 };

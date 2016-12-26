@@ -22,21 +22,24 @@ module.exports = class gameModeHandler {
     }
     init() {
         this.setMode(this.main.getConfig().gameMode)
+
+
         this.event('onServerInit')
+        this.main.log("gre{[OpenAgar]} Current gamemode is ".styleMe() + this.main.getConfig().gameMode + " (" + this.mode.name + ")")
     }
     setMode(mode) {
         this.mode = ingame.get(mode)
         if (!this.mode) this.mode = this.main.pluginService.gamemodes[mode]
         this.mode = this.mode || false
     }
-    event(event,data) {
+    event(event, data) {
         if (!data) data = {}
         if (!this.mode) return true;
-       if (!this.mode[event]) return true;
+        if (!this.mode[event]) return true;
         data.main = this.main;
         data.log = this.main.log
         if (this.mode[event](data) === false) return false
         return true;
     }
-    
+
 }

@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class cell extends template {
+module.exports = class Cell extends template {
     constructor(position, mass, type, owner, other) {
         super(position, mass, type, owner, other);
     }

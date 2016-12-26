@@ -40,6 +40,7 @@ module.exports = class Main {
         this.scname = scname;
         this.debug = debug
         this.log = log;
+
         this.viruses = 0;
         this.minfood = 500;
         this.clientLen = 0;
@@ -55,9 +56,11 @@ module.exports = class Main {
         this.tbd = [];
         this.wormHoles = 0;
         this.paused = false;
+        this.collist = [];
         this.bots = new Map();
         this.timeouts = [];
         this.intervals = [];
+        this.feedListeners = [];
         this.deleteR = "";
         this.lag = 0
         this.chatNames = [];
@@ -151,14 +154,13 @@ module.exports = class Main {
             init: Date.now(),
             status: 60
         };
-        this.gameMode = new GMService(this)
+
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
         this.pluginService = new PluginService(this)
+        this.gameMode = new GMService(this)
         this.childService = new ChildService(this, child)
-
-
         this.addBots(config.serverBots)
 
     }
@@ -764,6 +766,7 @@ module.exports = class Main {
         this.debug("gre{[Debug]} STATUS REPORT FOR SERVER ".styleMe() + this.id + ":")
         this.debug(JSON.stringify(this.status))
     }
+
     mloop() {
         this.timeout = setTimeout(function () {
             this.loop()
@@ -781,7 +784,7 @@ module.exports = class Main {
         // 0.05 seconds
 
         if (this.timer.updatePN >= 50) {
-
+            this.gameMode.event('onTick')
             this.updatePlayerNodes();
             this.updateMovingCells();
             this.updateBots()
@@ -813,6 +816,7 @@ module.exports = class Main {
                     this.checkFood();
                     this.foodService.checkVirus()
                     this.foodService.checkWormHole()
+                    this.foodService.loop();
                     this.updateMerge();
                     this.updateLB()
                     if (this.timer.status >= 60) {
@@ -907,6 +911,8 @@ module.exports = class Main {
     }
 
     updateHash(node) {
+        if (node.dead) return;
+
         node.bounds = {
             x: node.position.x - node.size,
             y: node.position.y - node.size,
@@ -983,7 +989,8 @@ module.exports = class Main {
                 check.collide(node, this)
                 break;
             default:
-                return true;
+                if (!this.collist[check.type]) return true;
+                check.collide(node, this)
                 break;
             }
             return false;
@@ -1032,9 +1039,21 @@ module.exports = class Main {
     setFlags(node, flags) {
         this.getWorld().setFlags(node, flags)
     }
+    addCollisionListener(id) {
+        this.collist[id] = true;
+    }
+    addGenerationLoop(min, id, name, start) {
+        this.foodService.addLoop(min, id, name, start);
+    }
+    addFeedListener(id) {
+        this.feedListeners[id] = true;
+    }
     addEntityType(id, name, clas) {
         this.entityTypes[id] = clas;
         this.getWorld().addEntity(id, name)
+    }
+    override(n, j, f) {
+        Entities[n].prototype[j] = f;
     }
     addNode(position, mass, type, owner, others, flags) {
         if (type === undefined) return false;

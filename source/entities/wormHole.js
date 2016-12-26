@@ -14,7 +14,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class wormhole extends template {
+module.exports = class WormHole extends template {
     constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
 
@@ -44,11 +44,9 @@ module.exports = class wormhole extends template {
     }
     getEatRange(node) {
 
-        if (node.mass > this.mass) {
-            return this.size * -0.4;
-        } else {
-            return this.size - node.size;
-        }
+
+        return this.size * 0.4;
+
 
     }
     tpa(node, main) {

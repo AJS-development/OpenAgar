@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class virus extends template {
+module.exports = class Virus extends template {
     constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
 
@@ -44,6 +44,7 @@ module.exports = class virus extends template {
         
         */
 
+        node.eat(this, main)
         if (this.mass > main.getConfig().maxVirusMass) this.updateMass(main.getConfig().maxVirusMass)
 
 
@@ -62,7 +63,7 @@ module.exports = class virus extends template {
             this.updateMass(main.getConfig().virusMass)
 
         }
-        node.eat(this, main)
+
     }
     split(angle, main) {
         main.splitCell(this, angle, main.getConfig().virusSpeed, main.getConfig().virusDecay, main.getConfig().virusMass)
@@ -77,7 +78,7 @@ module.exports = class virus extends template {
     }
     getEatRange() {
 
-        return this.size * -0.5;
+        return this.size * 0.5;
 
     }
     collide(node, main) {

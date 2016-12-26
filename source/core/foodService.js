@@ -19,6 +19,7 @@
 module.exports = class FoodService {
     constructor(main) {
         this.main = main;
+        this.loops = [];
     }
     checkFood() {
         // console.log(this.main.dataService.world.nodes.getWithMerged(this.main.bounds).length)
@@ -72,6 +73,33 @@ module.exports = class FoodService {
             var pos = this.getRandomPos();
             // console.log(pos)
             this.main.addNode(pos, this.main.getConfig().virusMass, 2);
+        }
+    }
+    loop() {
+        this.loops.forEach((l) => {
+            this.checkNode(l.min, l.id, l.name, l.start)
+        });
+    }
+    addLoop(min, id, name, start) {
+        this.loops.push({
+            min: min,
+            id: id,
+            name: name,
+            start: start
+        })
+    }
+
+    checkNode(min, id, name, start) {
+        var amount = this.main.getWorld().getNodes(name).size
+        if (amount < min) {
+            this.addNode(min - amount, id, start)
+        }
+    }
+    addNode(m, id, start) {
+        for (var i = 0; i < m; i++) {
+            var pos = this.getRandomPos();
+            // console.log(pos)
+            this.main.addNode(pos, start, id);
         }
     }
 };

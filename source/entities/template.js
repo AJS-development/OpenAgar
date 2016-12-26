@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-module.exports = class template {
+module.exports = class Template {
     constructor(position, mass, type, owner, other) {
         this.id = null;
         this.position = position
@@ -182,7 +182,7 @@ module.exports = class template {
     }
     getEatRange() {
 
-        return this.size * -0.4;
+        return this.size * 0.4;
 
     }
     collisionCheckCircle(node, no) {

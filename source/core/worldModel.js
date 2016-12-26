@@ -196,7 +196,7 @@ module.exports = class WorldModel {
     }
     removeNode(node) {
 
-        this.nodes.delete(node);
+        if (node.hash) this.nodes.delete(node);
 
         this.rainbowNodes.delete(node.id)
         this.mapnodes.delete(node.id);

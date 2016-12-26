@@ -62,6 +62,7 @@ var ShellService = require('./shellService.js')
 var Config = require('./configService.js')
 
 function Controller() {
+    console.log("gre{[OpenAgar]} Starting OpenAgar V".styleMe() + _version)
     this.config = Config.loadSConfig(true)
     var ban = Config.loadBan()
     var skins = Config.loadSkins(true)
@@ -73,6 +74,9 @@ function Controller() {
 }
 
 Controller.prototype.start = function () {
+
+
+
     this.shellService.init()
     this.serverService.start();
 

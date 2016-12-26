@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class bullet extends template {
+module.exports = class Bullet extends template {
     constructor(position, mass, type, owner, name) {
         super(position, mass, type, owner);
         if (this.owner.golden) {
@@ -84,7 +84,7 @@ module.exports = class bullet extends template {
     }
     getEatRange() {
 
-        return this.size * -0.5;
+        return this.size * 0.5;
 
     }
     explodeCell(node, main) {

@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var template = require('./template.js');
-module.exports = class cell extends template {
+module.exports = class PlayerCell extends template {
     constructor(position, mass, type, owner) {
         super(position, mass, type, owner);
         this.name = owner.gameData.name;
@@ -65,7 +65,7 @@ module.exports = class cell extends template {
             this.mergeDone(main)
             return;
         }
-        if (this.mergeage <= this.mass * this.mergeMult) {
+        if (this.mergeage <= this.mass * -this.mergeMult) {
             this.canMerge = true;
             main.getWorld().removeFlags(this, 'merge')
 
@@ -74,7 +74,7 @@ module.exports = class cell extends template {
         }
         this.mergeage--;
 
-        // console.log(this.mergeage,this.mass * this.mergeMult,this.canMerge)
+        //console.log(this.mergeage, this.mass * this.mergeMult, this.canMerge)
 
     }
     updateMass(mass) {

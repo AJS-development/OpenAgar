@@ -41,6 +41,7 @@ module.exports = class ShellService {
 
     }
     select(id, c) {
+        if (this.selected == id) return;
         this.selected = id
         this.writeLog(c)
     }

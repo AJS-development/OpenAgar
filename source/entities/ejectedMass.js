@@ -39,9 +39,9 @@ module.exports = class EjectedMass extends template {
 
 
         this.checkGameBorders(main)
-        this.checkVirus(main)
-        main.updateHash(this)
 
+        main.updateHash(this)
+        this.checkVirus(main)
         this.movCode()
 
     }
@@ -50,23 +50,33 @@ module.exports = class EjectedMass extends template {
         if (this.up)
 
 
-            main.getWorld().getNodes('hash').every(this.bounds, (virus) => {
-            if (virus.type == 2) {
+            main.getWorld().getNodes('hash').every(this.bounds, (node) => {
 
-                if (!virus.collisionCheckCircle(this, true)) return true;
-                virus.feed(this, main)
+            if (node.type == 2) {
 
-                return false
-            } else
-            if (virus.type == 5) {
-                virus.feed(this, main)
-            } else
-            if (virus.type == 0) {
-                if (!virus.collisionCheckCircle(this)) return true;
-                this.eat(virus, main)
+                if (!node.collisionCheckCircle(this, true)) return true;
+                node.feed(this, main)
+
                 return false;
-            } else if (virus.type == 6) {
-                virus.feed(this, main)
+            } else
+            if (node.type == 5) {
+                if (!node.collisionCheckCircle(this)) return true;
+                node.feed(this, main)
+                return false;
+            } else
+            if (node.type == 0) {
+                if (!node.collisionCheckCircle(this)) return true;
+                this.eat(node, main)
+                return false;
+            } else if (node.type == 6) {
+
+                if (!node.collisionCheckCircle(this)) return true;
+                node.feed(this, main);
+                return false;
+            } else if (main.feedListeners[node.type]) {
+                if (!node.collisionCheckCircle(this)) return true;
+                node.feed(this, main)
+                return false;
             }
 
             return true;
