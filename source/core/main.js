@@ -46,6 +46,7 @@ module.exports = class Main {
         this.updLb = true;
         this.toBeDeleted = [];
         this.selected = false;
+        this.entityTypes = [];
         this.food = 0;
         this.updateCode = 0;
         this.chatId = 1;
@@ -1011,7 +1012,10 @@ module.exports = class Main {
     setFlags(node, flags) {
         this.getWorld().setFlags(node, flags)
     }
-
+    addEntityType(id,name,clas) {
+    this.entityTypes[id] = clas;
+        this.getWorld().addEntity(id,name)
+    }
     addNode(position, mass, type, owner, others, flags) {
         if (type === undefined) return false;
 
@@ -1039,6 +1043,10 @@ module.exports = class Main {
         case 6: // wormholes
             var a = new Entities.wormHole(position, mass, type, null, others);
             break;
+            default: // custom
+                if (!this.entityTypes[type]) return false;
+                var a = new this.entityTypes[type](position,mass,type,owner,others)
+                break;
         }
 
         this.dataService.world.addNode(a, type, flags);
