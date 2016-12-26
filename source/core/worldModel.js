@@ -83,6 +83,9 @@ module.exports = class WorldModel {
         this.nodes.update(node)
 
     }
+    addEntity(id,type) {
+        
+    }
     addNode(node, type, flags) {
 
         var id = this.getNextID();
