@@ -151,12 +151,13 @@ module.exports = class Main {
             init: Date.now(),
             status: 60
         };
+        this.gameMode = new GMService(this)
         this.loop = this.mloop.bind(this);
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
         this.pluginService = new PluginService(this)
         this.childService = new ChildService(this, child)
-        this.gameMode = new GMService(this)
+
 
         this.addBots(config.serverBots)
 
@@ -230,6 +231,9 @@ module.exports = class Main {
         var id = this.getGlobal().getNextId()
         var botid = this.botid++;
         var bot = new Minion(this, id, "Bot: " + botid, botid, player)
+        this.gameMode.event('onAllInit', {
+            player: bot
+        })
         this.minions.set(bot.id, bot)
         player.addMinion(bot)
 
@@ -312,6 +316,9 @@ module.exports = class Main {
         var id = this.getGlobal().getNextId()
         var botid = this.botid++;
         var bot = new Bot(this, id, "Bot: " + botid, botid)
+        this.gameMode.event('onAllInit', {
+            player: bot
+        })
         this.bots.set(bot.id, bot)
         this.childService.addBot(bot)
     }
@@ -360,7 +367,9 @@ module.exports = class Main {
             this.gameMode.event('onPlayerInit', {
                 player: client
             })
-
+            this.gameMode.event('onAllInit', {
+                player: client
+            })
             this.clients.set(client.id, client);
             this.sendClientPacket(client)
             this.sendPrevChat(client)
@@ -626,6 +635,17 @@ module.exports = class Main {
 
 
         }
+    }
+    loopPlayers(call) {
+        this.clients.forEach((player) => {
+            call(player)
+        })
+        this.bots.forEach((player) => {
+            call(player)
+        })
+        this.minions.forEach((player) => {
+            call(player)
+        })
     }
     updateLB() {
         if (!this.gameMode.event('updateLB', {
@@ -1012,9 +1032,9 @@ module.exports = class Main {
     setFlags(node, flags) {
         this.getWorld().setFlags(node, flags)
     }
-    addEntityType(id,name,clas) {
-    this.entityTypes[id] = clas;
-        this.getWorld().addEntity(id,name)
+    addEntityType(id, name, clas) {
+        this.entityTypes[id] = clas;
+        this.getWorld().addEntity(id, name)
     }
     addNode(position, mass, type, owner, others, flags) {
         if (type === undefined) return false;
@@ -1043,10 +1063,10 @@ module.exports = class Main {
         case 6: // wormholes
             var a = new Entities.wormHole(position, mass, type, null, others);
             break;
-            default: // custom
-                if (!this.entityTypes[type]) return false;
-                var a = new this.entityTypes[type](position,mass,type,owner,others)
-                break;
+        default: // custom
+            if (!this.entityTypes[type]) return false;
+            var a = new this.entityTypes[type](position, mass, type, owner, others)
+            break;
         }
 
         this.dataService.world.addNode(a, type, flags);
