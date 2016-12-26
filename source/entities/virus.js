@@ -67,10 +67,7 @@ module.exports = class virus extends template {
     split(angle, main) {
         main.splitCell(this, angle, main.getConfig().virusSpeed, main.getConfig().virusDecay, main.getConfig().virusMass)
     }
-    doesCollide(node, main) {
-        return true;
 
-    }
 
     onDeletion(main) {
         main.viruses--;
