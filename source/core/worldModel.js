@@ -32,6 +32,8 @@ module.exports = class WorldModel {
         this.rainbowNodes = new Map();
         this.bulletNodes = new Map();
         this.wormHoleNodes = new Map();
+        this.entities = {};
+        this.entMap = [];
     }
 
     getNodes(s) {
@@ -65,7 +67,9 @@ module.exports = class WorldModel {
             return this.wormHoleNodes;
             break;
         default:
-            return this.nodes.allnodes;
+            if (!s) return this.nodes.allnodes;
+            if (!this.entities[s]) return false;
+            return this.entities[s];
             break;
 
         }
@@ -83,8 +87,9 @@ module.exports = class WorldModel {
         this.nodes.update(node)
 
     }
-    addEntity(id,type) {
-        
+    addEntity(id, name) {
+        this.entMap[id] = name;
+        this.entities[name] = new Map();
     }
     addNode(node, type, flags) {
 
@@ -124,6 +129,10 @@ module.exports = class WorldModel {
             break;
         case 6: // wormhole
             this.wormHoleNodes.set(id, node)
+            break;
+        default:
+            if (!this.entMap[type]) return false;
+            this.entities[this.entMap[type]].set(id, node)
             break;
         }
 
@@ -180,7 +189,11 @@ module.exports = class WorldModel {
 
         });
     }
-
+    deleteFromEnt(node) {
+        for (var i in this.entities) {
+            this.entities[i].delete(node.id)
+        }
+    }
     removeNode(node) {
 
         this.nodes.delete(node);
@@ -188,7 +201,7 @@ module.exports = class WorldModel {
         this.rainbowNodes.delete(node.id)
         this.mapnodes.delete(node.id);
         this.movingNodes.delete(node.id);
-
+        this.deleteFromEnt(node)
         node.moving = false
         this.ejectedNodes.delete(node.id);
         if (this.playerNodes.delete(node.id)) {
