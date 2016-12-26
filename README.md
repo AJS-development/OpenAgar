@@ -57,6 +57,27 @@ There are also chat commands
 |-----------|--------|
 |help       |Displays a list of commands|
 
+## Gamemodes
+There are also some gamemodes
+
+| ID | Mode       |
+|----|------------|
+|0   |FFA         |
+|1   |Teams       |
+|2   |Experimental|
+|3   |Minions (not finished)|
+|4   |Hide n seek (not finished)|
+|5   |Get rich or die trying (not finished)|
+|6   |Leap (not finished)|
+|7   |Timed FFA (not finished)|
+|8   |Hunger Games (not finished)|
+
+## Minigames
+Minigames are planned for OpenAgar, we dont know exactly how they will work, but we have an idea. Some ideas:
+
+* Pool: Like 8-ball pool with some tweaks. (2 players)
+* Maze: A maze, with teams and the first team to solve first wins (2-20 players)
+* Get the F off my turf: A game where you defend your turf from others.
 
 ## Plugins
 Since most of OpenAgar's features doesnt come in the box, plugins are very important. So we made it very easy to install plugins. 
