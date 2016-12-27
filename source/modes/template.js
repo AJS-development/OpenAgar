@@ -49,9 +49,15 @@ module.exports = class Template { // made gamemodes very alike ogar because then
     onCellRemove(data) {
         // Called when a player cell is removed
     }
+    onAllAdd(data) { // Called when a cell is added
 
+    }
+    onAllRemove(data) {
+        // Called when a cell is removed
+    }
     updateLB(data) {
         // Called when the leaderboard update function is called
 
     }
+
 }

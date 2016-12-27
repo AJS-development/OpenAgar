@@ -36,7 +36,7 @@ module.exports = class CollisionHandler {
 
             } else if (node.type == 5 && node.owner == cell.owner && node.getAge(this.main) < 500) {
                 this.relativeCollision2(cell, node);
-            } else if (node.doesCollide(cell, this.main)) {
+            } else if (cell.doesCollide(node, this.main)) {
                 this.relativeCollision2(cell, node);
             }
         });

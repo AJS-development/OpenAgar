@@ -105,8 +105,10 @@ module.exports = class WorldModel {
         this.nodes.insert(node);
 
         this.mapnodes.set(id, node);
-
-        // add specified nodes
+        this.main.gameMode.event('onAllAdd', {
+                cell: node
+            })
+            // add specified nodes
         switch (type) {
         case 0: // player
             this.playerNodes.set(id, node);
@@ -194,10 +196,28 @@ module.exports = class WorldModel {
             this.entities[i].delete(node.id)
         }
     }
+    clear() {
+        this.nodes.clear();
+        this.mapnodes.clear();
+        this.playerNodes.clear();
+        this.virusNodes.clear();
+        this.ejectedNodes.clear();
+        this.movingNodes.clear();
+        this.mergeNodes.clear();
+        this.lastID = 2;
+        this.rainbowNodes.clear();
+        this.bulletNodes.clear();
+        this.wormHoleNodes.clear();
+        for (var i in this.entities) {
+            this.entities[i].clear();
+        }
+    }
     removeNode(node) {
 
         if (node.hash) this.nodes.delete(node);
-
+        this.main.gameMode.event('onAllRemove', {
+            cell: node
+        });
         this.rainbowNodes.delete(node.id)
         this.mapnodes.delete(node.id);
         this.movingNodes.delete(node.id);

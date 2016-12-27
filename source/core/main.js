@@ -159,9 +159,11 @@ module.exports = class Main {
         this.foodService = new FoodService(this);
         this.collisionHandler = new CollisionHandler(this)
         this.pluginService = new PluginService(this)
-        this.gameMode = new GMService(this)
         this.childService = new ChildService(this, child)
+        this.gameMode = new GMService(this)
+        this.childService.init()
         this.addBots(config.serverBots)
+
 
     }
     setInterval(a, b) {
@@ -228,6 +230,25 @@ module.exports = class Main {
         for (var i = 0; i < num; i++) {
             this.addMinion(player)
         }
+    }
+    formatNode(node, player) {
+
+        var a = {
+            id: node.id,
+            owId: (node.owner) ? node.owner.id : 0,
+            size: node.size,
+            mass: node.mass,
+            type: node.type,
+            posX: node.position.x,
+            posY: node.position.y,
+            color: node.color
+        };
+        node.name && (a.name = node.name)
+        node.agit && (a.agit = 1)
+        node.skin && (a.skin = player.skinHandler.getSend(node.skin))
+
+        node.spiked && (a.spiked = 1);
+        return a;
     }
     addMinion(player) {
         var id = this.getGlobal().getNextId()
@@ -449,6 +470,12 @@ module.exports = class Main {
         this.childService.removeClient(client)
         this.debug("gre{[Debug]} Client (ID: ".styleMe() + client.id + ") was removed from server " + this.id)
     }
+    reset() {
+        this.getWorld().getNodes('map').forEach((node) => {
+            this.removeNode(node);
+        });
+        this.getWorld().clear()
+    }
 
     removeNode(cell) {
         cell.onDeletion(this);
@@ -500,7 +527,7 @@ module.exports = class Main {
     }
     pause(v) {
 
-        if (v == undefined) this.paused = !this.paused;
+        if (v === undefined) this.paused = !this.paused;
         else this.paused = v;
         if (this.paused) this.stop();
         else this.start()
@@ -533,11 +560,16 @@ module.exports = class Main {
         this.addNode(pos, this.getConfig().startMass, 5, name, color, id);
     }
     canEject(client) {
-        if (!client.lastEject || this.getConfig().ejectMassCooldown == 0 || this.time - client.lastEject >= this.getConfig().ejectMassCooldown) {
-            client.lastEject = this.time;
+        if (!client.lastEject || this.getConfig().ejectMassCooldown == 0 || this.timer.time - client.lastEject >= this.getConfig().ejectMassCooldown) {
+            client.lastEject = this.timer.time;
             return true;
         }
         return false;
+    }
+    ejectCheck(cell) {
+        if (cell.mass < this.getConfig().ejectMassMin) return false;
+        cell.addMass(-this.getConfig().ejectedMass);
+        return true;
     }
     ejectMass(player) {
 
@@ -550,7 +582,7 @@ module.exports = class Main {
             var cell = cells[i],
                 deltaX = player.mouse.x - cell.position.x,
                 deltaY = player.mouse.y - cell.position.y;
-            if (cell.mass < this.getConfig().ejectMassMin) continue;
+            if (!this.ejectCheck(cell)) continue;
             var angle = Math.atan2(deltaY, deltaX)
             angle += (Math.random() * 0.1) - 0.05;
             var size = cell.size + 0.2;
@@ -559,7 +591,7 @@ module.exports = class Main {
                 y: cell.position.y + ((size + this.getConfig().ejectedMass) * Math.sin(angle))
             };
 
-            cell.addMass(-this.getConfig().ejectedMass)
+
 
             var ejected = this.addNode(startPos, this.getConfig().ejectedMass, 3, player, [], "m")
             ejected.setEngine1(angle, this.getConfig().ejectedSpeed, this.getConfig().ejectedDecay)
@@ -934,16 +966,12 @@ module.exports = class Main {
         hashnodes.every((check) => {
 
             if (check == node || check.dead) return true;
-            if (check.moveEngine.collision == "circle") {
-                if (!node.collisionCheckCircle(check)) return true
+            if (!node.canEat(check, this)) return true;
+            if (!node.collisionCheckCircle(check)) return true
 
 
 
-            } else if (node.moveEngine.collision == "square") {
-                if (!node.collisionCheckSquare(check)) return true
-            } else {
-                return true;
-            }
+
             // check for collisions
 
             switch (check.type) {
@@ -1025,7 +1053,7 @@ module.exports = class Main {
 
     start() {
 
-        this.paused = false;
+        if (this.paused) return;
 
         try {
             clearTimeout(this.timeout)

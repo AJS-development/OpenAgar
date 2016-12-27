@@ -82,7 +82,7 @@ module.exports = class PlayerCell extends template {
 
         this.getSize()
 
-        this.speed = Math.pow(this.mass, -1.0 / 4.5) * 1.25;
+        this.speed = Math.pow(this.mass, -0.222) * 1.25;
         this.updCode()
     }
     moveToMouse(main, sp) {

@@ -48,7 +48,6 @@ module.exports = class Template {
         }
 
         this.moveEngine = {
-            collision: "circle",
             acceleration: 0,
             velocityInit: 0,
             maxDeltaT: 0,
@@ -157,18 +156,21 @@ module.exports = class Template {
     doesCollide(node, main) {
         return false;
     }
+    canEat(node, main) {
+        return true;
+    }
     getSize() {
-        this.size = Math.ceil(Math.sqrt(100 * this.mass));
+        this.size = Math.ceil(Math.sqrt(this.mass) * 10);
         return this.size
     }
     getOwner(main) {
         return this.owner
     }
-    updateMass(mass) {
-        this.mass = Math.max(mass, 10)
+    updateMass(mass, ov) {
+        this.mass = (ov) ? mass : Math.max(mass, 10);
         this.getSize()
 
-        this.speed = Math.pow(this.mass, -1.0 / 4.5) * 50 / 40;
+        this.speed = Math.pow(this.mass, -0.222) * 1.25;
         this.updCode()
     }
     onAdd(id) {

@@ -107,7 +107,9 @@ module.exports = class Minion {
         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
         this.mouse.y = Math.floor(a.height * Math.random()) + a.y
     }
+    msg() {
 
+    }
     changeColor(color) {
         this.gameData.color = color
         this.cells.forEach((cell) => {

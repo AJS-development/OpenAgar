@@ -32,8 +32,9 @@ module.exports = class childService {
         this.events = {}
         this.lb = [];
 
-        this.init()
+
     }
+
     init() {
         this.child.on(this.main.id, function (data) {
 

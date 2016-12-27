@@ -17,7 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const FormatNode = require('./formatNode.js')
 const Socket = require('./socket.js')
 const SkinHandler = require('./skinHandler.js')
 module.exports = class Player {
@@ -447,7 +446,7 @@ module.exports = class Player {
     }
     sendNode(node, main) {
 
-        var n = FormatNode(node, this)
+        var n = main.formatNode(node, this)
 
         // this.visSimple.push(n)
 

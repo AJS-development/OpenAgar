@@ -96,6 +96,9 @@ module.exports = class Bot {
 
 
     }
+    msg() {
+
+    }
     setOwn(node) {
         this.owning.set(node.id, node)
     }
