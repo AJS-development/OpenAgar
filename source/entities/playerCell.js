@@ -42,10 +42,7 @@ module.exports = class PlayerCell extends template {
         this.owner.mass -= this.mass
         this.owner.removeCell(this);
     }
-    doesCollide(node, main) {
-        return true;
 
-    }
     mergeDone(main) {
 
     }

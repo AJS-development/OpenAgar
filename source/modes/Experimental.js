@@ -1,7 +1,7 @@
 "use strict"
 var Virus = require('../entities/Virus.js');
 var template = require('./template.js');
-module.exports = class FFA extends template {
+module.exports = class Experimental extends template {
     constructor() {
         super()
         this.id = 2;

@@ -1,6 +1,6 @@
 "use strict"
 var template = require('./template.js');
-module.exports = class FFA extends template {
+module.exports = class Teams extends template {
     constructor() {
         super()
         this.id = 1;
