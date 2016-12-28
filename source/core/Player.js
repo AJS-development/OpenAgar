@@ -86,7 +86,7 @@ module.exports = class Player {
         this.visible = []
         this.minions = new Map()
         this.cells = new Map();
-        this.playing = false;
+
         this.socket = new Socket(socket, this)
         this.skinHandler = new SkinHandler(this)
         this.server.addClient(this)
@@ -173,7 +173,7 @@ module.exports = class Player {
             reservedNamesMap: []
         }
         this.owning.clear()
-        this.playing = false;
+
         this.sendData = false;
     }
     init() {
@@ -356,7 +356,7 @@ module.exports = class Player {
         switch (msg.type) {
         case "play":
 
-            if (this.playing) return;
+            if (this.cells.size > 0) return;
             this.sendData = true;
             this.bulletsleft = 3
             this.golden = false;
@@ -371,7 +371,7 @@ module.exports = class Player {
             })
             this.server.spawn(this)
             this.resetView()
-            this.playing = true;
+
             break;
         case "chat":
             servers.chat(msg.chat, this.server)
@@ -464,7 +464,7 @@ module.exports = class Player {
 
     }
     onDisconnect() {
-        this.playing = false;
+
         this.sendData = false;
         this.server.removeClient(this)
         this.minions.forEach((minion) => {
@@ -484,9 +484,9 @@ module.exports = class Player {
         })
         this.alive = this.server.timer.time;
 
-        this.playing = false;
+
         setTimeout(function () { // let the player see who killed them
-            if (this.playing) return
+            if (this.cells.size > 0) return
             this.sendData = false;
 
         }.bind(this), 10000)
@@ -509,7 +509,7 @@ module.exports = class Player {
     update(main) { // every 0.02 sec
 
         if (!this.sendData) return;
-        if (this.cells.size == 0 && this.playing) return;
+
         if (main.toBeDeleted.length > 0) this.deleteNodes(main);
 
         if (this.timer.view >= 5) { // 0.1 sec update clients (6 fps)
@@ -592,9 +592,9 @@ module.exports = class Player {
                 this.moveView.splice(id - buf, 1)
                 buf++;
             })
-            if (this.killer && this.killer.playing && this.killer.cells[0]) {
+            if (this.killer && this.killer.cells.size > 0) {
                 if (this.killer.isBot) {
-                    var a = this.killer.cells[0].position
+                    var a = this.killer.cells.peek().position
                 } else {
                     var a = this.killer.center
                 }

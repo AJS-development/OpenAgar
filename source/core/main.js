@@ -540,14 +540,14 @@ module.exports = class Main {
         }
     }
     spawn(player) {
-
+        if (player.cells.size > 0) return
         if (!this.pluginService.send('beforeSpawn', {
                 player: player,
                 main: this
-            })) return
+            }));
         if (!this.gameMode.event('onPlayerSpawn', {
                 player: player
-            })) return
+            }));
         if (!player.isBot) player.gameData.chatName = this.getChatName(player)
 
         var pos = this.foodService.getRandomPos();
@@ -605,7 +605,7 @@ module.exports = class Main {
         player.bulletsleft--;
         if (player.bulletsleft <= 0) {
             player.golden = false;
-            setTimeout(function () {
+            this.setTimeout(function () {
                 if (player.bulletsleft > 0 || player.mass > this.getConfig().bulletReloadMin) return;
                 player.bulletsleft = 3;
                 var r = Math.floor(Math.random() * 40)

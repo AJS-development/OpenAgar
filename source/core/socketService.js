@@ -63,10 +63,10 @@ module.exports = class socketService {
     onDDOS() {
         if (this.ddos) return;
         this.ddos = true;
-         this.ddosbuf = 5
+        this.ddosbuf = 5
         this.serverService.ddos(true)
         this.clients.forEach((client) => {
-            if (client._player.playing) client.emit('ddos')
+            if (client._player.cells.size > 0) client.emit('ddos')
         })
 
     }
@@ -75,7 +75,7 @@ module.exports = class socketService {
             this.ddos = false;
             this.serverService.ddos(false)
             this.clients.forEach((client) => {
-                if (client._player.playing) client.emit('ddosover')
+                if (client._player.size > 0) client.emit('ddosover')
             })
         }
 

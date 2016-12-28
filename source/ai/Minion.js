@@ -74,16 +74,16 @@ module.exports = class Minion {
         this.mass = 0;
         this.score = 0;
         this.alive = this.server.timer.time;
-        this.playing = false;
+
         this.spawn()
     }
     spawn() {
-        if (this.playing || this.removed) return;
+        if (this.cells.size > 0 || this.removed) return;
 
 
         this.server.spawn(this)
 
-        this.playing = true;
+
         if (this.parent.pausem) this.frozen = true;
     }
     getScore(re) {

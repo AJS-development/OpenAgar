@@ -45,7 +45,7 @@ module.exports = class Bot {
         var t = new Date()
         this.alive = t.getTime()
         this.cells = new Map();
-
+        server.spawn(this)
     }
     onRemove(main) {
 
@@ -63,14 +63,14 @@ module.exports = class Bot {
         this.mass = 0;
         this.score = 0;
 
-        this.playing = false;
+
 
     }
     onSpawn() {
 
-        if (this.playing) return
+
         this.alive = this.server.timer.time;
-        this.playing = true;
+
     }
     getScore(re) {
 

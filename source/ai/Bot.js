@@ -32,7 +32,7 @@ module.exports = class Bot {
             y: 0
         }
         this.team = 0;
-        this.playing = false;
+
         this.server = server;
         this.cells = [];
         this.send = false;
@@ -53,11 +53,11 @@ module.exports = class Bot {
     }
 
     onDeath() {
-        this.playing = false;
+
 
     }
     spawn() {
-        this.playing = true;
+
         this.server.spawn(this)
 
     }
@@ -97,7 +97,7 @@ module.exports = class Bot {
     }
     update() { // 0.05 sec
 
-        if (this.cells.length == 0 && !this.playing) this.spawn()
+        if (this.cells.length == 0) this.spawn()
         var a = this.calcView()
         if (!a) return
 
