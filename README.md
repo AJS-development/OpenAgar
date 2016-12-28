@@ -65,8 +65,8 @@ There are also some gamemodes
 |0   |FFA         |
 |1   |Teams       |
 |2   |Experimental|
-|3   |Minions (not finished)|
-|4   |Hide n seek (not finished)|
+|3   |Minions     |
+|4   |Hide n seek |
 |5   |Get rich or die trying (not finished)|
 |6   |Leap (not finished)|
 |7   |Timed FFA (not finished)|
