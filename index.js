@@ -38,6 +38,10 @@ Map.prototype.filter = function (c) {
     return f;
 
 }
-
+Map.prototype.peek = function () {
+    var a = this.entries();
+    var b = a.next().value;
+    return b[1];
+}
 var m = new main()
 m.start()

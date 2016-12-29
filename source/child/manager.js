@@ -32,6 +32,7 @@ module.exports = class Manager {
         this.haveTeams = false;
         this.paused = false;
         this.events = {}
+        this.bounds;
         this.timers = {
             a: 0,
             b: 0,
@@ -178,11 +179,19 @@ module.exports = class Manager {
             }
         })
     }
-
+    getRandomPos() {
+        var x = Math.floor(this.bounds.width * Math.random());
+        var y = Math.floor(Math.random() * this.bounds.height);
+        return {
+            x: x,
+            y: y
+        };
+    }
     init(msg) {
 
-        this.config = msg.config
-        this.haveTeams = msg.teams
+        this.config = msg.config;
+        this.haveTeams = msg.teams;
+        this.bounds = msg.bounds;
         try {
 
             clearInterval(this.interval)

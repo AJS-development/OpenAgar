@@ -200,7 +200,7 @@ module.exports = class BotAi {
                     pos.y = randomNode.position.y;
                 } else {
                     // Not a food/ejected cell
-                    pos = this.player.getRandom();
+                    pos = this.player.server.getRandomPos()
                 }
 
                 // Set bot's mouse coords to this location

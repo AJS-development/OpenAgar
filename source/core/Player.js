@@ -594,9 +594,10 @@ module.exports = class Player {
             })
             if (this.killer && this.killer.cells.size > 0) {
                 if (this.killer.isBot) {
-                    var a = this.killer.cells.peek().position
+                    var a = this.killer.cells.peek().position;
                 } else {
-                    var a = this.killer.center
+                    var a = this.killer.center;
+
                 }
                 this.socket.emit('killer', a)
             }

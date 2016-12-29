@@ -43,7 +43,8 @@ module.exports = class childService {
         this.send(0, {
             hello: "hello",
             config: this.main.getConfig(),
-            teams: this.main.haveTeams
+            teams: this.main.haveTeams,
+            bounds: this.main.bounds
         })
         this.on('lb', function (lb) {
             this.lb = lb

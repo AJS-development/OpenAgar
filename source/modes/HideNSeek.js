@@ -136,6 +136,7 @@ module.exports = class HideNSeek extends template {
             main = data.main,
             player = cell.owner;
 
+        cell.name = "";
 
         if (player.team) {
             cell.color = {
@@ -183,6 +184,9 @@ module.exports = class HideNSeek extends template {
                 if (ch.type == 0 && ch.owner.team == 1)
                     return false;
                 return true;
+            }
+            cell.doesCollide = function () {
+                return false;
             }
             return;
         }
@@ -290,18 +294,16 @@ module.exports = class HideNSeek extends template {
         var main = data.main,
             player = data.player;
         if (this.state != 0) {
-            if (data.player.team === 0) {
-                data.player.team = 1;
-                this.hiders--;
-                this.seekers++;
+            if (player.team === 0) {
+                player.team = 1;
                 return true;
             }
-            data.player.msg("The game has started!");
+            player.msg("The game has started! You must wait to join!");
             return false;
         }
         if (player.team == false || player.team == undefined) this.initPlayer(data);
         this.players++;
-        player.gameData.name = "";
+
         if (player.team == 1) return;
         player.entity = Math.floor(Math.random() * 3.25) // 0= virus, 1 = ejectedmass, 2=wormhole,3=food  
         player.msg("You have joined the game! Waiting for " + (this.required - this.players) + " players");
@@ -314,6 +316,7 @@ module.exports = class HideNSeek extends template {
         if (this.state == 0) return this.players--;
 
         if (player.team) this.dead++;
+
     }
     broadCast(msg, main) {
         main.clients.forEach((player) => {
@@ -328,7 +331,7 @@ module.exports = class HideNSeek extends template {
         if (cell.owner.cells.size <= 0) this.onDeath(cell.owner);
     }
     show(data) {
-        this.broadCast("Hiders are visible for 3 seconds!", data.main);
+        this.broadCast("Hiders are visible for 5 seconds!", data.main);
         data.main.getWorld().getNodes('player').forEach((m) => {
             if (m.owner.team == 0) {
                 m.color = {
@@ -354,7 +357,7 @@ module.exports = class HideNSeek extends template {
                     m.updCode();
                 }
             })
-        }.bind(this), 3000)
+        }.bind(this), 5000)
     }
     update(data) {
         var main = data.main;
@@ -394,7 +397,7 @@ module.exports = class HideNSeek extends template {
 
             if (this.st <= 0) {
                 this.state = 2;
-                this.remain = 900;
+                this.remain = 330;
                 this.start(data)
             }
             this.st--;
@@ -458,7 +461,7 @@ module.exports = class HideNSeek extends template {
             }
 
             if (this.remain <= 0 || (this.players - this.dead) <= 0 || hiders <= 0 || seekers <= 0) this.stop(data, hiders, seekers)
-            if (!(this.remain % 300) && this.remain != 900) this.show(data)
+            if (!(this.remain == 120)) this.show(data)
             this.remain--;
             break;
         case 3:
