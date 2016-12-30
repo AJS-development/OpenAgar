@@ -79,6 +79,10 @@ Minigames are planned for OpenAgar, we dont know exactly how they will work, but
 * Maze: A maze, with teams and the first team to solve first wins (2-20 players)
 * Get the F off my turf: A game where you defend your turf from others.
 
+## Statistics
+
+
+
 ## Plugins
 Since most of OpenAgar's features doesnt come in the box, plugins are very important. So we made it very easy to install plugins. 
 
