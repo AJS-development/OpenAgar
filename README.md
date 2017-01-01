@@ -29,6 +29,20 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 #### The key system
 In order to use this, you must have a key. This is so this project isnt overwhelmed with people. However, you can get your key from us via http://login.opnagar.us. We will never charge or demand anything for it. However, we are limiting the amount of keys given out, to maintain this projects semi-private status.
 
+##### Login.opnagar.us
+This is the website to generate keys from. You will have to sign up/sign in using your github account. Note there is a limit to the amount of accounts. We are using github because:
+
+1. We would rather have developers, not noobs
+2. We dont want to deal with managing accounts (ie, making sure they are real)
+
+Then, once you are logged in, you can generate keys. You may only have one active key in your account. If you need to replace your key, for some reasons, you can deactivate your old one and activate the new key.
+
+#### Please do not misuse the key system
+Please do not be an idiot and try to make money off of ths system. We will monitor accounts and suspend them that are known for misuse.
+
+## NEVER BUY OPENAGAR!
+If you bought a copy of openagar, wow, you have been ripped. People who have a key might trick you that they will give away their copy for money. First off, that is impossible as keys are **generated uniquely for every machine**. This means the key they have, wont work on your machine, even if you copied their entire computer. Secondly, who would actually 'give up' a rare copy of OpenAgar? They would rather just trick you. Thirdly, even if they did give it to you, and you managed to use their key (which is impossible), they would be able to remotly disable your purchased key and generate another one for themselves. So my advice to you: If you really want a copy, yet you dont have one, too bad, deal with it.
+
 ## Commands
 There are commands you can type in command line.
 
