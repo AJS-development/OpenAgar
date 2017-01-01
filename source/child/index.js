@@ -14,10 +14,11 @@
 */
 var Manager = require('./manager.js')
 var manager = new Manager()
-
 var managers = new Map()
-// require('../../cpu.js').init('./data')
+    // require('../../cpu.js').init('./data')
 process.on('message', function (msg) {
+
+
     if (msg.sid || msg.sid == 0) {
         var manager = managers.get(msg.sid)
         if (!manager) return;

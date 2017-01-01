@@ -34,7 +34,7 @@ module.exports = class socketService {
         this.lastconn = 0;
         this.interval;
         this.password = 'd6F3Efeqe'; // will be encrypted later
-        this.io = require("socket.io");
+        this.io = require("ajs-dev-socket.io-edited");
         if (!this.uid) throw "UID not specified"
 
 

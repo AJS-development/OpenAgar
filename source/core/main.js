@@ -916,30 +916,33 @@ module.exports = class Main {
             if (player.owner.frozen) return;
             if (player.owner.isBot) {
 
-                if (!this.timer.bot) return // bots update slower
-                setTimeout(function () {
-                    player.move(this, 1 + shift)
-                }.bind(this), 1)
-                this.collisionHandler.collidePlayer(player)
-                player.checkGameBorders(this);
+                if (!this.timer.bot) return; // bots update slower
 
-                player.movCode()
+                player.move(this, 1 + shift);
+
                 upt.push(player)
             } else {
                 player.move(this, 0 + shift);
-                this.collisionHandler.collidePlayer(player)
-                player.checkGameBorders(this);
-
-                player.movCode()
                 upt.push(player)
             }
         });
+
         upt.forEach((player) => {
+            this.collisionHandler.collidePlayer(player)
+        });
+        upt.forEach((player) => {
+            player.checkGameBorders(this);
+        })
+        upt.forEach((player) => {
+
             this.updateHash(player);
+        });
+        upt.forEach((player) => {
+
+            player.movCode()
         })
 
-
-        this.timer.bot = !this.timer.bot
+        this.timer.bot = !this.timer.bot;
     }
 
     updateHash(node) {
@@ -961,68 +964,70 @@ module.exports = class Main {
 
 
         var hashnodes = node.nearby
+        if (!hashnodes.length && !node.owner.isBot && node.owner.visible) {
+            hashnodes = node.owner.visible;
+        }
+
+        if (!hashnodes.every((check) => {
+
+                if (check == node || check.dead) return true;
+                if (!node.canEat(check, this)) return true;
+                if (!node.collisionCheckCircle(check)) return true
 
 
-        hashnodes.every((check) => {
-
-            if (check == node || check.dead) return true;
-            if (!node.canEat(check, this)) return true;
-            if (!node.collisionCheckCircle(check)) return true
 
 
+                // check for collisions
+
+                switch (check.type) {
+                case 0: // players
+                    if (check.owner == node.owner) {
+
+                        if (!node.canMerge || !check.canMerge) {
+                            check.eat(node, this)
+                            return true;
+                        }
 
 
-            // check for collisions
-
-            switch (check.type) {
-            case 0: // players
-                if (check.owner == node.owner) {
-
-                    if (!node.canMerge || !check.canMerge) {
-                        check.eat(node, this)
-                        return true;
                     }
+                    if (check.mass * 1.25 > node.mass) return;
 
-
-                }
-                if (check.mass * 1.25 > node.mass) return;
-
-                check.eat(node, this)
-                break;
-
-            case 1: // cells
-                if (check.mass > node.mass) return true;
-                check.eat(node, this)
-                break;
-            case 2: // virus
-                if (check.mass * 1.33 > node.mass) return true
-                check.collide(node, this)
-                return;
-                break;
-            case 3: // ejectedmass
-
-                if (check.getAge(this) > 300)
                     check.eat(node, this)
+                    break;
 
-                break;
-            case 4: // food
-                check.eat(node, this)
-                break;
-            case 5: // bullets
+                case 1: // cells
+                    if (check.mass > node.mass) return true;
+                    check.eat(node, this)
+                    break;
+                case 2: // virus
+                    if (check.mass * 1.33 > node.mass) return true
+                    check.collide(node, this)
+                    return;
+                    break;
+                case 3: // ejectedmass
 
-                check.collide(node, this)
-                break;
-            case 6: //  wormholes
+                    if (check.getAge(this) > 300)
+                        check.eat(node, this)
 
-                check.collide(node, this)
-                break;
-            default:
-                if (!this.collist[check.type]) return true;
-                check.collide(node, this)
-                break;
-            }
-            return false;
-        });
+                    break;
+                case 4: // food
+                    check.eat(node, this)
+                    break;
+                case 5: // bullets
+
+                    check.collide(node, this)
+                    break;
+                case 6: //  wormholes
+
+                    check.collide(node, this)
+                    break;
+                default:
+                    if (!this.collist[check.type]) return true;
+                    check.collide(node, this)
+                    break;
+                }
+                return false;
+            })) node.nearby = [];
 
 
     }

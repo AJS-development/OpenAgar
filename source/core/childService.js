@@ -13,11 +13,10 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var Child = require('child_process')
 
 module.exports = class childService {
     constructor(main, child) {
-        this.cpus = require('os').cpus().length
+
 
         this.child = child
 

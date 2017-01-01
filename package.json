@@ -13,7 +13,7 @@
         "rson": "latest",
         "hashbounds": "1.7.9",
         "styleme": "latest",
-        "socket.io": "latest",
+        "ajs-dev-socket.io-edited": "latest",
         "node-cryptojs-aes": "latest",
         "minirequest": "latest",
         "asyncconsole": "latest",

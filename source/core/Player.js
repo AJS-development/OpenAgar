@@ -44,7 +44,6 @@ module.exports = class Player {
         this.frozen = false;
         this.score = 0;
         this.nodeHash = {};
-        this.hashnodes = [];
         this.moveView = [];
         this.upmoveHash = {};
         this.moveHash = {};
@@ -385,7 +384,6 @@ module.exports = class Player {
     }
     resetView() {
         this.nodeHash = {};
-        this.hashnodes = [];
         this.moveView = [];
         this.upmoveHash = {};
         this.moveHash = {};
@@ -516,7 +514,7 @@ module.exports = class Player {
             this.checkKeys(main)
             this.calcView()
             var hash = this.server.getWorld().getNodes('hash');
-            this.hashnodes = hash.toArray(this.view)
+
 
 
             this.timer.view = 0;
@@ -529,10 +527,10 @@ module.exports = class Player {
 
 
             var hashtable = {};
-            this.hashnodes.forEach((node) => {
+            hash.forEach(this.view, (node) => {
                 if (node.dead) return;
                 if (!this.doesFit(node)) return;
-
+                this.visible.push(node)
                 hashtable[node.id] = true;
                 if (node.moving && !this.moveHash[node.id] && !this.cellHash[node.id]) {
                     this.moveView.push(node)
@@ -551,10 +549,6 @@ module.exports = class Player {
                 }
                 this.upmoveHash[node.id] = node.moveCode;
                 this.nodeHash[node.id] = node.updateCode;
-
-
-
-                this.visible.push(node)
                 this.sendNode(node, main)
 
             });

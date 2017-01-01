@@ -30,11 +30,11 @@ module.exports = class Socket {
     }
     sendNodes(obj) {
 
-        this.socket.emit('nodes', obj)
+        this.socket.hasBinary(false).emit('nodes', obj)
     }
     sendDelete(tex) {
 
-        this.socket.emit('delnodes', tex)
+        this.socket.hasBinary(false).emit('delnodes', tex)
     }
     disconnect() {
         this.socket._diconnect = true;

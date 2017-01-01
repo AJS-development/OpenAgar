@@ -25,6 +25,9 @@ module.exports = class ChildHolder {
         this.assigned = 0;
         this.init()
     }
+    _send(data) {
+        this.child.send(data)
+    }
     init() {
         this.child.on('message', function (msg) {
             if (this.listeners[msg.id]) this.listeners[msg.id](msg.data)
@@ -34,7 +37,7 @@ module.exports = class ChildHolder {
         data.sid = id;
         try {
 
-            this.child.send(data)
+            this._send(data)
 
         } catch (e) {
 
@@ -47,7 +50,7 @@ module.exports = class ChildHolder {
     assign(sid) {
 
         this.assigned++;
-        this.child.send({
+        this._send({
             type: 8,
             a: sid
         })
@@ -56,7 +59,7 @@ module.exports = class ChildHolder {
         this.assigned--;
     }
     stop() {
-        this.child.send({
+        this._send({
             type: 6
         })
         delete this.child
