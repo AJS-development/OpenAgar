@@ -41,7 +41,7 @@ class Main {
      * @param {Number} id - Id of server
      * @param {String} name - Name of server
      * @param {String} scname - Screen name of server
-     * @param {globalData} globalData - Global data object
+     * @param {GlobalData} globalData - Global data object
      * @param {Object} config - Object of server's config
      * @param {Function} log - Log function
      * @param {Child} child - The assigned child process
@@ -422,6 +422,14 @@ class Main {
             client.msg(msg, name, color)
         })
     }
+
+    /**
+     * Parses a chat command
+     * @param {Player} player - Player that is issueing the command
+     * @param {String} msg - String of command
+     * @returns {Boolean} Returns whether the command was executed or not
+     */
+
     parseChatCommand(player, msg) {
         msg = msg.substr(1)
         if (!msg) return false;
@@ -440,9 +448,20 @@ class Main {
 
         return false
     }
+
+    /**
+     * Gets global data
+     * @returns {GlobalData} Returns the globaldata object
+     */
+
     getGlobal() {
         return this.dataService.globalData
     }
+
+    /**
+     * Adds a bot
+     */
+
     addBot() {
         var id = this.getGlobal().getNextId()
         var botid = this.botid++;
@@ -453,6 +472,12 @@ class Main {
         this.bots.set(bot.id, bot)
         this.childService.addBot(bot)
     }
+
+    /**
+     * Removes a minion
+     * @param {Minion} bot - Minion to remove
+     */
+
     removeMinion(bot) {
         bot.onRemove()
         bot.cells.forEach((c) => {
@@ -465,6 +490,12 @@ class Main {
         this.childService.removeClient(bot)
 
     }
+
+    /**
+     * Removes a bot
+     * @param {Bot} bot - Bot to remove
+     */
+
     removeBot(bot) {
         bot.onRemove()
         bot.cells.forEach((c) => {
@@ -476,6 +507,12 @@ class Main {
         this.bots.delete(bot.id)
         this.childService.removeClient(bot)
     }
+
+    /**
+     * Removes bots from a list of ids
+     * @param {Array} ids - array of botids 
+     */
+
     removeBots(ids) {
 
         ids.forEach((id) => {
@@ -486,6 +523,11 @@ class Main {
 
 
     }
+
+    /**
+     * Adds a client to the server
+     * @param {Player} client - Player to add to the server
+     */
 
     addClient(client) {
         if (!this.clients.get(client.id)) {
@@ -508,12 +550,24 @@ class Main {
         }
 
     }
-    sendPrevChat(client) {
+
+    /**
+     * Sends the chat log to the client
+     * @param {Player} player - player to send chat log
+     */
+
+    sendPrevChat(player) {
         this.chat.forEach((chat) => {
-            client.socket.emit('chat', chat)
+            player.socket.emit('chat', chat)
         })
     }
-    sendClientPacket(client) {
+
+    /**
+     * Sends a player's client instructions
+     * @param {Player} player - Player to send data to
+     */
+
+    sendClientPacket(player) {
         var config = this.getConfig()
         var a = {
             // Macros (1 = on)
@@ -541,8 +595,14 @@ class Main {
             leavemessage: config.clientLeaveMessage,
             customHTML: "",
         }
-        client.socket.emit('cpacket', a)
+        player.socket.emit('cpacket', a)
     }
+
+    /**
+     * Removes a player from the server
+     * @param {Player} client - Player to remove
+     */
+
     removeClient(client) {
 
         //  setTimeout(function() {
@@ -578,12 +638,22 @@ class Main {
         this.childService.removeClient(client)
         this.debug("gre{[Debug]} Client (ID: ".styleMe() + client.id + ") was removed from server " + this.id)
     }
+
+    /**
+     * Removes all nodes in the game
+     */
+
     reset() {
         this.getWorld().getNodes('map').forEach((node) => {
             this.removeNode(node);
         });
         this.getWorld().clear()
     }
+
+    /**
+     * Removes a node from the game
+     * @param {Node} cell - Node to remove
+     */
 
     removeNode(cell) {
         cell.onDeletion(this);
@@ -600,6 +670,12 @@ class Main {
         })
         this.dataService.world.removeNode(cell);
     }
+
+    /**
+     * Gets a player's chatname
+     * @param {Player} player - Player to get chatname
+     * @returns {(String|Boolean)} - Returns the chatname
+     */
 
     getChatName(player) {
         var name = player.gameData.name || "An Unamed Cell"
@@ -626,13 +702,29 @@ class Main {
         }
         return false;
     }
+
+    /**
+     * Checks if there is enough food cells
+     */
+
     checkFood() {
         return this.foodService.checkFood();
     }
 
+    /**
+     * Adds food cells
+     * @param {Number} n - Amount of food cells to add
+     */
+
     addFood(n) {
         return this.foodService.addFood(n);
     }
+
+    /**
+     * Pauses/unpauses the server
+     * @param {Boolean} [v] - State to set
+     */
+
     pause(v) {
 
         if (v === undefined) this.paused = !this.paused;
@@ -647,6 +739,12 @@ class Main {
             this.debug("gre{[Debug]} Unpaused server ".styleMe() + this.id)
         }
     }
+
+    /**
+     * Spawns a player into the game
+     * @param {Player} player - Player to spawn
+     */
+
     spawn(player) {
         if (player.cells.size > 0) return
         if (!this.pluginService.send('beforeSpawn', {
@@ -663,10 +761,13 @@ class Main {
         this.addNode(pos, this.getConfig().startMass, 0, player);
 
     }
-    spawnBot(name, color, id) {
-        var pos = this.foodService.getRandomPos();
-        this.addNode(pos, this.getConfig().startMass, 5, name, color, id);
-    }
+
+    /**
+     * Checks whether a player can eject mass or not
+     * @param {Player} client - Player to check
+     * @returns {Boolean} Whether player can eject or not
+     */
+
     canEject(client) {
         if (!client.lastEject || this.getConfig().ejectMassCooldown == 0 || this.timer.time - client.lastEject >= this.getConfig().ejectMassCooldown) {
             client.lastEject = this.timer.time;
@@ -674,11 +775,24 @@ class Main {
         }
         return false;
     }
+
+    /**
+     * Checks a playercell if it has requirements to eject
+     * @param {Node} cell - Playercell to check
+     * @returns {Boolean} Whether the cell can eject or not
+     */
+
     ejectCheck(cell) {
         if (cell.mass < this.getConfig().ejectMassMin) return false;
         cell.addMass(-this.getConfig().ejectedMass);
         return true;
     }
+
+    /**
+     * Ejects mass from a player
+     * @param {Player} player - Player to eject mass
+     */
+
     ejectMass(player) {
 
         if (this.paused) return;
@@ -707,6 +821,12 @@ class Main {
         }
 
     }
+
+    /**
+     * Shoots a bullet from a player
+     * @param {Player} player - Player to shoot bullet
+     */
+
     shootBullet(player) {
         if (this.paused) return;
         if (player.bulletsleft <= 0) return player.bulletsleft = 0;
@@ -742,6 +862,16 @@ class Main {
 
 
     }
+
+    /**
+     * Splits a player cell
+     * @param {Node} cell - Playercell to split
+     * @param {Number} angle - Angle to split
+     * @param {Number} speed - Speed to split
+     * @param {Number} decay - Time for split movement decay
+     * @returns {Node} Split item
+     */
+
     splitPlayerCell(cell, angle, speed, decay) {
         var splitted = this.splitCell(cell, angle, speed, decay, ~~(cell.mass / 2))
         cell.updateMass(~~(cell.mass / 2))
