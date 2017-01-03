@@ -40,7 +40,7 @@ module.exports = class Bullet extends template {
 
         this.agit = true;
         this.nearby = [];
-        owner.setOwn(this)
+        this.own = owner
 
     }
     moveDone(main, method) {
