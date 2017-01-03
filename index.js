@@ -1,6 +1,8 @@
 var main = require('./source/core/controller.js')
     // require('./cpu.js').init('./data')
     // require('./heap.js').init('./data')
+
+
 Map.prototype.every = function (c) {
     var a = this.entries()
     var b;

@@ -28,10 +28,25 @@ const Minion = require('../ai/Minion.js')
 const Commands = require('../commands').list
 const ChatCommands = require('../commands').chat
 
+
 const PluginService = require('./pluginService.js')
 const ChildService = require('./childService.js')
 const GMService = require('./gameMode.js')
-module.exports = class Main {
+
+/** Class that represents a game server */
+class Main {
+    /** 
+     * Creates a game server
+     * @param {Boolean} isMain - Tells if the server is the main server
+     * @param {Number} id - Id of server
+     * @param {String} name - Name of server
+     * @param {String} scname - Screen name of server
+     * @param {globalData} globalData - Global data object
+     * @param {Object} config - Object of server's config
+     * @param {Function} log - Log function
+     * @param {Child} child - The assigned child process
+     * @param {Function} debug - The debug function
+     */
     constructor(isMain, id, name, scname, globalData, config, log, child, debug) {
         this.isMain = isMain;
         this.id = id;
@@ -166,12 +181,38 @@ module.exports = class Main {
 
 
     }
-    setInterval(a, b) {
-        this.intervals.push(setInterval(a, b))
+
+    /** 
+     * Sets an interval so it can be removed when the server shuts down
+     * @param {Function} func - The function to call at a interval
+     * @param {Number} time - The interval time
+     * @return {Interval} The interval created from this function
+     */
+
+    setInterval(func, time) {
+        var interval = setInterval(func, time);
+        this.intervals.push(interval);
+        return interval;
     }
-    setTimeout(a, b) {
-        this.timeouts.push(setTimeout(a, b))
+
+    /** 
+     * Sets an timeout so it can be removed when the server shuts down
+     * @param {Function} func - The function to call at after the timeout
+     * @param {Number} time - The time to wait for the function to be called
+     * @return {Timeout} The timeout created from this function
+     */
+
+    setTimeout(func, time) {
+        var timeout = setTimeout(func, time)
+        this.timeouts.push(timeout)
+        return timeout;
     }
+
+    /**
+     * Clears all intervals
+     * @return {Number} The count of intervals removed
+     */
+
     clearIntervals() {
         var count = 0;
         this.intervals.forEach((i) => {
@@ -185,6 +226,12 @@ module.exports = class Main {
         this.intervals = [];
         return count
     }
+
+    /**
+     * Clears all timeouts
+     * @return {Number} The count of timeouts removed
+     */
+
     clearTimeouts() {
         var count = 0;
         this.timeouts.forEach((i) => {
@@ -198,9 +245,21 @@ module.exports = class Main {
         this.timeouts = [];
         return count
     }
+
+    /**
+     * Changes the gamemode
+     * @param {Number} mode - Gamemode id to switch to
+     * @deprecated Is not functional
+     */
+
     changeMode(mode) {
         this.gameMode.event('onChange')
     }
+
+    /**
+     * Called when the server is removed
+     */
+
     onRemove() {
         this.stop()
         this.destroyed = true;
@@ -226,11 +285,26 @@ module.exports = class Main {
         this.log = null;
 
     }
+
+    /**
+     * Adds minions for a player
+     * @param {Player} player - Player to give minions to
+     * @param {Number} num - Amount of minions to give
+     */
+
     addMinions(player, num) {
         for (var i = 0; i < num; i++) {
             this.addMinion(player)
         }
     }
+
+    /**
+     * Formats a node to be sent
+     * @param {Node} node - Node to be sent
+     * @param {Player} player - Player that it is being sent to
+     * @returns {Object} Formated node
+     */
+
     formatNode(node, player) {
 
         var a = {
@@ -250,6 +324,12 @@ module.exports = class Main {
         node.spiked && (a.spiked = 1);
         return a;
     }
+
+    /**
+     * Adds a single minion for a player
+     * @param {Player} player - Player to give the minion to
+     */
+
     addMinion(player) {
         var id = this.getGlobal().getNextId()
         var botid = this.botid++;
@@ -261,12 +341,25 @@ module.exports = class Main {
         player.addMinion(bot)
 
     }
+
+    /**
+     * Adds server bots
+     * @param {Number} num - Amount of bots to add
+     */
+
     addBots(num) {
         for (var i = 0; i < num; i++) {
             this.addBot()
 
         }
     }
+
+    /**
+     * Removes a chat entry
+     * @param {Number} id - Id of chat entry to remove
+     * @returns {Boolean} Returns whether it was sucessful or not
+     */
+
     removeChat(id) {
         if (this.chat.every((ch, i) => {
                 if (ch.id != id) return true;
@@ -280,6 +373,13 @@ module.exports = class Main {
         })
         return true;
     }
+
+    /**
+     * Adds a chat entry
+     * @param {Player} player - Player who chatted
+     * @param {String} msg - Msg to chat
+     */
+
     addChat(player, msg) {
         if (msg.charAt(0) == "/") {
             if (!this.parseChatCommand(player, msg)) player.msg("That command was not found")
@@ -309,6 +409,14 @@ module.exports = class Main {
             if (client.recievePublicChat && client.mutePlayers.indexOf(player.id) == -1) client.socket.emit('chat', data)
         })
     }
+
+    /**
+     * Broadcays a chat message
+     * @param {String} msg - Message to send
+     * @param {String} name - Name to send as
+     * @param {Object} color - Color to send as
+     */
+
     broadcast(msg, name, color) {
         this.clients.forEach((client) => {
             client.msg(msg, name, color)
@@ -1152,3 +1260,5 @@ module.exports = class Main {
 
 
 };
+
+module.exports = Main;
