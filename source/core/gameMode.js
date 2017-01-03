@@ -30,7 +30,7 @@ module.exports = class gameModeHandler {
     setMode(mode) {
         this.mode = ingame.get(mode)
         if (!this.mode) this.mode = this.main.pluginService.gamemodes[mode]
-        this.mode = this.mode || false
+        if (!this.mode) throw "ERROR: Invalid gamemode! Gamemode doesnt exsist"
     }
     event(event, data) {
         if (!data) data = {}
