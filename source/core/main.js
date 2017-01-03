@@ -618,7 +618,7 @@ class Main {
 
         })
 
-        client.cells = [];
+        client.cells.clear();
         //    }.bind(this),this.getConfig().disconnectTime * 1000)
 
 
