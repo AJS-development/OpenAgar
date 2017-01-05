@@ -1221,9 +1221,8 @@ class Main {
                 case 0: // players
                     if (check.owner == node.owner) {
 
-                        if (!node.canMerge || !check.canMerge) {
-                            check.eat(node, this)
-                            return true;
+                        if (node.canMerge && check.canMerge) {
+                            check.eat(node, this);
                         }
 
 
