@@ -22,6 +22,7 @@ module.exports = class PluginService {
         this.main = main
         this.plugins = {};
         this.pdata = {}
+        this.pluginNames = [];
         this.commands = {};
         this.addToHelp = [];
         this.data = {
@@ -88,7 +89,8 @@ module.exports = class PluginService {
                 })
             })
        for (var i in this.plugins) {
-           var plugin = this.plugins[i]
+           var plugin = this.plugins[i];
+           this.pluginNames.push(plugin.name);
        }
         
     }
