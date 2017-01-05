@@ -32,7 +32,9 @@ module.exports = class ShellService {
             if (this.redrawing || !this.controller.serverService.selected.interface) return false;
             return true;
 
-        }.bind(this))
+        }.bind(this),function() {
+            exit();
+        })
         this.ind = 0;
         this.console = []
 

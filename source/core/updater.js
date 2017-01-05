@@ -15,7 +15,7 @@ module.exports = class Updater {
             if (e) throw e;
             else {
                 this.loading("done. Restarting...             ");
-                process.exit(0);
+                exit(0);
             }
         }.bind(this))
 
