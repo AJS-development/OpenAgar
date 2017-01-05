@@ -20,6 +20,7 @@
 const RSON = require('rson');
 const Player = require('./Player.js');
 const crypto = require('crypto')
+const Stats = require('./Statistics.js');
 
 module.exports = class socketService {
     constructor(globalData, servers) {
@@ -110,7 +111,8 @@ module.exports = class socketService {
                 }
             }
 
-        }.bind(this), 1000)
+        }.bind(this), 1000);
+        Stats(this);
     }
     stop() {
         this.debug("gre{[Debug]} Closed socket".styleMe())
