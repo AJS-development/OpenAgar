@@ -171,6 +171,8 @@ There are exceptions, meaning there is still ways to use with the limit reached.
 2. Create 3 plugins or
 3. Host a server for OpenAgar Stats (And who does this will get an extra key to register)
 
+#### Why are some files encrypted?
+Some files are encrypted because they are needed to secure things such as sockets, or because they use our assets (our servers, other resources...). 
 
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
