@@ -34,7 +34,10 @@ module.exports = class childManager {
     }
     init() {
         this.debug("gre{[Debug]} Number of computer cores detected: ".styleMe() + this.cpus.length)
-        if (this.cpus.length <= 1) throw "Your computer must have more than one core in order to run this program"
+        if (this.cpus.length <= 1) {
+            console.log("red{[OpenAgar]} Your computer must have more than one core in order to run this program.".styleMe())
+        exit(0)
+        }
         process.on('exit', function () {
             var count = 0;
             this.childs.forEach((child) => {
