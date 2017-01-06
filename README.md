@@ -148,7 +148,6 @@ One thing we decided, was that we are not going to help other people run this pr
 ## More like ClosedAgar
 People have complained to me about this project being semi private. But in order to have everybody enjoy it, we must, since being too open means disaster. This was the problem with OgarUL, it got too big it collapsed on itself.
 
-
 ## FAQ
 #### Will this project ever be fully opened to the public?
 No, we want to keep it semi-private. No more than 100 users
@@ -161,6 +160,17 @@ Actually, there are a lot of features, but none come in the box. You must use th
 
 #### Can I make a Pull Request?
 Yes, but note that we are very very strict. So many pull requests wont be accepted
+
+#### Can I make a fork?
+Yes, you may.
+
+#### The account limit is reached! And I want to use this very badly
+There are exceptions, meaning there is still ways to use with the limit reached. In order to qualify, you must either: 
+
+1. Contribute to the __code__, and have changes accepted or
+2. Create 3 plugins or
+3. Host a server for OpenAgar Stats (And who does this will get an extra key to register)
+
 
 ## Another Note
 This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
