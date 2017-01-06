@@ -957,7 +957,7 @@ class Main {
             }
             return false;
         } catch (e) {
-            this.log("ERROR: " + e)
+            console.log("yel{[OpenAgar]} Command Error: ".styleMe() + e)
         }
     }
     getPlayer(id) {
