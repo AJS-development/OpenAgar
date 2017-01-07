@@ -35,12 +35,21 @@ module.exports = function (str, ss, log) {
 
     } else if (split[1] == "create") {
         var name = split[2]
-        var sc = split.slice(3).join(" ")
-        if (!name || !sc) {
 
-            return log("cya{[OpenAgar]} Please provide a name and a screen name".styleMe())
+        if (!name) {
+
+            return log("cya{[OpenAgar]} Please provide a name!".styleMe())
         }
-        if (ss.createServer(name, sc, ss.defconfig, false)) log("gre{[OpenAgar]} Server succesfully created".styleMe());
+        var configOv = Util.argsParser(str, 3);
+
+        var config = {};
+        for (var i in ss.defconfig) {
+            config[i] = ss.defconfig[i];
+        }
+        for (var i in configOv) {
+            config[i] = configOv[i];
+        }
+        if (ss.createServer(name, name, config, false)) log("gre{[OpenAgar]} Server succesfully created".styleMe());
         else return log("yel{[OpenAgar]} Could not create server".styleMe())
 
         ss.reloadInfoP()

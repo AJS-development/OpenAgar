@@ -94,8 +94,7 @@ Minigames are planned for OpenAgar, we dont know exactly how they will work, but
 * Get the F off my turf: A game where you defend your turf from others.
 
 ## Statistics
-
-
+Statistics allow you to host a public server. To post your server to statistics, edit serverConfig.ini's statistics config values. Then, your server will be listed and it will be joinable at `http://opnagar.us/server/yoururl`. 
 
 ## Plugins
 Since most of OpenAgar's features doesnt come in the box, plugins are very important. So we made it very easy to install plugins. 
@@ -122,6 +121,40 @@ This adds a library to install/search plugins from. The url is the plugin JSON f
 > plugin add [name] [url]
 
 This adds a plugin from it's url.
+
+## Multi-Server system
+OpenAgar is made so you can host multiple servers on one port. There are two ways to create additional servers in the multi-server system
+
+#### The settings/server folder
+Using this folder, you can automatically have OpenAgar create additional servers for you. Also, this allows you to easily change the configurations of the individual servers.
+
+##### Usage
+1. Create a file in the source/settings/server folder, the file should be `[Server name].ini`
+2. Then, you can override configs in that file. For example, I can put the line `gameMode = 1` to have the server be in teams
+3. Start the server. Your server will automatically be created.
+
+#### The server command
+The server command has 4 different usages
+
+##### 1. create
+> server create [name] [configs (optional)]
+
+This adds an additional server. The configs argument overrides default configs and looks like this: `configname1:value1,configname2:value2`. You do not have to specify every config values.
+
+##### 2. remove
+> server remove [id]
+
+This removes a server by id
+
+##### 3. select
+> server select [id]
+
+This selects a server for you to control via console.
+
+##### 4. list
+> server list
+
+This lists all servers: their ids, names, players/bots, uptime, and status
 
 ## Added Mechanics:
 
@@ -170,6 +203,9 @@ There are exceptions, meaning there is still ways to use with the limit reached.
 1. Contribute to the __code__, and have changes accepted or
 2. Create 3 plugins or
 3. Host a server for OpenAgar Stats (And who does this will get an extra key to register)
+
+#### I want to post a server to stats, however I am worried over ddos attacks and other things
+Statistics will not show your ip, minimising ddos attacks. Also, OpenAgar is made to handle them. It will detect those attacks and mitigate them.
 
 #### Why are some files encrypted?
 Some files are encrypted because they are needed to secure things such as sockets, or because they use our assets (our servers, other resources...). 

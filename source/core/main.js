@@ -306,7 +306,6 @@ class Main {
      */
 
     formatNode(node, player) {
-
         var a = {
             id: node.id,
             owId: (node.owner) ? node.owner.id : 0,
@@ -315,13 +314,12 @@ class Main {
             type: node.type,
             posX: node.position.x,
             posY: node.position.y,
-            color: node.color
+            color: node.color,
+            name: (node.name) ? node.name : "",
+            spiked: (node.spiked) ? 1 : 0,
+            agit: (node.agit) ? 1 : 0,
+            skin: (node.skin) ? "" : player.skinHandler.getSend(node.skin)
         };
-        node.name && (a.name = node.name)
-        node.agit && (a.agit = 1)
-        node.skin && (a.skin = player.skinHandler.getSend(node.skin))
-
-        node.spiked && (a.spiked = 1);
         return a;
     }
 
@@ -1227,9 +1225,10 @@ class Main {
 
 
                     }
-                    if (check.mass * 1.25 > node.mass) return;
+                    if (check.mass * 1.25 > node.mass) return true;
 
-                    check.eat(node, this)
+                    check.eat(node, this);
+                    return (Math.random() > 0.3);
                     break;
 
                 case 1: // cells

@@ -95,6 +95,23 @@ module.exports = {
 
 
     },
+    loadServers: function (defaultconf) {
+        var servers = {};
+        var files = fs.readdirSync(__dirname + '/../settings/servers/');
+        files.forEach((file) => {
+            var split = file.split(".");
+            if (split[1] != "ini") return;
+
+            var f = __dirname + '/../settings/servers/' + file;
+            var configs = ini.parse(fs.readFileSync(f, "utf8"));
+            for (var i in defaultconf) {
+                if (configs[i] === undefined) configs[i] = defaultconf[i];
+            }
+            servers[split[0]] = configs;
+
+        })
+        return servers;
+    }
 
 
 

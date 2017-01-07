@@ -42,15 +42,15 @@ module.exports = class SkinHandler {
     getSend(skin) {
 
         if (skin > 0 || this.sentHash[skin]) {
-            return skin;
+            return skin.toString();
         } else {
             if (this.player.globalData.skins2[skin]) {
                 this.sentHash[skin] = true;
 
-                return skin + "|" + this.player.globalData.skins2[skin]
+                return skin + "|" + this.player.globalData.skins2[skin];
 
             } else {
-                return 0
+                return "";
             }
         }
     }

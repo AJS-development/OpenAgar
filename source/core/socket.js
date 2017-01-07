@@ -30,7 +30,7 @@ module.exports = class Socket {
     }
     sendNodes(obj) {
 
-        this.socket.hasBinary(false).emit('nodes', obj)
+        this.socket.hasBinary(true).emit('nodes', obj)
     }
     sendDelete(tex) {
 

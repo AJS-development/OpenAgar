@@ -39,7 +39,6 @@ module.exports = class HideNSeek extends template {
             this.update(data)
         }.bind(this), 1000)
         main.formatNode = function (node, player) { // override to prevent cheat scripts
-
             var a = {
                 id: node.id,
                 owId: (node.owner && node.owner == player) ? node.owner.id : 0,
@@ -48,13 +47,12 @@ module.exports = class HideNSeek extends template {
                 type: (node._type) ? node._type : node.type,
                 posX: node.position.x,
                 posY: node.position.y,
-                color: node.color
+                color: node.color,
+                name: (node.name) ? node.name : "",
+                spiked: (node.spiked) ? 1 : 0,
+                agit: (node.agit) ? 1 : 0,
+                skin: ""
             };
-            node.name && (a.name = node.name)
-            node.agit && (a.agit = 1)
-                //  node.skin && (a.skin = player.skinHandler.getSend(node.skin))
-
-            node.spiked && (a.spiked = 1);
             return a;
         }
         main._split = main.splitPlayer;

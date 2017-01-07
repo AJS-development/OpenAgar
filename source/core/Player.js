@@ -19,6 +19,7 @@
 
 const Socket = require('./socket.js')
 const SkinHandler = require('./skinHandler.js')
+const BinaryNodes = require('./binaryNodes.js')
 module.exports = class Player {
     constructor(id, socket, server, globalData) {
         this.id = id;
@@ -455,9 +456,8 @@ module.exports = class Player {
     }
     sendDelNode(node) {
         this.toSend.push({
-            remove: node.id
-
-
+            _type: 2,
+            id: node.id
         })
 
     }
@@ -493,13 +493,14 @@ module.exports = class Player {
 
         if (this.toSend.length == 0) return;
 
-        this.socket.sendNodes(this.toSend)
+        this.socket.sendNodes(BinaryNodes(this.toSend))
         this.toSend = [];
     }
     sendMoveUpt(node) {
 
         this.toSend.push({
-            moveUpt: node.id,
+            _type: 1,
+            id: node.id,
             x: node.position.x,
             y: node.position.y
         })

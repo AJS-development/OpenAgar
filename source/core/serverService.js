@@ -36,7 +36,9 @@ module.exports = class ServerService {
         this.defconfig = Config.loadConfig(__dirname + '/../settings', true)
         this.childManager = new ChildManager(this)
         this.debug("gre{[Debug]} Server start time: ".styleMe() + Date.now())
-        var serv = this.createServer("Main", "Main", this.defconfig, true)
+        
+        
+        var serv = this.createServer("Main", "Main", this.clone(this.defconfig), true)
         this.default = serv;
 
         this.socketService = new SocketService(globalData, this);
@@ -45,6 +47,21 @@ module.exports = class ServerService {
         setInterval(function () {
             this.checkUpdates()
         }.bind(this), 60000)
+        this.init();
+    }
+    clone(obj) {
+        var final = {};
+        for (var i in obj) final[i] = obj[i];
+        return final;
+    }
+    init() {
+        var serverlist = Config.loadServers(this.defconfig);
+        var count = 0;
+        for (var i in serverlist) {
+            this.createServer(i,i,serverlist[i],false);
+          ++count
+        }
+          if (count) console.log("gre{[OpenAgar]} Created ".styleMe() + count + " additional servers!");
     }
     ddos(d) {
         if (d) {

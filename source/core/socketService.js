@@ -183,6 +183,16 @@ module.exports = class socketService {
             socket.disconnect()
             return;
         }
+        if (!this.serverService.default) {
+            socket._diconnect = true;
+            socket.emit('kicked', "ERR: No default server exsists!")
+            socket.disconnect();
+        }
+        if (this.iphash[socket._remoteAddress] > 10) {
+            socket._diconnect = true;
+            socket.emit('kicked', "You cannot have over 10 connections from the same ip!")
+            socket.disconnect();
+        }
         socket._activated = false;
         socket._disconnect = false;
         socket._uidp = this.uid + Math.floor(Math.random() * 1000)
