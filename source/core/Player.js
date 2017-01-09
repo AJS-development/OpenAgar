@@ -56,6 +56,7 @@ module.exports = class Player {
             second: 0
         }
         this.golden = false;
+        this.buflen = 0;
         this.gameData = {
             name: "",
             color: server.getRandomColor(),
@@ -445,7 +446,8 @@ module.exports = class Player {
     }
     sendNode(node, main) {
 
-        var n = main.formatNode(node, this)
+        var n = main.formatNode(node, this);
+        this.buflen += 16 + n.name.length + (n.skin.length / 2);
 
         // this.visSimple.push(n)
 
@@ -459,7 +461,7 @@ module.exports = class Player {
             _type: 2,
             id: node.id
         })
-
+        this.buflen += 2.5;
     }
     onDisconnect() {
 
@@ -492,9 +494,9 @@ module.exports = class Player {
     send() {
 
         if (this.toSend.length == 0) return;
-
-        this.socket.sendNodes(BinaryNodes(this.toSend))
+        this.socket.sendNodes(BinaryNodes(this.toSend, this.buflen))
         this.toSend = [];
+        this.buflen = 0;
     }
     sendMoveUpt(node) {
 
@@ -504,6 +506,7 @@ module.exports = class Player {
             x: node.position.x,
             y: node.position.y
         })
+        this.buflen += 6.5;
     }
     update(main) { // every 0.02 sec
 
