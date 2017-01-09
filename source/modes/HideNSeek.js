@@ -459,7 +459,7 @@ module.exports = class HideNSeek extends template {
             }
 
             if (this.remain <= 0 || (this.players - this.dead) <= 0 || hiders <= 0 || seekers <= 0) this.stop(data, hiders, seekers)
-            if (!(this.remain == 120)) this.show(data)
+            if (!(this.remain % 120)) this.show(data)
             this.remain--;
             break;
         case 3:
