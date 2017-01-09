@@ -610,9 +610,6 @@ class Main {
             this.gameMode.event('onPlayerRemove', {
                 player: client
             })
-            this.gameMode.event('onAllRemove', {
-                player: client
-            })
         //  setTimeout(function() {
         client.cells.forEach((cell) => {
             this.removeNode(cell);
