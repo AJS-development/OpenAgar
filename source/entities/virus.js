@@ -82,17 +82,17 @@ module.exports = class Virus extends template {
 
     }
     collide(node, main) {
-
+   this.eat(node, main);
         var split = main.getConfig().playerMaxCells - node.owner.cells.size;
-        if (split == 0) {
-            node.addMass(this.mass)
-        }
-        var defaultmass = ~~(node.mass / (split + 2))
-        var big = defaultmass * 2 + defaultmass / 2
-        var medium = defaultmass / 2 + defaultmass
+       
+           
+        
+        var defaultmass = ~~(node.mass / (split + 3))
+        var big = defaultmass * 2 + (defaultmass / 2) // 2.5
+        var medium = defaultmass / 2 + defaultmass // 1.5
         var angle = (Math.random() * 6.28318530718) // Math.floor(Math.random() * max) + min
         node.updateMass(big)
-        this.eat(node, main)
+     
 
         // need to divide angle in order to spread them evenly
         // 360 degrees -> 2PI radians -> 6.28318530718
