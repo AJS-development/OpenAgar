@@ -3,7 +3,6 @@ module.exports = {
     list: {
         addbot: require('./lib/addBot.js'),
         kick: require('./lib/kick.js'),
-        ban: require('./lib/ban.js'),
         pause: require('./lib/pause.js'),
         kickbots: require('./lib/kickbots.js'),
         list: require('./lib/list.js'),
@@ -33,6 +32,7 @@ module.exports = {
         server: require('./lib/server.js'),
         startv: require('./lib/startv.js'),
         stop: require('./lib/stop.js'),
+         ban: require('./lib/ban.js'),
         redraw: require('./lib/redraw.js'),
         plugin: require('./lib/plugin.js'),
         update: require('./lib/update.js'),
