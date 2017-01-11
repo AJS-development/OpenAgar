@@ -28,6 +28,7 @@ module.exports = class Manager {
         this.bots = new Map()
         this.config = {};
         this.s = false;
+
         this.haveTeams = false;
         this.paused = false;
         this.events = {}
@@ -83,40 +84,33 @@ module.exports = class Manager {
         this.paused = msg.p
     }
     updateLB() {
-        var hash = [];
+        var players = [];
 
-        function insert(p) {
-            p.getScore()
-
-            if (!hash[p.mass]) hash[p.mass] = [];
-            hash[p.mass].push(p)
-
+        function insert(pl) {
+            if (!pl.cells.length) return;
+            pl.getScore()
+            if (!pl.mass) return;
+            players.push({
+                i: pl.id,
+                m: pl.mass
+            })
         }
+
         this.bots.forEach((bot) => {
             insert(bot)
         })
         this.players.forEach((player) => {
-
             insert(player)
+
         })
+
         var amount = this.getConfig().leaderBoardLen;
-        var rank = 1;
-        var lb = [];
-        for (var i = hash.length; i > 0; i--) {
-            if (!hash[i]) continue;
-            if (!hash[i].every((h) => {
 
-                    lb.push({
-                        r: rank++,
-                        i: h.id
-                    })
-                    amount--;
-                    if (amount <= 0) return false;
-                    return true;
-                })) break;
-        }
+        var lb = players.sort(function (a, b) {
+            return b.m - a.m;
+        }).slice(0, amount);
 
-        return lb
+        return lb;
     }
 
     spawn(bot) {

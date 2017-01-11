@@ -602,15 +602,15 @@ class Main {
      */
 
     removeClient(client) {
-             this.pluginService.send('onClientRemove', {
-                player: client,
-                main: this
-            })
+        this.pluginService.send('onClientRemove', {
+            player: client,
+            main: this
+        })
 
-            this.gameMode.event('onPlayerRemove', {
+        this.gameMode.event('onPlayerRemove', {
                 player: client
             })
-        //  setTimeout(function() {
+            //  setTimeout(function() {
         client.cells.forEach((cell) => {
             this.removeNode(cell);
         })
@@ -928,17 +928,26 @@ class Main {
         if (!this.gameMode.event('updateLB', {
                 lb: this.childService.lb
             })) return
+
+
         if (this.childService.lb.length <= 0) return;
         var tosend = [];
+        var rank = 0;
+
         this.childService.lb.forEach((lb) => {
             var a = this.getPlayer(lb.i)
-            if (!a) return;
-            a.rank = lb.r
+            if (!a) {
+
+                return;
+
+            }
+            a.rank = (a.rank) ? ++rank : Math.max(a.rank, ++rank);
             tosend.push({
                 name: a.gameData.name || "An Unamed Cell",
                 id: lb.i
             })
-        })
+        });
+
         this.clients.forEach((client) => {
 
             client.socket.emit('lb', {
