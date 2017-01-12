@@ -1238,7 +1238,7 @@ class Main {
                         if (node.canMerge && check.canMerge) {
                             check.eat(node, this);
                         }
-
+                        return true;
 
                     }
                     if (check.mass * 1.25 > node.mass) return true;
