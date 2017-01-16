@@ -39,6 +39,10 @@ module.exports = class Teams extends template {
             if (cell.type == 0 && this.owner.team == cell.owner.team) return true;
             return false;
         }
+        data.cell.canEat = function(cell,main) {
+            if (cell.type != 0 || this.owner.team == cell.owner.team) return true;
+            return false;
+        }
     }
     updateLB(data) {
         var main = data.main;
