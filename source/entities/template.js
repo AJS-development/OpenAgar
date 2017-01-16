@@ -147,9 +147,10 @@ module.exports = class Template {
 
     eat(node, main) {
 
+        main.removeNode(this)
         this.killer = node
         this.killer.addMass(this.mass)
-        main.removeNode(this)
+            //  console.log(this.id, node.id)
         node.updCode()
 
     }

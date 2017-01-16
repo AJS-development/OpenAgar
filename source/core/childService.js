@@ -50,11 +50,16 @@ module.exports = class childService {
         }.bind(this))
         this.on('mass', function (m) {
             var nodes = this.main.getWorld().getNodes('player'),
-                max = this.main.getConfig().playerMaxMass;
+                max = this.main.getConfig().playerMaxMass,
+                maxCells = this.main.getConfig().playerMaxCells,
+                splitSpeed = this.main.getConfig().splitSpeed,
+                splitDecay = this.main.getConfig().splitDecay;
             m.forEach((k) => {
                 var node = nodes.get(k)
+
                 if (node) {
-                    node.mass = Math.min(node.mass, max)
+                    if (node.owner.cells.size >= maxCells) node.mass = Math.min(node.mass, max);
+                    else this.main.splitPlayerCell(node, Math.random() * 6.28, splitSpeed, splitDecay)
                     node.updCode()
                 }
             })

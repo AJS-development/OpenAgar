@@ -4,7 +4,7 @@ module.exports = class Template { // made gamemodes very alike ogar because then
     constructor() {
         this.id = -1;
         this.name = "Template";
-
+        this.decayMod = 1;
     }
 
     onServerInit(data) { // Called when the server starts
