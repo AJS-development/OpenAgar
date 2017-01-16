@@ -1101,13 +1101,14 @@ class Main {
                     this.foodService.checkVirus()
                     this.foodService.checkWormHole()
                     this.foodService.loop();
+                    this.updateMassDecay()
                     this.updateMerge();
                     this.updateLB()
+
                     if (this.timer.status >= 60) {
                         this.timer.status = 0;
                         this.statusReport()
                     } else this.timer.status++;
-
 
 
                 } else {
@@ -1128,6 +1129,19 @@ class Main {
             node.calcMerge(this)
         })
 
+
+    }
+    updateMassDecay() {
+        var rate = this.getConfig().decayRate * this.gameMode.mode.decayMod * 0.05,
+            max = this.getConfig().decayMax || this.getConfig().playerMaxMass,
+            mrate = this.getConfig().decayRateMax || 10
+        this.getWorld().getNodes('player').forEach((node) => {
+            if (node.mass > max) {
+                node.updateMass(node.mass * (1 - (rate * mrate)));
+            } else {
+                node.updateMass(node.mass * (1 - rate));
+            }
+        })
 
     }
     getConfig() {
@@ -1214,7 +1228,6 @@ class Main {
 
     collide(node, h) {
 
-
         var hashnodes = node.nearby
         if (!hashnodes.length && !node.owner.isBot && node.owner.visible) {
             hashnodes = node.owner.visible;
@@ -1239,12 +1252,11 @@ class Main {
                             check.eat(node, this);
                         }
                         return true;
-
                     }
                     if (check.mass * 1.25 > node.mass) return true;
 
                     check.eat(node, this);
-                    return (Math.random() > 0.3);
+                    return true;
                     break;
 
                 case 1: // cells
