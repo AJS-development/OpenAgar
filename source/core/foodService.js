@@ -57,6 +57,10 @@ module.exports = class FoodService {
             var pos = this.getRandomPos();
             // console.log(pos)
             var mass = Math.floor(Math.random() * 500) + 100
+            if (this.main.checkCollide(pos, Math.ceil(Math.sqrt(this.mass) * 10) + 5)) {
+                --i;
+                continue;
+            };
             this.main.addNode(pos, mass, 6);
         }
     }
@@ -71,6 +75,10 @@ module.exports = class FoodService {
 
         for (var i = 0; i < m; i++) {
             var pos = this.getRandomPos();
+            if (this.main.checkCollide(pos, 120)) {
+                --i;
+                continue;
+            };
             // console.log(pos)
             this.main.addNode(pos, this.main.getConfig().virusMass, 2);
         }

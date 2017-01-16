@@ -7,10 +7,10 @@ Map.prototype.every = function (c) {
     var a = this.entries()
     var b;
     while (b = a.next().value) {
-        if (!c(b[1], b[0])) return true;
+        if (!c(b[1], b[0])) return false;
     }
 
-    return false;
+    return true;
 }
 Map.prototype.toArray = function () {
     var array = [];

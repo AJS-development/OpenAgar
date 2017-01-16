@@ -764,9 +764,11 @@ class Main {
                 player: player
             }));
         if (!player.isBot) player.gameData.chatName = this.getChatName(player)
-
-        var pos = this.foodService.getRandomPos();
-
+        var pos;
+        for (var i = 0; i < 10; ++i) {
+            pos = this.foodService.getRandomPos();
+            if (!this.checkCollide(pos, 10)) break;
+        }
         this.addNode(pos, this.getConfig().startMass, 0, player);
 
     }
@@ -1322,7 +1324,19 @@ class Main {
         });
     }
 
+    checkCollide(pos, size) {
+        var bounds = {
+            x: pos.x - size,
+            y: pos.y - size,
+            width: size + size,
+            height: size + size
+        }
+        return !this.getWorld().getNodes('hash').every(bounds, (node) => {
 
+            if (node.type == 0 && node.collisionCheckSquare(bounds)) return false;
+            return true;
+        })
+    }
 
     start() {
 
