@@ -541,6 +541,10 @@ class Main {
             this.gameMode.event('onAllInit', {
                 player: client
             })
+            client.socket.emit('mes', {
+                type: "setBorder",
+                bounds: this.bounds
+            })
             this.clients.set(client.id, client);
             this.sendClientPacket(client)
             this.sendPrevChat(client)

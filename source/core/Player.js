@@ -178,10 +178,7 @@ module.exports = class Player {
         this.sendData = false;
     }
     init() {
-        this.socket.emit('mes', {
-            type: "setBorder",
-            bounds: this.server.bounds
-        })
+
     }
     recmouse(data) {
 
