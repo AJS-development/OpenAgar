@@ -81,10 +81,11 @@ There are also some gamemodes
 |2   |Experimental|
 |3   |Minions     |
 |4   |Hide n seek |
-|5   |Get rich or die trying (not finished)|
-|6   |Leap (not finished)|
-|7   |Timed FFA (not finished)|
-|8   |Hunger Games (not finished)|
+|5   |Adv Teams   |
+|6   |Get rich or die trying (not finished)|
+|7   |Leap (not finished)|
+|8   |Timed FFA (not finished)|
+|9   |Hunger Games (not finished)|
 
 ## Minigames
 Minigames are planned for OpenAgar, we dont know exactly how they will work, but we have an idea. Some ideas:
