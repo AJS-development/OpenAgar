@@ -30,7 +30,7 @@ module.exports = class Teams extends template {
     onAllInit(data) {
         data.player.team = this.lowest;
 
-        data.player.gameData.color = this.colors[data.player.team]
+        data.player.setColor(this.colors[data.player.team]);
 
     }
     onCellAdd(data) {
@@ -39,7 +39,7 @@ module.exports = class Teams extends template {
             if (cell.type == 0 && this.owner.team == cell.owner.team) return true;
             return false;
         }
-        data.cell.canEat = function(cell,main) {
+        data.cell.canEat = function (cell, main) {
             if (cell.type != 0 || this.owner.team != cell.owner.team) return true;
             return false;
         }

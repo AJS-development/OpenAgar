@@ -30,17 +30,21 @@ module.exports = class Teams extends template {
     onAllInit(data) {
         data.player.team = this.lowest;
 
-        data.player.gameData.color = this.colors[data.player.team]
+        data.player.setColor(this.colors[data.player.team]);
 
     }
+
     onCellAdd(data) {
+
         data.cell.doesCollide = function (cell) {
 
-            if (cell.type == 0 && (this.owner.team == cell.owner.team || cell.owner.cells.size)) return true;
+            if (cell.type == 0 && this.owner.team == cell.owner.team && cell.owner.cells.size <= 1 && this.owner.cells.size <= 1) return true;
+
             return false;
         }
-        data.cell.canEat = function(cell,main) {
-            if (cell.type != 0 || this.owner.team != cell.owner.team || cell.owner.cells.size) return true;
+        data.cell.canEat = function (cell, main) {
+
+            if (cell.type != 0 || this.owner.team != cell.owner.team || cell.owner.cells.size > 1) return true;
             return false;
         }
     }
