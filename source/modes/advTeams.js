@@ -36,11 +36,11 @@ module.exports = class Teams extends template {
     onCellAdd(data) {
         data.cell.doesCollide = function (cell) {
 
-            if (cell.type == 0 && this.owner.team == cell.owner.team) return true;
+            if (cell.type == 0 && (this.owner.team == cell.owner.team || cell.owner.cells.size)) return true;
             return false;
         }
         data.cell.canEat = function(cell,main) {
-            if (cell.type != 0 || this.owner.team == cell.owner.team) return true;
+            if (cell.type != 0 || this.owner.team != cell.owner.team || cell.owner.cells.size) return true;
             return false;
         }
     }
