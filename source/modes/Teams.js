@@ -4,7 +4,7 @@ module.exports = class Teams extends template {
     constructor() {
         super()
         this.id = 1;
-        this.name = "TEAMS";
+        this.name = "Teams";
         this.lowest = 0;
         this.highest = false;
         this.colors = [{
@@ -40,7 +40,7 @@ module.exports = class Teams extends template {
             return false;
         }
         data.cell.canEat = function(cell,main) {
-            if (cell.type != 0 || this.owner.team == cell.owner.team) return true;
+            if (cell.type != 0 || this.owner.team != cell.owner.team) return true;
             return false;
         }
     }
