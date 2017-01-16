@@ -20,18 +20,10 @@
 const Socket = require('./socket.js')
 const SkinHandler = require('./skinHandler.js')
 const BinaryNodes = require('./binaryNodes.js')
-module.exports = class Player {
+var Template = require('./PlayerTemplate.js');
+module.exports = class Player extends Template {
     constructor(id, socket, server, globalData) {
-        this.id = id;
-
-        this.server = server;
-
-        this.mouse = {
-            x: 0,
-            y: 0
-        }
-        this.owning = new Map();
-        this.mass = 0;
+        super(id, server)
         this.keys = {
             w: false,
             space: false,
@@ -41,36 +33,20 @@ module.exports = class Player {
             q: false,
             f: false
         }
+        this.globalData = globalData;
         this.pausem = false;
-        this.frozen = false;
-        this.score = 0;
         this.nodeHash = {};
         this.moveView = [];
         this.upmoveHash = {};
         this.moveHash = {};
         this.recievePublicChat = true;
         this.mutePlayers = []
-        this.cellHash = {};
+
         this.timer = {
             view: 0,
             second: 0
         }
-        this.golden = false;
         this.buflen = 0;
-        this.gameData = {
-            name: "",
-            color: server.getRandomColor(),
-            chatColor: server.getRandomColor(),
-            reservedChatNames: [],
-            chatName: "",
-            chkDeath: false,
-            chatBan: false,
-            reservedNamesMap: []
-        }
-
-        this.bulletsleft = 3
-        this.killer = false;
-        this.globalData = globalData
         this.view = {
             x: 0,
             y: 0,
@@ -78,34 +54,19 @@ module.exports = class Player {
             height: 0
         }
         this.lastVis = []
-        this.center = {
-            x: 0,
-            y: 0
-        }
         this.toSend = []
         this.visSimple = []
         this.visible = []
-        this.minions = new Map()
-        this.cells = new Map();
 
         this.socket = new Socket(socket, this)
         this.skinHandler = new SkinHandler(this)
         this.server.addClient(this)
         this.sendData = true;
 
-        this.alive = Date.now()
+
 
     }
-    setOwn(node) {
-        this.owning.set(node.id, node)
-    }
-    removeOwn(node) {
-        this.owning.delete(node.id)
-    }
-    addMinion(minion) {
-        this.minions.set(minion.id, minion)
 
-    }
     msg(m, n, c, i) {
         var color = c || {
             'r': 155,
@@ -121,18 +82,7 @@ module.exports = class Player {
             id: id
         })
     }
-    setMass(m) {
-        this.cells.forEach((cell) => {
-            cell.updateMass(m)
-        })
-    }
-    removeMinion(minion) {
-        this.minions.delete(minion.id)
-    }
-    updateMinions() {
 
-
-    }
     kick(reason) {
         if (!reason) reason = "You have been kicked from the server";
         this.socket.emit('kicked', reason)
@@ -194,37 +144,14 @@ module.exports = class Player {
         }
     }
     addCell(cell) {
-
-        if (this.cellHash[cell.id]) return;
         this.cells.set(cell.id, cell)
-        this.cellHash[cell.id] = true;
         this.socket.emit('mes', {
             type: "addNode",
             id: cell.id
         })
     }
-    setColor(color) {
-        this.gameData.color = color
-        this.cells.forEach((cell) => {
-            cell.color = color
-        })
-
-    }
-    setName(name) {
-        this.gameData.name = name
-        this.cells.forEach((cell) => {
-            cell.name = name
-            cell.updCode()
-        })
 
 
-    }
-
-    removeCell(cell) {
-        this.cells.delete(cell.id)
-        this.cellHash[cell.id] = false;
-        if (this.cells.size == 0) this.onDeath(cell.killer)
-    }
     checkKeys(main) {
         if (this.keys.space) {
             this.keys.space = false;
@@ -342,13 +269,7 @@ module.exports = class Player {
 
 
     }
-    getBiggest() {
-        var cell = false;
-        this.cells.forEach((c) => {
-            if (!cell || c.mass > cell.mass) cell = c
-        })
-        return cell;
-    }
+
     onmsg(msg, servers) {
         if (!msg || !msg.type) return;
         switch (msg.type) {
@@ -387,7 +308,7 @@ module.exports = class Player {
         this.upmoveHash = {};
         this.moveHash = {};
 
-        this.cellHash = {};
+
         this.view = {};
 
     }
@@ -533,7 +454,7 @@ module.exports = class Player {
                 if (!this.doesFit(node)) return;
                 this.visible.push(node)
                 hashtable[node.id] = true;
-                if (node.moving && !this.moveHash[node.id] && !this.cellHash[node.id]) {
+                if (node.moving && !this.moveHash[node.id] && !this.cells.get(node.id)) {
                     this.moveView.push(node)
                     this.moveHash[node.id] = true;
 
@@ -604,20 +525,7 @@ module.exports = class Player {
             this.timer.view++;
         }
     }
-    getScore(re) {
 
-        if (re) {
-            var l = 0;
-            this.cells.forEach((n) => {
-                l += n.mass;
-            })
-            this.mass = l;
-            this.score = Math.max(this.score, l)
-            return l
-        }
-        this.score = Math.max(this.score, this.mass)
-        return this.score
-    }
     deleteNodes(main) {
 
         this.socket.sendDelete(main.deleteR)

@@ -54,13 +54,13 @@ module.exports = function (str, main, log) {
             alive = Math.round(alive / 6000)
             alive = alive / 10
 
-            if (client.cells[0]) {
-                center = client.cells[0].position
+            if (client.cells.peek()) {
+                center = client.cells.peek().position
                 center.y = Math.round(center.y)
                 center.x = Math.round(center.x)
             }
 
-            log("|" + fill(client.id.toString(), 5) + "|" + fill(client.botid.toString(), 7) + "|" + fill(name, 16) + "|" + fill(rank.toString(), 8) + "|" + fill(center.x.toString(), 9) + "|" + fill(center.y.toString(), 9) + "|" + fill(alive.toString(), 9) + "|" + fill(client.mass.toString(), 8) + "|")
+            log("|" + fill(client.id.toString(), 5) + "|" + fill(client.botid.toString(), 7) + "|" + fill(name, 16) + "|" + fill(rank.toString(), 8) + "|" + fill(center.x.toString(), 9) + "|" + fill(center.y.toString(), 9) + "|" + fill(alive.toString(), 9) + "|" + fill(Math.round(client.mass).toString(), 8) + "|")
         })
     } else if (str[1] == "minions") {
         if (main.minions.size == 0) return log("cya{[OpenAgar]} There are no minions in the game!".styleMe())
@@ -79,13 +79,13 @@ module.exports = function (str, main, log) {
             }
 
 
-            if (client.cells[0]) {
-                center = client.cells[0].position
+            if (client.cells.peek()) {
+                center = client.cells.peek().position
                 center.y = Math.round(center.y)
                 center.x = Math.round(center.x)
             }
 
-            log("|" + fill(client.id.toString(), 5) + "|" + fill(client.botid.toString(), 7) + "|" + fill(name, 16) + "|" + fill(rank.toString(), 8) + "|" + fill(center.x.toString(), 9) + "|" + fill(center.y.toString(), 9) + "|" + fill(client.parent.id.toString(), 9) + "|" + fill(client.mass.toString(), 8) + "|")
+            log("|" + fill(client.id.toString(), 5) + "|" + fill(client.botid.toString(), 7) + "|" + fill(name, 16) + "|" + fill(rank.toString(), 8) + "|" + fill(center.x.toString(), 9) + "|" + fill(center.y.toString(), 9) + "|" + fill(client.parent.id.toString(), 9) + "|" + fill(Math.round(client.mass).toString(), 8) + "|")
         })
     } else if (str[1] == "help") {
         log("|-------Available Commands for List-------|")

@@ -16,24 +16,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+var Template = require('../core/PlayerTemplate.js');
 
-module.exports = class Bot {
+module.exports = class FakePlayer extends Template {
     constructor(server, id, name, botid) {
-        this.id = id
-        this.botid = botid
-        this.server = server;
-        this.isBot = true;
-        this.mouse = {
-            x: 0,
-            y: 0
-        }
-        this.center = {
-            x: 0,
-            y: 0
-        }
-        this.owning = new Map();
-        this.mass = 0;
+        super(id, server)
 
+        this.botid = botid
+
+        this.isBot = true;
         this.gameData = {
             name: name,
             color: server.getRandomColor(),
@@ -41,20 +32,13 @@ module.exports = class Bot {
             reservedChatNames: [],
             chkDeath: false
         }
-        this.score = 0;
-        var t = new Date()
-        this.alive = t.getTime()
-        this.cells = new Map();
+
         server.spawn(this)
     }
     onRemove(main) {
 
-    }
-    addCell(cell) {
+  }
 
-        this.cells.set(cell.id, cell)
-
-    }
     kick() {
         this.server.removeBot(this)
     }
@@ -62,67 +46,9 @@ module.exports = class Bot {
     onDeath() {
         this.mass = 0;
         this.score = 0;
-
-
-
     }
     onSpawn() {
-
-
         this.alive = this.server.timer.time;
-
-    }
-    getScore(re) {
-
-        if (re) {
-            var l = 0;
-            this.cells.forEach((n) => {
-                l += n.mass;
-            })
-            this.mass = l;
-            this.score = Math.max(this.score, l)
-            return l
-        }
-        this.score = Math.max(this.score, this.mass)
-        return this.score
-    }
-    calcView() {
-
-    }
-    setRandom() {
-
-    }
-    update() {
-
-
-    }
-    msg() {
-
-    }
-    setOwn(node) {
-        this.owning.set(node.id, node)
-    }
-    removeOwn(node) {
-        this.owning.delete(node.id)
-    }
-    changeColor(color) {
-        this.gameData.color = color
-        this.cells.forEach((cell) => {
-            cell.color = color
-        })
-
-    }
-    changeName(name) {
-        this.gameData.name = name
-        this.cells.forEach((cell) => {
-            cell.name = name
-        })
-
-    }
-    removeCell(cell) {
-        this.cells.delete(cell.id)
-
-        if (this.cells.size == 0) this.onDeath()
     }
 
 }

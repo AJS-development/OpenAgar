@@ -43,7 +43,7 @@ Map.prototype.filter = function (c) {
 Map.prototype.peek = function () {
     var a = this.entries();
     var b = a.next().value;
-    return b[1];
+    return (b) ? b[1] : false;
 }
 var m = new main()
 m.start()

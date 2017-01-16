@@ -16,23 +16,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+var Template = require('../core/PlayerTemplate.js');
 
-module.exports = class Minion {
+module.exports = class Minion extends Template {
     constructor(server, id, name, botid, parent) {
-        this.id = id
+        super(id, server)
         this.parent = parent
         this.botid = botid
-        this.server = server;
         this.isBot = true;
         this.isMinion = true;
         this.mouse = this.parent.mouse
 
-        this.center = {
-            x: 0,
-            y: 0
-        }
-        this.owning = new Map();
-        this.mass = 0;
         this.timer = {
             changeDir: 0,
         }
@@ -43,19 +37,10 @@ module.exports = class Minion {
             reservedChatNames: [],
             chkDeath: false
         }
-        this.score = 0;
-        var t = new Date()
-        this.alive = t.getTime()
-        this.cells = new Map();
-        this.removed = false;
+
         this.spawn()
     }
-    setOwn(node) {
-        this.owning.set(node.id, node)
-    }
-    removeOwn(node) {
-        this.owning.delete(node.id)
-    }
+
 
     onRemove(main) {
         this.parent.removeMinion(this)
@@ -65,18 +50,8 @@ module.exports = class Minion {
         this.server.removeMinion(this)
     }
 
-    addCell(cell) {
-        this.cells.set(cell.id, cell)
 
-    }
 
-    onDeath() {
-        this.mass = 0;
-        this.score = 0;
-        this.alive = this.server.timer.time;
-
-        this.spawn()
-    }
     spawn() {
         if (this.cells.size > 0 || this.removed) return;
 
@@ -86,20 +61,7 @@ module.exports = class Minion {
 
         if (this.parent.pausem) this.frozen = true;
     }
-    getScore(re) {
 
-        if (re) {
-            var l = 0;
-            this.cells.forEach((n) => {
-                l += n.mass;
-            })
-            this.mass = l;
-            this.score = Math.max(this.score, l)
-            return l
-        }
-        this.score = Math.max(this.score, this.mass)
-        return this.score
-    }
 
     setRandom() {
         if (!this.a) return;
@@ -107,26 +69,7 @@ module.exports = class Minion {
         this.mouse.x = Math.floor(a.width * Math.random()) + a.x;
         this.mouse.y = Math.floor(a.height * Math.random()) + a.y
     }
-    msg() {
 
-    }
-    changeColor(color) {
-        this.gameData.color = color
-        this.cells.forEach((cell) => {
-            cell.color = color
-        })
 
-    }
-    changeName(name) {
-        this.gameData.name = name
-        this.cells.forEach((cell) => {
-            cell.name = name
-        })
-
-    }
-    removeCell(cell) {
-        this.cells.delete(cell.id)
-        if (this.cells.size == 0) this.onDeath()
-    }
 
 }

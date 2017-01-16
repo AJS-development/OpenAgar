@@ -19,7 +19,7 @@
 
 
 module.exports = class PlayerTemplate {
-    constructor(id, server, globalData) {
+    constructor(id, server) {
         this.id = id;
 
         this.server = server;
@@ -28,9 +28,14 @@ module.exports = class PlayerTemplate {
             x: 0,
             y: 0
         }
+        this.center = {
+            x: 0,
+            y: 0
+        }
         this.owning = new Map();
         this.mass = 0;
         this.frozen = false;
+
         this.score = 0;
         this.golden = false;
         this.gameData = {
@@ -46,14 +51,16 @@ module.exports = class PlayerTemplate {
 
         this.bulletsleft = 3
         this.killer = false;
-        this.globalData = globalData
-      
-        this.minions = new Map()
+
+
+        this.minions = new Map();
         this.cells = new Map();
-        this.server.addClient(this)
-        this.sendData = true;
+
 
         this.alive = Date.now()
+
+    }
+    msg() {
 
     }
     setOwn(node) {
@@ -66,7 +73,9 @@ module.exports = class PlayerTemplate {
         this.minions.set(minion.id, minion)
 
     }
-   
+    addCell(cell) {
+        this.cells.set(cell.id, cell)
+    }
     setMass(m) {
         this.cells.forEach((cell) => {
             cell.updateMass(m)
@@ -93,7 +102,7 @@ module.exports = class PlayerTemplate {
 
         this.sendData = false;
     }
-  
+
     setColor(color) {
         this.gameData.color = color
         this.cells.forEach((cell) => {
@@ -110,13 +119,19 @@ module.exports = class PlayerTemplate {
 
 
     }
+    onDeath() {
+        this.mass = 0;
+        this.score = 0;
+        this.alive = this.server.timer.time;
 
+        this.spawn()
+    }
     removeCell(cell) {
         this.cells.delete(cell.id)
-        this.cellHash[cell.id] = false;
+
         if (this.cells.size == 0) this.onDeath(cell.killer)
     }
- 
+
 
     getBiggest() {
         var cell = false;
@@ -143,4 +158,5 @@ module.exports = class PlayerTemplate {
 
         this.socket.sendDelete(main.deleteR)
     }
+
 }
