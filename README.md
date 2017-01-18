@@ -169,6 +169,8 @@ There is a very slight chance that when they are reloaded, you get golden bullet
 ##### 3. Wormholes
 They are black thingys that you can teleport with. If you collide with one, and you are below the mass of the wormhole, you will be teleported to another wormhole. If you have more than one cell, then the other cells will be lost. If you are bigger, there is a chance that you will teleport (with the one cell rule) while breaking the wormholes, or you may not teleport at all. But if you do or do not, your cell's mass will become the size of the wormhole plus a little more (A strategy might be find the biggest wormhole, become as big as the wormhole, collide, if no tp, then stay, so anyone who tped there will be eaten). 
 
+> Note that you have to set minWormHoles to a number as they are disabled by default
+
 
 ## Developers
 
