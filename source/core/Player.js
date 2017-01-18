@@ -140,7 +140,7 @@ module.exports = class Player extends Template {
             if (!isNaN(x)) this.mouse.x = x;
             if (!isNaN(x)) this.mouse.y = y
         } catch (e) {
-            console.log(e)
+         //   console.log(e)
         }
     }
     addCell(cell) {
