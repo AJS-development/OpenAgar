@@ -3,9 +3,6 @@
     "version": "1.0.0",
     "description": "An open source web game",
     "main": "index.js",
-    "engines": {
-        "node": "6.9.0"
-    },
     "dependencies": {
         "cli-gui": "latest",
         "quickmap": "latest",
