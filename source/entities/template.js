@@ -185,14 +185,15 @@ module.exports = class Template {
     }
     getEatRange() {
 
-        return this.size * 0.4;
+        return this.size * -0.4;
 
     }
     collisionCheckCircle(node, no) {
 
         var distance = this.getDistance(node.position.x, node.position.y);
 
-        var s = (no) ? node.size : node.getEatRange(node)
+        var s = (no) ? node.size : node.getEatRange(node);
+        (this.size + s > 0) || (s = 0);
         if (distance <= this.size + s) return true;
         return false;
     }

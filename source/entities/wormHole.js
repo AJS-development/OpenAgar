@@ -42,13 +42,7 @@ module.exports = class WormHole extends template {
     onCreation(main) {
         main.wormHoles++;
     }
-    getEatRange(node) {
 
-
-        return this.size * 0.4;
-
-
-    }
     tpa(node, main) {
 
         node.position.x = this.position.x

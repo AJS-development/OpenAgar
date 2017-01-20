@@ -40,7 +40,7 @@ module.exports = class MotherCell extends template {
 
     getEatRange() {
 
-        return this.size * 0.8;
+        return this.size * -0.8;
 
     }
     collide(node, main) {

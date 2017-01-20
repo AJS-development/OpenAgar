@@ -78,7 +78,7 @@ module.exports = class Virus extends template {
     }
     getEatRange() {
 
-        return this.size * 0.5;
+        return this.size * -0.5;
 
     }
     collide(node, main) {

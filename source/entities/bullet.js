@@ -84,7 +84,7 @@ module.exports = class Bullet extends template {
     }
     getEatRange() {
 
-        return this.size * 0.5;
+        return this.size * -0.5;
 
     }
     explodeCell(node, main) {
