@@ -2,7 +2,7 @@
 /*
 Copyright 2016 Andrew S
 
-You may use this without this copyright header, this header is only so people can sue me if they claim it as theirs. 
+You may use this without this copyright header, this header is only so people cant sue me if they claim it as theirs. 
 */
 
 module.exports = {
