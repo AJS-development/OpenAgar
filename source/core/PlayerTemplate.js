@@ -40,8 +40,8 @@ module.exports = class PlayerTemplate {
         this.golden = false;
         this.gameData = {
             name: "",
-            color: server.getRandomColor(),
-            chatColor: server.getRandomColor(),
+            color: Util.getRandomColor(),
+            chatColor: Util.getRandomColor(),
             reservedChatNames: [],
             chatName: "",
             chkDeath: false,
