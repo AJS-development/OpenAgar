@@ -23,5 +23,17 @@ dirEscape: function(before,dir,ext) {
     f = f.join("/")
     if (f) f = f.replace(/\./g,"")
    return before + f + "/" + file
-}
+},
+      getRandomColor: function() {
+        var colorRGB = [0xFF, 0x07, (Math.random() * 256) >> 0];
+        colorRGB.sort(function () {
+            return 0.5 - Math.random();
+        });
+
+        return {
+            r: colorRGB[0],
+            b: colorRGB[1],
+            g: colorRGB[2]
+        };
+    }
 }
