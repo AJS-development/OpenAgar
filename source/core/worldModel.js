@@ -20,7 +20,7 @@
 const HashBounds = require('hashbounds');
 module.exports = class WorldModel {
     constructor(main) {
-        this.nodes = new HashBounds(7, 3,Math.max(main.bounds.width,main.bounds.height),700);
+        this.nodes = new HashBounds(7, 3,Math.max(main.bounds.width,main.bounds.height) + 700,700);
         this.main = main
         this.mapnodes = new Map();
         this.playerNodes = new Map();
