@@ -22,7 +22,7 @@ module.exports = class Manager {
         this.id = id;
         this.addedHash = [];
 
-        this.nodes = new HashBounds(10, 4); // 64 min
+        
         this.toSend = [];
         this.map = new Map()
         this.bots = new Map()
@@ -185,6 +185,7 @@ module.exports = class Manager {
         this.config = msg.config;
         this.haveTeams = msg.teams;
         this.bounds = msg.bounds;
+        this.nodes = new HashBounds(6, 4,Math.max(this.bounds.width,this.bounds.height)); // 64 min
         try {
 
             clearInterval(this.interval)
