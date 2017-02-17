@@ -185,7 +185,7 @@ module.exports = class Manager {
         this.config = msg.config;
         this.haveTeams = msg.teams;
         this.bounds = msg.bounds;
-        this.nodes = new HashBounds(6, 4,Math.max(this.bounds.width,this.bounds.height),700); // 64 min
+        this.nodes = new HashBounds(6, 4,Math.max(this.bounds.width,this.bounds.height) + 700,700); // 64 min
         try {
 
             clearInterval(this.interval)
