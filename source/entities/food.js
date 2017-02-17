@@ -30,7 +30,7 @@ module.exports = class Food extends template {
     }
     getEatRange() {
 
-        return this.size;
+        return -this.size;
 
     }
 };
