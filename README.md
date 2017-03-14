@@ -13,8 +13,8 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 
 **Please note that a key is required, that it's distribution is limited! This is so that computer newbies wont waste our time**
 
-#### Dependancies
-* Nodejs
+#### Dependencies
+* Nodejs (**v5.10.0**+)
 * Npm (included with Nodejs)
 
 #### Guide
