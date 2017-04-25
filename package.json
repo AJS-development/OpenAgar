@@ -3,20 +3,7 @@
     "version": "1.0.0",
     "description": "An open source web game",
     "main": "index.js",
-    "dependencies": {
-        "cli-gui": "latest",
-        "quickmap": "latest",
-        "SmartConfig": "latest",
-        "rson": "latest",
-        "hashbounds": "4.2.2",
-        "styleme": "latest",
-        "ajs-dev-socket.io-edited": "latest",
-        "node-cryptojs-aes": "latest",
-        "minirequest": "latest",
-        "asyncconsole": "latest",
-        "nodesounds": "latest",
-        "cligui2": "latest"
-    },
+    "dependencies": {},
     "devDependencies": {},
     "scripts": {
         "test": "node build.js",
