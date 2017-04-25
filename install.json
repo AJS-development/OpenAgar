@@ -1,6 +1,10 @@
 [
   {
-    "name": "cligui",
+    "name": "cli-gui",
+    "version": "latest"
+  },
+  {
+    "name": "rson",
     "version": "latest"
   },
   {
