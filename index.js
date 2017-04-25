@@ -69,6 +69,7 @@ function install() {
 }
 
 function callback() {
+    fs.writeFileSync("modules.json", JSON.stringify(toCheck), "utf8")
 var main = require('./source/core/controller.js')
     //require('./cpu.js').init('./data')
     //require('./heap.js').init('./data')
@@ -118,7 +119,7 @@ Map.prototype.peek = function () {
 }
 
 
-    fs.writeFileSync("modules.json", JSON.stringify(toCheck), "utf8")
+    
 var m = new main()
 m.start()
 }
