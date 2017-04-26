@@ -16,7 +16,7 @@
          "asyncconsole": "latest",
          "nodesounds": "latest",
          "cligui2": "latest",
-         "toobusy": "latest"
+         "toobusy-js": "latest"
      },
     "devDependencies": {},
     "scripts": {
