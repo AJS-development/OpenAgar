@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-const TooBusy = require('TooBusy')
+const TooBusy = require('toobusy-js')
 const Commands = require('../commands')
 const SocketService = require('./socketService.js');
 const Main = require('./main.js');
@@ -41,7 +41,7 @@ module.exports = class ServerService {
         
         var serv = this.createServer("Main", "Main", this.clone(this.defconfig), true)
         this.default = serv;
-
+        this.lagInt;
         this.socketService = new SocketService(globalData, this);
         this.updater = new Updater(this)
         this.checkUpdates()
@@ -49,6 +49,7 @@ module.exports = class ServerService {
             this.checkUpdates()
         }.bind(this), 60000)
         this.init();
+        this.setUpLagDetection()
     }
     clone(obj) {
         var final = {};
@@ -63,6 +64,21 @@ module.exports = class ServerService {
           ++count
         }
           if (count) console.log("gre{[OpenAgar]} Created ".styleMe() + count + " additional servers!");
+    }
+    setUpLagDetection() {
+     TooBusy.maxLag(1000); // set max lag to 1 sec
+        setInterval(function() {
+        if (TooBusy()) {
+            debug("yel{[Debug]} Lag detected. Mitigating... Latency: " + lag);
+         this.servers.forEach((s)=>{
+         s.setLag(true);
+         })   
+        } else {
+        this.servers.forEach((s)=>{
+         s.setLag(false);
+         })   
+        }
+        },5000) // check every 5 sec
     }
     ddos(d) {
         if (d) {
