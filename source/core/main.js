@@ -77,13 +77,13 @@ class Main {
         this.intervals = [];
         this.feedListeners = [];
         this.deleteR = "";
-        this.lag = 0
         this.chatNames = [];
         this.interface = true;
         this.botid = 0;
         this.lbConfig = {
             lbtype: 0
         }
+        this.lag = false;
         this.haveTeams = false;
         this.colors = [
             {
@@ -1000,6 +1000,9 @@ class Main {
         node.setEngine1(angle, speed, decay)
         return node
     }
+    setLag(val) {
+        this.lag = val;
+    }
     removeFlags(node, flag) {
         this.getWorld().removeFlags(node, flag)
     }
@@ -1079,7 +1082,6 @@ class Main {
             this.updateMovingCells();
             this.updateBots()
             this.timer.updatePN = 0;
-            this.checkLag()
         }
 
 
@@ -1162,22 +1164,12 @@ class Main {
     getWorld() {
         return this.dataService.world;
     }
-    checkLag() {
-            if (this.lag > 0) return this.lag--;
-            if (this.timer.passed > 80) {
-                this.lag = 30
-                this.lagtime = this.timer.passed
-                this.debug("yel{[Debug]} Possible lag spike detected: ".styleMe() + this.lagtime + " MS. Nodecount: " + this.getWorld().getNodes('map').size)
-                this.debug("yel{[Debug]} Mitigating lag...".styleMe())
-            }
-
-        }
+   
         // update nodes quickly (0)
     updatePlayerNodes() {
         var shift = 0;
 
-        if (this.lag > 0) { // lag detection
-            //  console.log(this.timer.passed)
+        if (this.lag) { // slow down
             shift = 1
             this.timer.pn = !this.timer.pn
             if (this.timer.pn) return
