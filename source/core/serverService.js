@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+const TooBusy = require('TooBusy')
 const Commands = require('../commands')
 const SocketService = require('./socketService.js');
 const Main = require('./main.js');
