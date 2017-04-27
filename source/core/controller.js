@@ -32,7 +32,7 @@ Sounds.add('start', 'start.mp3')
 Sounds.add('alert', 'alert.mp3')
 Sounds.add('tone', 'tone.mp3')
 
-_version = "4.4.0"
+_version = "4.5.0"
 _key = ""
 exit = function (a) {
     process.exit(a)
