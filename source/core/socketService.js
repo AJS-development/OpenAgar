@@ -52,7 +52,7 @@ module.exports = class socketService {
         return false;
     }
     checkDDOS(socket) {
-
+        if (!this.serverService.TooBusy()) return true;
         if (this.lastconn[socket._remoteAddress] >= 10) return false;
         if (this.clients.length >= 1000) return false;
         var time = Date.now()
@@ -62,6 +62,7 @@ module.exports = class socketService {
         return true;
     }
     onDDOS() {
+
         if (this.ddos) return;
         this.ddos = true;
         this.ddosbuf = 5
@@ -85,6 +86,7 @@ module.exports = class socketService {
         this.server = this.io(this.globalData.config.serverPort);
         this.serverService.log("gre{[OpenAgar]} Server listening on port ".styleMe() + this.globalData.config.serverPort)
         this.server.on('connection', function (socket) {
+
             this.cwindow++;
             if (this.ddos) return socket.disconnect();
             setImmediate(function () {

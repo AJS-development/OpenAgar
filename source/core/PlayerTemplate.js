@@ -49,7 +49,7 @@ module.exports = class PlayerTemplate {
             reservedNamesMap: []
         }
 
-        this.bulletsleft = 3
+        this.bulletsleft = 0
         this.killer = false;
 
 

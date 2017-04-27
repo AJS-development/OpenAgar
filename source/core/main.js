@@ -1164,8 +1164,8 @@ class Main {
     getWorld() {
         return this.dataService.world;
     }
-   
-        // update nodes quickly (0)
+
+    // update nodes quickly (0)
     updatePlayerNodes() {
         var shift = 0;
 

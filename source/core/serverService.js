@@ -37,8 +37,8 @@ module.exports = class ServerService {
         this.defconfig = Config.loadConfig(__dirname + '/../settings', true)
         this.childManager = new ChildManager(this)
         this.debug("gre{[Debug]} Server start time: ".styleMe() + Date.now())
-        
-        
+
+
         var serv = this.createServer("Main", "Main", this.clone(this.defconfig), true)
         this.default = serv;
         this.lagInt;
@@ -49,6 +49,7 @@ module.exports = class ServerService {
             this.checkUpdates()
         }.bind(this), 60000)
         this.init();
+        this.TooBusy = TooBusy;
         this.setUpLagDetection()
     }
     clone(obj) {
@@ -60,25 +61,26 @@ module.exports = class ServerService {
         var serverlist = Config.loadServers(this.defconfig);
         var count = 0;
         for (var i in serverlist) {
-            this.createServer(i,i,serverlist[i],false);
-          ++count
+            this.createServer(i, i, serverlist[i], false);
+            ++count
         }
-          if (count) console.log("gre{[OpenAgar]} Created ".styleMe() + count + " additional servers!");
+        if (count) console.log("gre{[OpenAgar]} Created ".styleMe() + count + " additional servers!");
     }
     setUpLagDetection() {
-     TooBusy.maxLag(1000); // set max lag to 1 sec
-        setInterval(function() {
-        if (TooBusy()) {
-            debug("yel{[Debug]} Lag detected. Mitigating... Latency: " + lag);
-         this.servers.forEach((s)=>{
-         s.setLag(true);
-         })   
-        } else {
-        this.servers.forEach((s)=>{
-         s.setLag(false);
-         })   
-        }
-        },5000) // check every 5 sec
+
+        setInterval(function () {
+                var lag = TooBusy.lag();
+                if (lag > 150) {
+                    this.debug("yel{[Debug]} Lag detected. Mitigating... Latency: " + lag);
+                    this.servers.forEach((s) => {
+                        s.setLag(true);
+                    })
+                } else {
+                    this.servers.forEach((s) => {
+                        s.setLag(false);
+                    })
+                }
+            }.bind(this), 5000) // check every 5 sec
     }
     ddos(d) {
         if (d) {
