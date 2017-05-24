@@ -24,7 +24,7 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 3. Make sure all the dependancies are installed
 4. Install npm dependancies `npm install`
 5. Run index.js using node `node index.js`
-6. Record the ID given and get the appropriete key by going here: http://login.opnagar.us.
+6. Record the ID given and get the appropriate key by going here: http://login.opnagar.us.
 7. Paste your key into `key.txt` (command line: `nano key.txt`)
 8. Run index.js again
 9. Connect using `opnagar.us` (development client, real one will be at ogarul.io)
