@@ -339,12 +339,12 @@ module.exports = class HashBounds {
         this.lastid = 0;
         this.BASE = false;
         this.createLevels()
-        this.SQRT = [];
-        this.setupSQRT()
+        this.log2 = [];
+        this.setupLog2()
     }
-    setupSQRT() {
-        for (var i = 0; i < 255; ++i) {
-            this.SQRT.push(Math.floor(Math.sqrt(i)))
+    setupLog2() {
+        for (var i = 0; i < 64; ++i) {
+            this.log2.push(Math.floor(Math.log2(i + 1)));
         }
     }
     createLevels() {
@@ -378,7 +378,8 @@ module.exports = class HashBounds {
             return;
         }
 
-        var index = this.SQRT[(node.bounds.width + node.bounds.height) >> this.MIN]
+        var index = this.log2[(Math.max(node.bounds.width, node.bounds.height) >> this.MIN)]
+
         if (index >= this.LVL) index = this.LVL - 1;
 
         node._HashIndex = index;
