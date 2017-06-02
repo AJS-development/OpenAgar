@@ -2,14 +2,17 @@
 /*
        HashBounds - A hierarchical spacial hashing system
     Copyright (C) 2016 Andrew S
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
+
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -62,8 +65,7 @@ class QuickMapV2 {
         return n;
     }
     delete(id) {
-        if (this.ARRAY[id])
-            this.ARRAY[id].destroy();
+        this.ARRAY[id].destroy();
         this.ARRAY[id] = null;
     }
     get(id) {
@@ -77,6 +79,8 @@ class QuickMapV2 {
     }
 
 }
+
+
 class Holder {
     constructor(parent, x, y, power, lvl) {
         this.PARENT = parent;
@@ -127,32 +131,105 @@ class Holder {
 
     }
 
-    every(bounds, call) {
-        if (!this.LEN) return true;
-        if (!this.MAP.every(call)) return false;
-        if (this.CHILDREN[0]) {
-            for (var i = 0; i < this.CHILDREN.length; ++i) {
-                if (this.checkIntersect(bounds, this.CHILDREN[i].BOUNDS)) {
-                    if (!this.CHILDREN[i].every(bounds, call)) return false;
-                }
-            }
+    getQuad(bounds, bounds2) {
+        if (!this.CHILDREN[0]) return -2;
 
+        var minX = bounds.x,
+            minY = bounds.y,
+            maxX = bounds.x + bounds.width,
+            maxY = bounds.y + bounds.height,
+            minX2 = bounds2.x,
+            minY2 = bounds2.y,
+            maxX2 = bounds2.x + bounds2.width,
+            maxY2 = bounds2.y + bounds2.height,
+            halfY = bounds2.y + (bounds2.height >> 1),
+            halfX = bounds2.x + (bounds2.width >> 1);
+
+
+        var top = maxY <= halfY;
+        var bottom = minY > halfY;
+        var left = maxX <= halfX;
+        var right = minX > halfX;
+
+
+        if (top) {
+            if (left) return [0];
+            else if (right) return [2];
+            return [0, 2];
+        } else if (bottom) {
+            if (left) return [1];
+            else if (right) return [3];
+            return [1, 3];
         }
-        return true;
+
+        if (left) {
+            return [0, 1];
+        } else if (right) {
+            return [2, 3];
+        }
+
+        if (bounds.width < bounds2.width || bounds.height < bounds2.height) return [0, 1, 2, 3];
+        return -1; // too big
+    }
+
+
+
+    forEachAll(call) {
+        if (!this.LEN) return;
+        this.MAP.forEach(call)
+
+        for (var i = 0; i < this.CHILDREN.length; ++i) {
+            this.CHILDREN[i].forEachAll(call)
+        }
+
+
     }
     forEach(bounds, call) {
         if (!this.LEN) return;
-        this.MAP.forEach(call)
-        if (this.CHILDREN[0]) {
-            for (var i = 0; i < this.CHILDREN.length; ++i) {
-                if (this.checkIntersect(bounds, this.CHILDREN[i].BOUNDS)) {
-                    this.CHILDREN[i].forEach(bounds, call)
-                }
-            }
 
-        }
+
+        var quads = this.getQuad(bounds, this.BOUNDS)
+
+        if (quads === -1) return this.forEachAll(call);
+
+        this.MAP.forEach(call)
+
+        if (quads === -2) return
+
+        quads.forEach((q) => {
+            var child = this.CHILDREN[q];
+            if (child) child.forEach(bounds, call)
+        })
+
+
         return;
     }
+    every(bounds, call) {
+        if (!this.LEN) return true;
+
+        var quads = this.getQuad(bounds, this.BOUNDS)
+
+        if (quads === -1) return this.everyAll(call);
+
+        if (!this.MAP.every(call)) return false;
+
+        if (quads === -2) return true;
+
+        return quads.every((q) => {
+            var child = this.CHILDREN[q];
+            if (!child) return true;
+            return this.CHILDREN[i].every(bounds, call)
+        })
+    }
+    everyAll(call) {
+        if (!this.LEN) return true;
+        if (!this.MAP.every(call)) return false;
+        for (var i = 0; i < this.CHILDREN.length; ++i) {
+            if (!this.CHILDREN[i].everyAll(call)) return false;
+        }
+        return true;
+    }
+
     sub() {
         --this.LEN;
         this.PARENT.sub();
@@ -161,7 +238,6 @@ class Holder {
         this.MAP.delete(id)
         this.sub()
     }
-
 
 }
 class Grid {
@@ -196,7 +272,7 @@ class Grid {
                         sub: function () {}
                     }
 
-                this.DATA[key] = new Holder(l, j, i, this.POWER, this.LVL);
+                this.DATA[key] = new Holder(l, j, i, this.POWER, this.LEVEL);
 
             }
         }
@@ -261,7 +337,7 @@ class Grid {
                 var ke = this._getKey(x, i);
 
                 // console.log(ke)
-                if (this.DATA[ke]) this.DATA[ke].set(node._HashID, node)
+                this.DATA[ke].set(node._HashID, node)
             }
 
         }
@@ -275,11 +351,9 @@ class Grid {
         for (var j = k1.x; j < lenX; ++j) {
             var x = j << 16;
             for (var i = k1.y; i < lenY; ++i) {
-
-
+                   
                 var ke = this._getKey(x, i);
-
-                if (this.DATA[ke]) this.DATA[ke].delete(node._HashID)
+                this.DATA[ke].delete(node._HashID)
             }
 
         }
@@ -328,6 +402,7 @@ class Grid {
         })
     }
 }
+
 module.exports = class HashBounds {
     constructor(power, lvl, max, minc) {
         this.INITIAL = power;
@@ -344,7 +419,7 @@ module.exports = class HashBounds {
     }
     setupLog2() {
         for (var i = 0; i < 64; ++i) {
-            this.log2.push(Math.floor(Math.log2(i + 1)));
+            this.log2.push(Math.floor(Math.log2(i + 1)))
         }
     }
     createLevels() {
@@ -379,7 +454,6 @@ module.exports = class HashBounds {
         }
 
         var index = this.log2[(Math.max(node.bounds.width, node.bounds.height) >> this.MIN)]
-
         if (index >= this.LVL) index = this.LVL - 1;
 
         node._HashIndex = index;
