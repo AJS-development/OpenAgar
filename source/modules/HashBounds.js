@@ -65,6 +65,7 @@ class QuickMapV2 {
         return n;
     }
     delete(id) {
+        if (!this.ARRAY[id]) return false; // quickfix
         this.ARRAY[id].destroy();
         this.ARRAY[id] = null;
     }
@@ -337,7 +338,7 @@ class Grid {
                 var ke = this._getKey(x, i);
 
                 // console.log(ke)
-                this.DATA[ke].set(node._HashID, node)
+                 if (this.DATA[ke]) this.DATA[ke].set(node._HashID, node)
             }
 
         }
