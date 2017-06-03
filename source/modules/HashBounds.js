@@ -17,79 +17,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Root {
-    constructor() {
-
-    }
-    forEach() {
-
-    }
-    every() {
-        return true;
-    }
-
-}
-
-class ListNode {
-    constructor(child, parent, node, id) {
-        this.CHILD = child;
-        this.NODE = node;
-        this.ID = id;
-        this.PARENT = parent;
-    }
-    destroy() {
-        this.PARENT.CHILD = this.CHILD;
-        this.CHILD.PARENT = this.PARENT;
-    }
-    forEach(call) {
-        call(this.NODE, this.ID);
-        this.CHILD.forEach(call);
-
-    }
-    every(call) {
-        if (!call(this.NODE, this.ID)) return false;
-        return this.CHILD.forEach(call);
-    }
-
-}
-class QuickMapV2 {
-    constructor() {
-        this.CHILD = new Root()
-        this.ARRAY = [];
-    }
-    set(id, node) {
-        var n = new ListNode(this.CHILD, this, node, id)
-        this.CHILD.PARENT = n;
-        this.CHILD = n;
-        this.ARRAY[id] = n;
-        return n;
-    }
-    delete(id) {
-        if (!this.ARRAY[id]) return false; // quickfix
-        this.ARRAY[id].destroy();
-        this.ARRAY[id] = null;
-    }
-    get(id) {
-        return this.ARRAY[id].NODE;
-    }
-    forEach(call) {
-        this.CHILD.forEach(call)
-    }
-    every(call) {
-        return this.CHILD.every(call)
-    }
-
-}
-
 
 class Holder {
     constructor(parent, x, y, power, lvl) {
         this.PARENT = parent;
         this.PARENT.CHILDREN.push(this)
-        this.MAP = new QuickMapV2();
+            // this.MAP = new QuickMapV2();
+        this.MAP = [];
         this.POWER = power;
         this.LVL = lvl
-        this.LEN = 0;
+        this.LEN = 0; // problem with lots of objs
         this.X = x;
         this.Y = y;
         this.BOUNDS = {
@@ -120,10 +57,17 @@ class Holder {
 
     }
 
-    set(id, node) {
+    set(node) {
 
-        this.MAP.set(id, node)
+        this.MAP.push(node);
         this.add()
+    }
+    delete(node) {
+        var ind = this.MAP.indexOf(node)
+
+        this.MAP[ind] = this.MAP[this.MAP.length - 1];
+        this.MAP.pop();
+        this.sub()
     }
     add() {
         ++this.LEN;
@@ -197,10 +141,10 @@ class Holder {
 
         if (quads === -2) return
 
-        quads.forEach((q) => {
-            var child = this.CHILDREN[q];
+        for (var i = 0, l = quads.length; i < l; i++) {
+            var child = this.CHILDREN[quads[i]];
             if (child) child.forEach(bounds, call)
-        })
+        }
 
 
         return;
@@ -219,7 +163,7 @@ class Holder {
         return quads.every((q) => {
             var child = this.CHILDREN[q];
             if (!child) return true;
-            return this.CHILDREN[i].every(bounds, call)
+            return child.every(bounds, call)
         })
     }
     everyAll(call) {
@@ -235,44 +179,41 @@ class Holder {
         --this.LEN;
         this.PARENT.sub();
     }
-    delete(id) {
-        this.MAP.delete(id)
-        this.sub()
-    }
+
 
 }
 class Grid {
-    constructor(g, p, size, minc, prev) {
+    constructor(g, p, size, prev) {
         this.POWER = g;
         this.LEVEL = p;
         this.PREV = prev;
         this.SIZE = size;
-        this.MIN = minc * -1;
+
         this.DATA = {};
         this.init()
     }
+
     init() {
         if (this.SIZE >= 65535) {
             throw "Maximum amount of buckets are 65535^2"
         } // Max limit is 65535 (16 bits) 
         // console.log(this.SIZE)
-        for (var j = this.MIN; j <= this.SIZE; ++j) {
-            var x = j << 16
-            var bx = (j >> 1) << 16;
-            for (var i = this.MIN; i <= this.SIZE; ++i) {
+        for (var j = 0; j < this.SIZE; ++j) {
+            var x = j * this.SIZE;
+            if (this.PREV) var bx = (j >> 1) * this.PREV.SIZE;
+            for (var i = 0; i < this.SIZE; ++i) {
 
-                var by = i >> 1
-                var key = this._getKey(x, i);
+                var by = i >> 1;
+                var key = x + i;
 
 
-                if (this.PREV) var l = this.PREV.DATA[this._getKey(bx, by)];
+                if (this.PREV) var l = this.PREV.DATA[bx + by];
                 else
                     var l = {
                         CHILDREN: [],
                         add: function () {},
                         sub: function () {}
                     }
-
                 this.DATA[key] = new Holder(l, j, i, this.POWER, this.LEVEL);
 
             }
@@ -281,8 +222,8 @@ class Grid {
 
     getKey(x, y) {
         return {
-            x: x >> this.POWER,
-            y: y >> this.POWER
+            x: Math.max(x >> this.POWER, 0),
+            y: Math.max(y >> this.POWER, 0)
         }
     }
     _getKey(x, y) {
@@ -300,12 +241,12 @@ class Grid {
 
         for (var j = k1.x; j <= k2.x; ++j) {
 
-            var x = j << 16;
+            var x = j * this.SIZE;
 
             for (var i = k1.y; i <= k2.y; ++i) {
 
 
-                var key = this._getKey(x, i);
+                var key = x + i;
                 if (this.DATA[key]) {
                     if (!call(this.DATA[key])) return false
                 }
@@ -315,7 +256,7 @@ class Grid {
         return true;
     }
 
-    insert(node) {
+    insert2(node) {
 
         //   var a = this.getKey(node.bounds.width, node.bounds.height);
         // if (a.x + a.y >= 2 && this.LEVEL != 0) return false;
@@ -332,29 +273,36 @@ class Grid {
         node.hash.level = this.LEVEL;
 
         for (var j = k1.x; j <= k2.x; ++j) {
-            var x = j << 16;
+            var x = j * this.SIZE;
             for (var i = k1.y; i <= k2.y; ++i) {
 
-                var ke = this._getKey(x, i);
+                var ke = x + i;
 
                 // console.log(ke)
-                 if (this.DATA[ke]) this.DATA[ke].set(node._HashID, node)
+                this.DATA[ke].set(node)
+
+
+
             }
 
         }
+
+
         return true;
     }
     delete(node) {
         var k1 = node.hash.k1
         var k2 = node.hash.k2
-        var lenX = k2.x + 1,
-            lenY = k2.y + 1;
-        for (var j = k1.x; j < lenX; ++j) {
-            var x = j << 16;
-            for (var i = k1.y; i < lenY; ++i) {
-                   
-                var ke = this._getKey(x, i);
-                this.DATA[ke].delete(node._HashID)
+        var lenX = k2.x,
+            lenY = k2.y;
+        for (var j = k1.x; j <= lenX; ++j) {
+            var x = j * this.SIZE;
+            for (var i = k1.y; i <= lenY; ++i) {
+
+
+                var ke = x + i;
+
+                this.DATA[ke].delete(node)
             }
 
         }
@@ -405,11 +353,11 @@ class Grid {
 }
 
 module.exports = class HashBounds {
-    constructor(power, lvl, max, minc) {
+    constructor(power, lvl, max) {
         this.INITIAL = power;
         this.LVL = lvl;
         this.MAX = max;
-        this.MINC = minc || 0;
+
         this.MIN = power;
         this.LEVELS = []
         this.lastid = 0;
@@ -430,7 +378,7 @@ module.exports = class HashBounds {
         for (var i = this.LVL - 1; i >= 0; --i) {
             var a = this.INITIAL + i;
             var b = 1 << a;
-            var grid = new Grid(a, i, Math.ceil(this.MAX / b), Math.ceil(this.MINC / b), last)
+            var grid = new Grid(a, i, Math.ceil(this.MAX / b), last)
             if (!this.BASE) this.BASE = grid;
             this.LEVELS[i] = grid;
             last = grid;
@@ -445,21 +393,27 @@ module.exports = class HashBounds {
         this.insert(node)
     }
     insert(node) {
-        if (node.hash) throw "ERR: A node cannot be already in a hash!"
+        if (node._IsInHash) throw "ERR: A node cannot be already in a hash!"
         var bounds = node.bounds;
-        node.hash = {}
-        if (!node._HashID) node._HashID = ++this.lastid;
-        if (node._HashSize == node.bounds.width + node.bounds.height) {
-            this.LEVELS[node._HashIndex].insert(node);
+        node._IsInHash = true;
+
+        if (node._HashSizeX === bounds.width && node._HashSizeY === bounds.height) {
+            this.LEVELS[node._HashIndex].insert2(node);
             return;
         }
 
-        var index = this.log2[(Math.max(node.bounds.width, node.bounds.height) >> this.MIN)]
+        if (!node._HashID) {
+            node._HashID = ++this.lastid;
+            node.hash = {};
+        }
+
+        var index = this.log2[(Math.max(bounds.width, bounds.height) >> this.MIN)]
         if (index >= this.LVL) index = this.LVL - 1;
 
         node._HashIndex = index;
-        node._HashSize = node.bounds.width + node.bounds.height;
-        this.LEVELS[index].insert(node);
+        node._HashSizeX = bounds.width;
+        node._HashSizeY = bounds.height;
+        this.LEVELS[index].insert2(node);
         //for (var i = 0; i < len; ++i) {
         //   if (this.LEVELS[len - i - 1].insert(node)) break;
         //}
@@ -467,9 +421,9 @@ module.exports = class HashBounds {
 
 
     delete(node) {
-        if (!node.hash) throw "ERR: Node is not in a hash!"
+        if (!node._IsInHash) throw "ERR: Node is not in a hash!"
         this.LEVELS[node.hash.level].delete(node)
-        node.hash = null;
+        node._IsInHash = false;
     }
     toArray(bounds) {
         return this.BASE.toArray(bounds);
