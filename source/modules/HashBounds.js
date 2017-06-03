@@ -368,9 +368,8 @@ module.exports = class HashBounds {
     }
     setupLog2() {
         var pow = 1 << this.LVL;
-
         for (var i = 0; i < pow; ++i) {
-            this.log2.push(Math.floor(Math.log2(i + 1)))
+            this.log2[i - 1] = Math.floor(Math.log2(i))
         }
     }
     createLevels() {
