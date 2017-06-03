@@ -279,7 +279,7 @@ class Grid {
                 var ke = x + i;
 
                 // console.log(ke)
-                this.DATA[ke].set(node)
+                if (this.DATA[ke]) this.DATA[ke].set(node)
 
 
 
@@ -302,7 +302,7 @@ class Grid {
 
                 var ke = x + i;
 
-                this.DATA[ke].delete(node)
+                if (this.DATA[ke]) this.DATA[ke].delete(node)
             }
 
         }
