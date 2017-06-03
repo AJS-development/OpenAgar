@@ -13,16 +13,21 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var HashBounds = require('hashbounds')
+var HashBounds = require('../modules/HashBounds.js')
 var Node = require('./node.js')
 var Bot = require('../ai/Bot.js')
 var Player = require('./Player.js')
+var TooBusy = require('toobusy-js')
+
+
+
+
 module.exports = class Manager {
     constructor(id) {
         this.id = id;
         this.addedHash = [];
 
-        
+        this.lagDel = false;
         this.toSend = [];
         this.map = new Map()
         this.bots = new Map()
@@ -38,7 +43,13 @@ module.exports = class Manager {
             b: 0,
             c: 0
         }
+        this.lag = false
         this.players = new Map();
+        setInterval(function () {
+            var lag = TooBusy.lag();
+            this.lag = lag > 150
+            if (this.lag) this.emit("lag", lag)
+        }.bind(this), 4000)
     }
     addNodes(nodes) {
 
@@ -185,7 +196,7 @@ module.exports = class Manager {
         this.config = msg.config;
         this.haveTeams = msg.teams;
         this.bounds = msg.bounds;
-        this.nodes = new HashBounds(7, 3,Math.max(this.bounds.width,this.bounds.height) + 700,700); // 64 min
+        this.nodes = new HashBounds(5, 3, Math.max(this.bounds.width, this.bounds.height) + 700, 700); // 32 min, 256 max
         try {
 
             clearInterval(this.interval)
@@ -283,7 +294,11 @@ module.exports = class Manager {
         } else this.timers.c++;
     }
     loop() { // 0.005 s
+        if (this.lag) {
+            this.lagDel = !this.lagDel
+            if (this.lagDel) return;
 
+        }
         setTimeout(function () {
             this.updatePlayers()
         }.bind(this), 1)
@@ -300,6 +315,7 @@ module.exports = class Manager {
 
         if (this.timers.b >= 10) {
             if (this.bots.size > 0) {
+
                 this.bots.forEach((bot) => {
                     setTimeout(function () {
                         bot.update()
@@ -309,9 +325,8 @@ module.exports = class Manager {
                         m: bot.mouse
                     })
                 })
+
             }
-
-
             if (this.toSend[0]) this.send(this.toSend)
 
             this.toSend = [];
@@ -329,12 +344,11 @@ module.exports = class Manager {
         this.players.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {
-                var nodes = this.nodes.toArray(cell.getCheck())
                 var list = [];
-                nodes.forEach((node) => {
+                this.nodes.forEach(cell.getCheck(), (node) => {
                     if (node.id != cell.id) {
 
-                        if (cell.checkSend(node)) list.push(node.id)
+                        if (this.lag || cell.checkSend(node)) list.push(node.id)
 
                     }
                 })
@@ -347,12 +361,11 @@ module.exports = class Manager {
         this.bots.forEach((player) => {
             if (player.cells.length == 0) return;
             player.cells.forEach((cell) => {
-                var nodes = this.nodes.toArray(cell.getCheck())
                 var list = [];
-                nodes.forEach((node) => {
+                this.nodes.forEach(cell.getCheck(), (node) => {
                     if (node.id != cell.id) {
 
-                        if (cell.checkSend(node)) list.push(node.id)
+                        if (this.lag || cell.checkSend(node)) list.push(node.id)
                     }
                 })
 

@@ -1,6 +1,6 @@
 {
     "name": "OpenAgar",
-    "version": "1.0.0",
+    "version": "4.5.0",
     "description": "An open source web game",
     "main": "index.js",
     "dependencies": {
@@ -8,14 +8,14 @@
         "quickmap": "latest",
         "SmartConfig": "latest",
         "rson": "latest",
-        "hashbounds": "4.2.2",
         "styleme": "latest",
         "ajs-dev-socket.io-edited": "latest",
         "node-cryptojs-aes": "latest",
         "minirequest": "latest",
         "asyncconsole": "latest",
         "nodesounds": "latest",
-        "cligui2": "latest"
+        "cligui2": "latest",
+        "toobusy-js": "latest"
     },
     "devDependencies": {},
     "scripts": {

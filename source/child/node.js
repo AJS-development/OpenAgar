@@ -39,7 +39,7 @@ module.exports = class Node {
 
 
     checkSend(node) {
-        var size = node.size + this.size + (Math.min(100 / this.size, 1) * 100) // smaller nodes have bigger collision range since they go faster. Fine tunes previous check.
+        var size = node.size + this.size + (Math.min(100 / this.size, 1.1) * 100) // smaller nodes have bigger collision range since they go faster. Fine tunes previous check.
 
         /*
  ____________________________________

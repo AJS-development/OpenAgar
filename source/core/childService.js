@@ -67,6 +67,9 @@ module.exports = class childService {
         this.on('totmass', function (m) {
             this.totalMass = m;
         }.bind(this))
+        this.on('lag', function (lag) {
+            this.main.debug("yel{[Debug]} Lag detected for child ".styleMe() + this.child.id + " Latency: " + lag)
+        }.bind(this))
     }
     pause(state) {
         this.send(9, {

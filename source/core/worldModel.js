@@ -17,10 +17,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const HashBounds = require('hashbounds');
+const HashBounds = require('../modules/HashBounds.js');
 module.exports = class WorldModel {
     constructor(main) {
-        this.nodes = new HashBounds(8, 2,Math.max(main.bounds.width,main.bounds.height) + 700,700);
+        this.nodes = new HashBounds(8, 2, Math.max(main.bounds.width, main.bounds.height) + 700, 700);
         this.main = main
         this.mapnodes = new Map();
         this.playerNodes = new Map();

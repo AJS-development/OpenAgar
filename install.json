@@ -1,0 +1,50 @@
+[
+  {
+    "name": "cli-gui",
+    "version": "latest"
+  },
+  {
+    "name": "toobusy-js",
+    "version": "latest"
+  },
+  {
+    "name": "rson",
+    "version": "latest"
+  },
+  {
+    "name": "quickmap",
+    "version": "latest"
+  },
+  {
+    "name": "hashbounds",
+    "version": "4.2.2"
+  },
+  {
+    "name": "styleme",
+    "version": "latest"
+  },
+  {
+    "name": "ajs-dev-socket.io-edited",
+    "version": "latest"
+  },
+  {
+    "name": "node-cryptojs-aes",
+    "version": "latest"
+  },
+  {
+    "name": "minirequest",
+    "version": "latest"
+  },
+  {
+    "name": "asyncconsole",
+    "version": "latest"
+  },
+  {
+    "name": "nodesounds",
+    "version": "latest"
+  },
+  {
+    "name": "cligui2",
+    "version": "latest"
+  }
+]
