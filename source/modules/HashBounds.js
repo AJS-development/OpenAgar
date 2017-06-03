@@ -367,7 +367,9 @@ module.exports = class HashBounds {
         this.setupLog2()
     }
     setupLog2() {
-        for (var i = 0; i < 32768; ++i) {
+        var pow = 1 << this.LVL;
+
+        for (var i = 0; i < pow; ++i) {
             this.log2.push(Math.floor(Math.log2(i + 1)))
         }
     }
@@ -408,14 +410,14 @@ module.exports = class HashBounds {
         }
 
         var index = this.log2[(Math.max(bounds.width, bounds.height) >> this.MIN)]
-        if (index === undefined || index >= this.LVL) index = this.LVL - 1;
+        if (index === undefined) index = this.LVL - 1;
 
         node._HashIndex = index;
         node._HashSizeX = bounds.width;
         node._HashSizeY = bounds.height;
-   
+
         this.LEVELS[index].insert2(node);
-        
+
         //for (var i = 0; i < len; ++i) {
         //   if (this.LEVELS[len - i - 1].insert(node)) break;
         //}
