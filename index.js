@@ -1,12 +1,5 @@
 var fs = require('fs')
 
-// Fix for Windows Bash
-try { 
-    require('os').networkInterfaces();
-} catch (e) { 
-    require('os').networkInterfaces = () => ({}); 
-}
-
 var toCheck = JSON.parse(fs.readFileSync(__dirname + "/install.json", "utf8"))
 var exec = require('child_process').exec;
 var modules = []
