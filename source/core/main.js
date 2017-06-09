@@ -318,7 +318,7 @@ class Main {
             name: (node.name) ? node.name : "",
             spiked: (node.spiked) ? 1 : 0,
             agit: (node.agit) ? 1 : 0,
-            skin: (node.skin) ? "" : player.skinHandler.getSend(node.skin)
+            skin: (node.skin) ? player.skinHandler.getSend(node.skin) : ""
         };
         return a;
     }
