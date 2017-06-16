@@ -24,13 +24,13 @@ module.exports = class Node {
         }
     }
     getCheck() { // get checking bounds
-        var dif = Math.min(100 / this.size, 1) * 100; // smaller nodes have bigger collision range since they go faster.
+        var dif = Math.min(100 / this.size, 2) * 25; // smaller nodes have bigger collision range since they go faster.
 
         return {
             x: this.bounds.x - dif,
             y: this.bounds.y - dif,
-            width: this.bounds.width + dif,
-            height: this.bounds.height + dif
+            width: this.bounds.width + dif * 2,
+            height: this.bounds.height + dif * 2
 
         }
 
