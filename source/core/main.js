@@ -397,8 +397,8 @@ class Main {
             id: this.chatId++,
             name: player.gameData.chatName,
             color: player.gameData.chatColor,
-            msg: msg
-
+            msg: msg,
+            pid: player.id
         }
 
         this.chat.push(data)
@@ -612,9 +612,9 @@ class Main {
         })
 
         this.gameMode.event('onPlayerRemove', {
-                player: client
-            })
-            //  setTimeout(function() {
+            player: client
+        })
+        //  setTimeout(function() {
         client.cells.forEach((cell) => {
             this.removeNode(cell);
         })
@@ -828,7 +828,7 @@ class Main {
 
             var ejected = this.addNode(startPos, this.getConfig().ejectedMass, 3, player, [], "m")
             ejected.setEngine1(angle, this.getConfig().ejectedSpeed, this.getConfig().ejectedDecay)
-                // ejected.setCurve(10)
+            // ejected.setCurve(10)
         }
 
     }
@@ -869,7 +869,7 @@ class Main {
 
         var ejected = this.addNode(startPos, 12, 5, player, [], "m")
         ejected.setEngine1(angle, this.getConfig().bulletSpeed, this.getConfig().bulletDecay)
-            // ejected.setCurve(10)
+        // ejected.setCurve(10)
 
 
     }
@@ -1243,50 +1243,50 @@ class Main {
                 // check for collisions
 
                 switch (check.type) {
-                case 0: // players
-                    if (check.owner == node.owner) {
+                    case 0: // players
+                        if (check.owner == node.owner) {
 
-                        if (node.canMerge && check.canMerge) {
-                            check.eat(node, this);
+                            if (node.canMerge && check.canMerge) {
+                                check.eat(node, this);
+                            }
+                            return true;
                         }
+                        if (check.mass * 1.25 > node.mass) return true;
+
+                        check.eat(node, this);
                         return true;
-                    }
-                    if (check.mass * 1.25 > node.mass) return true;
+                        break;
 
-                    check.eat(node, this);
-                    return true;
-                    break;
-
-                case 1: // cells
-                    if (check.mass > node.mass) return true;
-                    check.eat(node, this)
-                    break;
-                case 2: // virus
-                    if (check.mass * 1.33 > node.mass) return true
-                    check.collide(node, this)
-                    return;
-                    break;
-                case 3: // ejectedmass
-
-                    if (check.getAge(this) > 300)
+                    case 1: // cells
+                        if (check.mass > node.mass) return true;
                         check.eat(node, this)
+                        break;
+                    case 2: // virus
+                        if (check.mass * 1.33 > node.mass) return true
+                        check.collide(node, this)
+                        return;
+                        break;
+                    case 3: // ejectedmass
 
-                    break;
-                case 4: // food
-                    check.eat(node, this)
-                    break;
-                case 5: // bullets
+                        if (check.getAge(this) > 300)
+                            check.eat(node, this)
 
-                    check.collide(node, this)
-                    break;
-                case 6: //  wormholes
+                        break;
+                    case 4: // food
+                        check.eat(node, this)
+                        break;
+                    case 5: // bullets
 
-                    check.collide(node, this)
-                    break;
-                default:
-                    if (!this.collist[check.type]) return true;
-                    check.collide(node, this)
-                    break;
+                        check.collide(node, this)
+                        break;
+                    case 6: //  wormholes
+
+                        check.collide(node, this)
+                        break;
+                    default:
+                        if (!this.collist[check.type]) return true;
+                        check.collide(node, this)
+                        break;
                 }
                 return false;
             })) node.nearby = [];
@@ -1366,33 +1366,33 @@ class Main {
         if (type === undefined) return false;
 
         switch (type) {
-        case 0: // playercells
-            var a = new Entities.playerCell(position, mass, type, owner, others);
+            case 0: // playercells
+                var a = new Entities.playerCell(position, mass, type, owner, others);
 
-            break;
-        case 1: // cells
-            var a = new Entities.cell(position, mass, type, null, others);
-            break;
-        case 2: // viruses
-            var a = new Entities.virus(position, mass, type, null, others);
-            break;
-        case 3: // ejected cells
-            var a = new Entities.ejectedMass(position, mass, type, owner, others);
-            break;
-        case 4: // food cells
-            var a = new Entities.food(position, mass, type, null, others);
-            a.color = this.getRandomColor()
-            break;
-        case 5: // bullets
-            var a = new Entities.bullet(position, mass, type, owner, others);
-            break;
-        case 6: // wormholes
-            var a = new Entities.wormHole(position, mass, type, null, others);
-            break;
-        default: // custom
-            if (!this.entityTypes[type]) return false;
-            var a = new this.entityTypes[type](position, mass, type, owner, others)
-            break;
+                break;
+            case 1: // cells
+                var a = new Entities.cell(position, mass, type, null, others);
+                break;
+            case 2: // viruses
+                var a = new Entities.virus(position, mass, type, null, others);
+                break;
+            case 3: // ejected cells
+                var a = new Entities.ejectedMass(position, mass, type, owner, others);
+                break;
+            case 4: // food cells
+                var a = new Entities.food(position, mass, type, null, others);
+                a.color = this.getRandomColor()
+                break;
+            case 5: // bullets
+                var a = new Entities.bullet(position, mass, type, owner, others);
+                break;
+            case 6: // wormholes
+                var a = new Entities.wormHole(position, mass, type, null, others);
+                break;
+            default: // custom
+                if (!this.entityTypes[type]) return false;
+                var a = new this.entityTypes[type](position, mass, type, owner, others)
+                break;
         }
 
         this.dataService.world.addNode(a, type, flags);
@@ -1421,7 +1421,7 @@ class Main {
         }
         this.paused = true;
         this.debug("gre{[Debug]} Stopped server ".styleMe() + this.id)
-            // stop the server
+        // stop the server
     }
 
 
