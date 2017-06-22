@@ -129,7 +129,7 @@ module.exports = class socketService {
                         certificate: keys.certificate,
                         expire: Date.now() + 8553600000
                     }));
-                    console.log("gre{[OpenAgar]} Loaded certificate".styleMe())
+                    console.log("gre{[OpenAgar]} Generated self-signed certificate".styleMe())
                     this.app = express();
 
                     this._server = require("https").createServer({
