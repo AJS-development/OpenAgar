@@ -94,17 +94,23 @@ module.exports = class socketService {
             try {
                 var keys = JSON.parse(fs.readFileSync("rsa.json", "utf8"));
 
+                if (!keys.key || !keys.certificate) {
+                    console.log("gre{[OpenAgar]} RSA configuration invalid. Generating new".styleMe())
+                    throw "invalid";
+                }
+
                 if (Date.now() > keys.expire) {
                     console.log("gre{[OpenAgar]} RSA Encryption Certificate has expired. Generating new".styleMe())
-                    throw "expired"
+                    throw "expired";
                 }
 
                 console.log("gre{[OpenAgar]} Loaded RSA Certificate".styleMe())
                 this.app = express();
 
                 this._server = require("https").createServer({
-                    key: keys.serviceKey,
-                    cert: keys.certificate
+                    key: keys.key,
+                    cert: keys.certificate,
+                    ca: keys.ca
                 }, this.app).listen(this.globalData.config.serverPort);
 
                 this.server = this.io(this._server)
@@ -119,8 +125,8 @@ module.exports = class socketService {
                     selfSigned: true
                 }, function (err, keys) {
                     fs.writeFileSync("rsa.json", JSON.stringify({
-                        serviceKey: keys.serviceKey,
-                        cert: keys.certificate,
+                        key: keys.serviceKey,
+                        certificate: keys.certificate,
                         expire: Date.now() + 8553600000
                     }));
                     console.log("gre{[OpenAgar]} Loaded certificate".styleMe())
