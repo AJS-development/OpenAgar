@@ -98,10 +98,11 @@ module.exports = class socketService {
                     console.log("gre{[OpenAgar]} RSA configuration invalid. Generating new".styleMe())
                     throw "invalid";
                 }
-
-                if (Date.now() > keys.expire) {
-                    console.log("gre{[OpenAgar]} RSA Encryption Certificate has expired. Generating new".styleMe())
-                    throw "expired";
+                if (keys.expire) {
+                    if (Date.now() > keys.expire) {
+                        console.log("gre{[OpenAgar]} RSA Encryption Certificate has expired. Generating new".styleMe())
+                        throw "expired";
+                    }
                 }
 
                 console.log("gre{[OpenAgar]} Loaded RSA Certificate".styleMe())

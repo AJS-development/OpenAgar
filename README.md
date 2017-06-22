@@ -160,20 +160,23 @@ This selects a server for you to control via console.
 
 This lists all servers: their ids, names, players/bots, uptime, and status
 
-## Added Mechanics:
+## SSL
+OpenAgar is compatable with SSL. To use, set ssl to true in serverConfig.ini. 
 
-##### 1. Bullets
-Press f to shoot a bullet. A small, slow, grey object that moves to your destination. Changes direction when ejected mass is shot at it. You can only have 3. Then if you are below 1000 in mass, it will reload the bullets in 25 seconds. But know that if you are above that amount, and 25 seconds pass, then you will lose bullets forever until you die. If you consume your own or are below 500, then it is consumed and you get another bullet to spend (horaay!). If not, then you explode, like a virus, but much severly. There are much more to bullets. But you have to discover them. Have fun!
+#### rsa.json
+SSL uses this file to configure SSL.
 
+```
+{
+   "key": "", // RSA Private key (PEM format)
+   "certificate": "", // RSA Signed Certificate
+   "ca": "", // certificate authority
+   "expire": int // Expiration (in milliseconds) (Optional)
+}
+```
 
-##### 2. Golden Bullets
-There is a very slight chance that when they are reloaded, you get golden bullets instead. Behaves just like normal bullets, except the target literally explodes (slither.io?). You will not be notified when this happens. So let the mystery begin!
-
-##### 3. Wormholes
-They are black thingys that you can teleport with. If you collide with one, and you are below the mass of the wormhole, you will be teleported to another wormhole. If you have more than one cell, then the other cells will be lost. If you are bigger, there is a chance that you will teleport (with the one cell rule) while breaking the wormholes, or you may not teleport at all. But if you do or do not, your cell's mass will become the size of the wormhole plus a little more (A strategy might be find the biggest wormhole, become as big as the wormhole, collide, if no tp, then stay, so anyone who tped there will be eaten). 
-
-> Note that you have to set minWormHoles to a number as they are disabled by default
-
+#### Self-Signed-cert
+OpenAgar can generate its own self-signed RSA certificate. To use, just set ssl to true, without adding the rsa.json file. However, to be able to connect however (in most browsers), you must go to `https:yourip:yourport` in the browser and verify the certificate. (Since no CA is used)
 
 ## Developers
 
