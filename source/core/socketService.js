@@ -21,6 +21,9 @@ const RSON = require('rson');
 const Player = require('./Player.js');
 const crypto = require('crypto')
 const Stats = require('./Statistics.js');
+const express = require('express');
+const pem = require('pem');
+const fs = require('fs')
 
 module.exports = class socketService {
     constructor(globalData, servers) {
@@ -83,7 +86,73 @@ module.exports = class socketService {
 
     }
     start() {
-        this.server = this.io(this.globalData.config.serverPort);
+
+
+        if (this.globalData.config.ssl) { // ssl
+            console.log("gre{[OpenAgar]} Secure Socket (SSL) on".styleMe())
+
+            try {
+                var keys = JSON.parse(fs.readFileSync("rsa.json", "utf8"));
+
+                if (Date.now() > keys.expire) {
+                    console.log("gre{[OpenAgar]} RSA Encryption Certificate has expired. Generating new".styleMe())
+                    throw "expired"
+                }
+
+                console.log("gre{[OpenAgar]} Loaded RSA Certificate".styleMe())
+                this.app = express();
+
+                this._server = require("https").createServer({
+                    key: keys.serviceKey,
+                    cert: keys.certificate
+                }, this.app).listen(this.globalData.config.serverPort);
+
+                this.server = this.io(this._server)
+
+
+                this._start();
+
+            } catch (e) {
+                console.log("gre{[OpenAgar]} Creating RSA Certificate:".styleMe())
+                pem.createCertificate({
+                    days: 100,
+                    selfSigned: true
+                }, function (err, keys) {
+                    fs.writeFileSync("rsa.json", JSON.stringify({
+                        serviceKey: keys.serviceKey,
+                        cert: keys.certificate,
+                        expire: Date.now() + 8553600000
+                    }));
+                    console.log("gre{[OpenAgar]} Loaded certificate".styleMe())
+                    this.app = express();
+
+                    this._server = require("https").createServer({
+                        key: keys.serviceKey,
+                        cert: keys.certificate
+                    }, this.app).listen(this.globalData.config.serverPort);
+
+                    this.server = this.io(this._server)
+
+                    this._start();
+                }.bind(this));
+            }
+        } else {
+
+            this.app = express()
+
+            this._server = require("http").Server(this.app)
+
+            this._server.listen(this.globalData.config.serverPort)
+
+            this.server = this.io(this._server)
+
+            this._start();
+        }
+
+
+
+    }
+    _start() {
         this.serverService.log("gre{[OpenAgar]} Server listening on port ".styleMe() + this.globalData.config.serverPort)
         this.server.on('connection', function (socket) {
 
@@ -228,7 +297,7 @@ module.exports = class socketService {
                 socket._keySent = true;
                 var uid = socket._uidp
                 socket._key = data.toString()
-                    // some algorithm
+                // some algorithm
                 var a = _socketOkay(socket)
 
                 if (a) {
