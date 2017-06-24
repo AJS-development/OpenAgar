@@ -9,4 +9,4 @@ Before posting your issue, please take a look at these things
 7. Please keep OpenAgar's issues just for OpenAgar. Other projects like ogar, ogarul, multiogar, cigar, and etc is not supported here.
 8. Please do not put issues asking us to put Agar.io physics on OpenAgar. Like we said, OpenAgar is not Agar.io, and is different. Similar, but different
 9. No profanity whatsoever. Doing so will be very very bad for you.
-10. Post things that violate rule 1,3,4,5,6, and/or 7 here: http://forum.ogarul.io
+10. Post things that violate rule 1,3,4,5,6, and/or 7 here: http://home.opnagar.us/
