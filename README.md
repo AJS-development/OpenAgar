@@ -27,7 +27,7 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 6. Record the ID given and get the appropriate key by going here: http://login.opnagar.us.
 7. Paste your key into `key.txt` (command line: `nano key.txt`)
 8. Run index.js again
-9. Connect using `opnagar.us` (development client, real one will be at ogarul.io)
+9. Connect using `opnagar.us`
 
 #### Registration
 While you do not need to registrate to run openagar (not anymore), you need to registrate to use services provided by AJS. Such include:
