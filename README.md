@@ -29,22 +29,39 @@ It is a web game that we are making, similar to [agar.io](https://agar.io), but 
 8. Run index.js again
 9. Connect using `opnagar.us` (development client, real one will be at ogarul.io)
 
-#### The key system
-In order to use this, you must have a key. This is so this project isnt overwhelmed with people. However, you can get your key from us via http://login.opnagar.us. We will never charge or demand anything for it. However, we are limiting the amount of keys given out, to maintain this projects semi-private status.
+#### Registration
+While you do not need to registrate to run openagar (not anymore), you need to registrate to use services provided by AJS. Such include:
+
+1. Statistics - Publishing your server online to opnagar.us
+2. Plugins - Use of our libraries (One plugins is allowed for unregistered copies)
+3. Socket Protection
+4. Skin publishing - globally to opnagar.us
+5. Auto issue reports
+6. Our client.
+
+
+If you dont registrate, you are unable to:
+
+1. Publish server on stats
+2. Use more than 1 plugin
+3. No socket protection
+4. Inability to use our client (excluding localhost and lan)
+5. Inability to publish global skins
+6. Auto issue reports
 
 ##### Login.opnagar.us
-This is the website to generate keys from. You will have to sign up/sign in using your github account. Note there is a limit to the amount of accounts. We are using github because:
+This is the website to generate keys from. You will have to sign up/sign in using your github account. We are using github because:
 
 1. We would rather have developers, not noobs
 2. We dont want to deal with managing accounts (ie, making sure they are real)
 
-Then, once you are logged in, you can generate keys. You may only have one active key in your account. If you need to replace your key, for some reasons, you can deactivate your old one and activate the new key.
+Then, once you are logged in, you can register servers. You may only have two registrated servers in your account. You may delete or deactivate unused registrations
 
-#### Please do not misuse the key system
+#### Please do not misuse the registration system
 Please do not be an idiot and try to make money off of ths system. We will monitor accounts and suspend them that are known for misuse.
 
 ## NEVER BUY OPENAGAR!
-If you bought a copy of openagar, wow, you have been ripped. People who have a key might trick you that they will give away their copy for money. First off, that is impossible as keys are **generated uniquely for every machine**. This means the key they have, wont work on your machine, even if you copied their entire computer. Secondly, who would actually 'give up' a rare copy of OpenAgar? They would rather just trick you. Thirdly, even if they did give it to you, and you managed to use their key (which is impossible), they would be able to remotly disable your purchased key and generate another one for themselves. So my advice to you: If you really want a copy, yet you dont have one, too bad, deal with it.
+If you bought a copy of openagar, wow, you have been ripped. People who have a registrated version might try to sell it for money. While sharing of servers is allowed, however note that if multiple people are using it at the same time - your server will become unjoinable - I suggest not doing this unless you are his/her friend. Another thing, is that openagar is free. Yes, its FREE. Also, the registration is FREE and UNLIMITED.
 
 ## Commands
 There are commands you can type in command line.
@@ -186,16 +203,12 @@ OpenAgar can generate its own self-signed RSA certificate. To use, just set ssl 
 # Support
 One thing we decided, was that we are not going to help other people run this project. If you cant... Too bad, use ogar. We are really trying to have this project be semi-private. 
 
-
 ## More like ClosedAgar
-People have complained to me about this project being semi private. But in order to have everybody enjoy it, we must, since being too open means disaster. This was the problem with OgarUL, it got too big it collapsed on itself.
+People have complained to me about this project being semi private. But in order to have everybody enjoy it, we must, since being too open means disaster. This was the problem with OgarUL, it got too big it collapsed on itself. Resources cost money you know.
 
 ## FAQ
-#### Will this project ever be fully opened to the public?
-No, we want to keep it semi-private. No more than 100 users
-
 #### How can I help?
-You cant
+Make a pr. But please make good ones
 
 #### How come features are so limited?
 Actually, there are a lot of features, but none come in the box. You must use the plugin command to add them
@@ -206,19 +219,8 @@ Yes, but note that we are very very strict. So many pull requests wont be accept
 #### Can I make a fork?
 Yes, you may.
 
-#### The account limit is reached! And I want to use this very badly
-There are exceptions, meaning there is still ways to use with the limit reached. In order to qualify, you must either: 
-
-1. Contribute to the __code__, and have changes accepted or
-2. Create 3 plugins or
-3. Host a server for OpenAgar Stats (And who does this will get an extra key to register)
-
 #### I want to post a server to stats, however I am worried over ddos attacks and other things
-Statistics will not show your ip, minimising ddos attacks. Also, OpenAgar is made to handle them. It will detect those attacks and mitigate them.
+Statistics will not show your ip, minimising ddos attacks. Also, OpenAgar is made to handle them. It will detect those attacks and mitigate them. DDOSers have no life.
 
 #### Why are some files encrypted?
 Some files are encrypted because they are needed to secure things such as sockets, or because they use our assets (our servers, other resources...). 
-
-## Another Note
-This game is different and is not Agar.io or Ogar. It is similar, but very different. We are making a unique game.
-
