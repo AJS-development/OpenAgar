@@ -37,6 +37,9 @@ module.exports = class GlobalData {
         this.ban = ban
     }
     getNextId() {
+
+        if (this.id >= 4294967295) this.id = 0;
+
         return this.id++;
     }
 

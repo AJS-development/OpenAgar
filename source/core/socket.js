@@ -28,9 +28,12 @@ module.exports = class Socket {
             this.remoteAddress = socket._remoteAddress.slice(idx + 1);
         this.IPv6 = socket._remoteAddress
     }
-    sendNodes(obj) {
+    sendNodes(dt) {
 
-        this.socket.hasBinary(true).emit('nodes', obj)
+        this.socket.socket.send(dt, {
+            binary: true
+        });
+
     }
     sendDelete(tex) {
 

@@ -20,7 +20,11 @@
 module.exports = class Template {
     constructor(position, mass, type, owner, other) {
         this.id = null;
-        this.position = position
+        this.position = position;
+
+        this.position.oldX = position.x;
+        this.position.oldY = position.y;
+
         this.mass = mass;
         this.owner = owner;
         this.moving = false;
@@ -72,17 +76,54 @@ module.exports = class Template {
         this.created = d.getTime()
     }
     updCode() {
-        this.updateCode++;
-        if (this.updateCode > 10000) this.updateCode = 1;
+        this.updateCode = this.main.timer.update;
     }
     movCode() {
-        this.moveCode++;
-        if (this.moveCode > 10000) this.moveCode = 1;
+
+        this.moveCode = this.main.timer.update;
+    }
+    calcDelta() {
+        let dx = this.position.dx,
+            dy = this.position.dy,
+            outx = [],
+            outy = [],
+            max,
+            out;
+
+        while (dx > 127) {
+            outx.push(127);
+            dx = dx - 127;
+        }
+        while (dx < -128) {
+            outx.push(-128);
+            dx = dx + 128;
+        }
+        outx.push(dx);
+
+        while (dy > 127) {
+            outy.push(127);
+            dy = dy - 127;
+        }
+
+        while (dy < -128) {
+            outy.push(-128);
+            dy = dy + 128;
+        }
+        outy.push(dy);
+
+        max = Math.max(outx.length, outy.length);
+        out = new Int8Array(max * 2)
+
+        for (let i = 0, b = 0; i < max; i++, b += 2) {
+            out[b] = outx[i] || 0;
+            out[b + 1] = outy[i] || 0;
+        }
+
+        this.out = out;
     }
     setPos(x, y) {
         this.position.x = parseInt(x)
         this.position.y = parseInt(y)
-
     }
     addPos(x, y) {
         this.setPos(this.position.x + x, this.position.y + y)
@@ -110,7 +151,7 @@ module.exports = class Template {
         var disty = y1 - y2
 
         return Sqrt.sqrt(distx * distx + disty * disty)
-            //  return ~~(Math.sqrt(distx * distx + disty * disty))
+        //  return ~~(Math.sqrt(distx * distx + disty * disty))
     }
     addMass(m) {
         // console.log(m)
@@ -125,12 +166,12 @@ module.exports = class Template {
         var add = radius / 2 // quarter 
         var bounds = main.bounds
         var border = {
-                top: bounds.y - add,
-                bottom: bounds.y + bounds.height + add,
-                left: bounds.x - add,
-                right: bounds.x + bounds.width + add
-            }
-            // stop the cell
+            top: bounds.y - add,
+            bottom: bounds.y + bounds.height + add,
+            left: bounds.x - add,
+            right: bounds.x + bounds.width + add
+        }
+        // stop the cell
         if (y < border.top) { // effeciency, dont do the next check if first check passes
             this.position.y = border.top
         } else if (y > border.bottom) {
@@ -150,7 +191,7 @@ module.exports = class Template {
         main.removeNode(this)
         this.killer = node
         this.killer.addMass(this.mass)
-            //  console.log(this.id, node.id)
+        //  console.log(this.id, node.id)
         node.updCode()
 
     }
@@ -168,14 +209,22 @@ module.exports = class Template {
         return this.owner
     }
     updateMass(mass, ov) {
+
+        if (this.mass === mass) return;
+
         this.mass = (ov) ? mass : Math.max(mass, 10);
         this.getSize()
 
         this.speed = Math.pow(this.mass, -0.222) * 1.25;
         this.updCode()
     }
+
+    setMain(main) {
+        this.main = main;
+    }
     onAdd(id) {
         this.id = id;
+
     }
     onCreation(main) {
 
@@ -246,7 +295,10 @@ module.exports = class Template {
     }
     moveDone(main, method) {
 
-        if (!this.moveEngine.useEngine && !this.moveEngine2.useEngine) main.removeFlags(this, "m")
+        if (!this.moveEngine.useEngine && !this.moveEngine2.useEngine) {
+            main.removeFlags(this, "m")
+            this.updCode();
+        }
     }
 
     calcMove2(main, speed) {
@@ -342,7 +394,7 @@ module.exports = class Template {
         }
         this.position.x += Math.abs(Velocity) * m.cos
         this.position.y += Math.abs(Velocity) * m.sin
-            // console.log(this.position,m.angle)
+        // console.log(this.position,m.angle)
         if (!m.useCurve) return;
 
         if (m.deltaT % 2) return

@@ -24,10 +24,6 @@
         "version": "latest"
   },
     {
-        "name": "ajs-dev-socket.io-edited",
-        "version": "latest"
-  },
-    {
         "name": "node-cryptojs-aes",
         "version": "latest"
   },
@@ -54,5 +50,9 @@
     {
         "name": "pem",
         "version": "latest"
+    },
+    {
+        "name": "simplesockets",
+        "version": "1.0.2"
     }
 ]

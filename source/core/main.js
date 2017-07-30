@@ -60,7 +60,6 @@ class Main {
         this.minfood = 500;
         this.clientLen = 0;
         this.updLb = true;
-        this.toBeDeleted = [];
         this.selected = false;
         this.entityTypes = [];
         this.food = 0;
@@ -160,11 +159,7 @@ class Main {
             tick: 0,
             time: 0,
             update: 0,
-            slow: 0,
-            updatePN: false,
-            rslow: 0,
-            bot: false,
-            pn: false,
+            internal: 0,
             passed: 0,
             init: Date.now(),
             status: 60
@@ -667,11 +662,6 @@ class Main {
     removeNode(cell) {
         cell.onDeletion(this);
         cell.dead = true;
-        this.toBeDeleted.push({
-            id: cell.id,
-            killer: (cell.killer) ?
-                cell.killer.id : false
-        });
         this.tbd.push({
             id: cell.id,
             killer: (cell.killer) ?
@@ -1008,14 +998,26 @@ class Main {
     }
     updateClients() {
         // if (this.toBeDeleted.length == 1) this.toBeDeleted.push({id:0,killer:0})
-        this.deleteR = JSON.stringify(this.toBeDeleted)
+
 
         this.clients.forEach((client) => {
 
             client.update(this);
         });
-        this.toBeDeleted = [];
-        this.deleteR = ";"
+
+        this.timer.update++;
+
+        if (this.timer.update > 9007199254740991) this.timer.update = 0;
+
+
+
+    }
+    updateClientKeys() {
+
+        this.clients.forEach((client) => {
+
+            client.checkKeys(this); // check for pressed keys
+        });
     }
     updateBots() {
         return;
@@ -1026,7 +1028,8 @@ class Main {
     }
 
     getRandomColor() {
-        var colorRGB = [0xFF, 0x07, (Math.random() * 256) >> 0];
+        var colorRGB = [255, 0x07, 128];
+
         colorRGB.sort(function () {
             return 0.5 - Math.random();
         });
@@ -1059,73 +1062,85 @@ class Main {
         this.debug("gre{[Debug]} STATUS REPORT FOR SERVER ".styleMe() + this.id + ":")
         this.debug(JSON.stringify(this.status))
     }
-
     mloop() {
-        this.timeout = setTimeout(function () {
-            this.loop()
-        }.bind(this), 5);
+
         let local = Date.now();
         this.timer.tick += (local - this.timer.time);
-        this.timer.passed = local - this.timer.time
-
-
-        this.timer.updatePN += local - this.timer.time;
+        this.timer.passed = local - this.timer.time;
         this.timer.time = local;
 
-        //  if (this.timer.passed <= 0) return
-
-        // 0.05 seconds
-
-        if (this.timer.updatePN >= 50) {
-            this.gameMode.event('onTick')
-            this.updatePlayerNodes();
-            this.updateMovingCells();
-            this.updateBots()
-            this.timer.updatePN = 0;
-        }
 
 
-        // 0.02 seconds
-        if (this.timer.tick >= 20) {
-            // update views for every client at 50 frames per second
-            this.updateClients();
-            this.timer.tick = 0;
+        if (this.timer.passed > 0) {
 
 
-            // 0.1 seconds
-            if (this.timer.rslow >= 5) {
-                this.timer.rslow = 0;
-                this.playerCollision();
-                this.childService.sendNodes()
-                this.childService.update()
-                this.childService.deleteNodes(this.tbd)
+            // 0.025 seconds - internal clock
+            if (this.timer.tick >= 25) {
+                ++this.timer.internal;
+                if (this.timer.internal >= 9007199254740991) this.timer.internal = 0;
 
-                this.tbd = [];
+                this.timer.tick = 0;
+
+
+
+                // 0.05 seconds
+
+                if (this.timer.internal % 2 === 0) {
+                    this.gameMode.event('onTick')
+                    this.updatePlayerNodes();
+                    this.updateMovingCells();
+                    this.updateBots()
+
+                }
+
+
+
+                // 0.1 seconds
+                if (this.timer.internal % 4 === 0) {
+                    this.playerCollision();
+                    this.childService.sendNodes()
+                    this.childService.update()
+
+                    this.childService.deleteNodes(this.tbd)
+                    this.tbd = [];
+
+                    this.updateClients(); // 10 fps
+                    this.updateClientKeys();
+
+                }
+
+
 
                 // 1 second
-                if (this.timer.slow >= 10) {
-                    this.timer.slow = 0;
+                if (this.timer.internal % 40 === 0) {
                     this.checkFood();
                     this.foodService.checkVirus()
-                    this.foodService.checkWormHole()
+                    // this.foodService.checkWormHole()
                     this.foodService.loop();
                     this.updateMassDecay()
                     this.updateMerge();
                     this.updateLB()
-
-                    if (this.timer.status >= 60) {
-                        this.timer.status = 0;
-                        this.statusReport()
-                    } else this.timer.status++;
-
-
-                } else {
-                    this.timer.slow++;
                 }
-                this.timer.rslow = 0;
-            } else {
-                this.timer.rslow++;
+
+                // 2 minutes
+                if (this.timer.internal % 4800 === 0) {
+                    this.statusReport();
+                }
             }
+
+        }
+
+        if (this.clients.size === 0) {
+
+            this.timeout = setTimeout(function () {
+                this.loop()
+            }.bind(this), 50);
+
+        } else {
+
+            this.timeout = setTimeout(function () {
+                this.loop()
+            }.bind(this), 0);
 
         }
 
@@ -1175,6 +1190,7 @@ class Main {
             if (this.timer.pn) return
 
         }
+
         var upt = [];
         this.getWorld().getNodes("player").forEach((player) => {
             if (player.owner.frozen) return;
@@ -1186,7 +1202,7 @@ class Main {
 
                 upt.push(player)
             } else {
-                player.move(this, 0 + shift);
+                player.move(this, shift);
                 upt.push(player)
             }
         });
@@ -1395,6 +1411,7 @@ class Main {
                 break;
         }
 
+        a.setMain(this)
         this.dataService.world.addNode(a, type, flags);
         this.childService.addNode(a)
         a.onCreation(this);

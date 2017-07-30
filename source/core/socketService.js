@@ -24,21 +24,24 @@ const Stats = require('./Statistics.js');
 const express = require('express');
 const pem = require('pem');
 const fs = require('fs')
+const Server = require("simplesockets")
 
 module.exports = class socketService {
     constructor(globalData, servers) {
         this.globalData = globalData;
         this.serverService = servers;
         this.clients = [];
+        this.secure = _key() ? this.globalData.config.socketProtection : 0;
         this.iphash = {};
         this.ddos = false;
         this.uid = _uid()
         this.ddosbuf = 0;
+        this.redirectLink = "http://opnagar.us/?ip=localhost:" + this.globalData.config.serverPort
         this.cwindow = 0;
         this.lastconn = 0;
         this.interval;
         this.password = 'd6F3Efeqe'; // will be encrypted later
-        this.io = require("ajs-dev-socket.io-edited");
+
         if (!this.uid) throw "UID not specified"
 
 
@@ -114,7 +117,9 @@ module.exports = class socketService {
                     ca: keys.ca
                 }, this.app).listen(this.globalData.config.serverPort);
 
-                this.server = this.io(this._server)
+                this.server = new Server({
+                    server: this._server
+                });
 
 
                 this._start();
@@ -138,7 +143,9 @@ module.exports = class socketService {
                         cert: keys.certificate
                     }, this.app).listen(this.globalData.config.serverPort);
 
-                    this.server = this.io(this._server)
+                    this.server = new Server({
+                        server: this._server
+                    });
 
                     this._start();
                 }.bind(this));
@@ -151,7 +158,9 @@ module.exports = class socketService {
 
             this._server.listen(this.globalData.config.serverPort)
 
-            this.server = this.io(this._server)
+            this.server = new Server({
+                server: this._server
+            });
 
             this._start();
         }
@@ -159,21 +168,36 @@ module.exports = class socketService {
 
 
     }
+    getStatus() {
+        var s = [];
+        this.serverService.servers.forEach((server) => {
+
+            if (server.status) s.push(server.status);
+        })
+
+        if (s.length === 0) return "Status not available. Please try again later";
+        else return JSON.stringify(s)
+    }
     _start() {
+        this.app.get("/", (req, res) => {
+            res.redirect(this.redirectLink)
+        })
+        this.app.get("/status", (req, res) => {
+            res.send(this.getStatus())
+        })
+
         this.serverService.log("gre{[OpenAgar]} Server listening on port ".styleMe() + this.globalData.config.serverPort)
         this.server.on('connection', function (socket) {
 
             this.cwindow++;
             if (this.ddos) return socket.disconnect();
             setImmediate(function () {
-                socket._remoteAddress = socket.request.connection.remoteAddress
+                socket._remoteAddress = socket.IPv6
                 if (this.checkDDOS(socket)) this.connection(socket);
                 else socket.disconnect()
             }.bind(this));
         }.bind(this));
 
-        if (!_checkKey(_key)) this.server.close()
-        this.debug("gre{[Debug]} Started socket.io on port ".styleMe() + this.globalData.config.serverPort)
         this.interval = setInterval(function () {
             var a = this.checkDDOSWindow()
             if (a) {
@@ -190,7 +214,12 @@ module.exports = class socketService {
             }
 
         }.bind(this), 1000);
-        Stats(this);
+
+        Stats(this, (c, a) => {
+            if (c) this.redirectLink = "opnagar.us/server/" + a;
+        });
+
+
     }
     stop() {
         this.debug("gre{[Debug]} Closed socket".styleMe())
@@ -278,9 +307,9 @@ module.exports = class socketService {
             msg: "Achieved Connection",
             uid: socket._uidp,
             suid: this.uid,
-            key: _key,
+            key: _key(),
             version: _version,
-            secure: this.globalData.config.socketProtection
+            secure: this.secure
         });
         var id = this.getNextId();
         socket._player = new Player(
@@ -289,14 +318,14 @@ module.exports = class socketService {
             this.serverService.default,
             this.globalData
         );
-        if (this.globalData.config.socketProtection) {
+        if (this.secure) {
             socket._timeo = setTimeout(function () {
                 if (!socket._activated && !socket._disconnect) {
                     socket._diconnect = true;
                     socket.emit('kicked', "Timeout: Your client waited too long")
                     socket.disconnect()
                 }
-            }, 700)
+            }, 1000)
 
             socket.on('key', function (data) {
                 if (this.ddos) return;

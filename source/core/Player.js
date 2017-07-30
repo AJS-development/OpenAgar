@@ -64,7 +64,7 @@ module.exports = class Player extends Template {
         this.sendData = true;
 
 
-
+        this.lastUpdate = Date.now();
     }
 
     msg(m, n, c, i) {
@@ -140,7 +140,7 @@ module.exports = class Player extends Template {
             if (!isNaN(x)) this.mouse.x = x;
             if (!isNaN(x)) this.mouse.y = y
         } catch (e) {
-         //   console.log(e)
+            //   console.log(e)
         }
     }
     addCell(cell) {
@@ -241,29 +241,29 @@ module.exports = class Player extends Template {
         id = parseInt(id)
 
         switch (id) {
-        case 32: // space
-            this.keys.space = true
-            break;
-        case 81: // q
-            this.keys.q = true
-            break;
-        case 87: // w
-            this.keys.w = true
-            break;
-        case 69: // e
-            this.keys.e = true;
-            break;
-        case 82: // r
-            this.keys.r = true;
-            break;
-        case 84: // t
-            this.keys.t = true;
-            break;
-        case 27: // esc
-            break;
-        case 70: // f
-            this.keys.f = true;
-            break;
+            case 32: // space
+                this.keys.space = true
+                break;
+            case 81: // q
+                this.keys.q = true
+                break;
+            case 87: // w
+                this.keys.w = true
+                break;
+            case 69: // e
+                this.keys.e = true;
+                break;
+            case 82: // r
+                this.keys.r = true;
+                break;
+            case 84: // t
+                this.keys.t = true;
+                break;
+            case 27: // esc
+                break;
+            case 70: // f
+                this.keys.f = true;
+                break;
 
         }
 
@@ -273,31 +273,31 @@ module.exports = class Player extends Template {
     onmsg(msg, servers) {
         if (!msg || !msg.type) return;
         switch (msg.type) {
-        case "play":
+            case "play":
 
-            if (this.cells.size > 0) return;
-            this.sendData = true;
-            this.bulletsleft = 3
-            this.golden = false;
-            this.resetView()
-            var name = msg.name || ""
-            if (!msg.skin) name = this.skinHandler.setSkin(name);
-            else if (msg.skin > 0)
-                this.skinHandler.skin = msg.skin
-            this.setName(name);
-            this.socket.emit('mes', {
-                type: "clearNodes"
-            })
-            this.server.spawn(this)
-            this.resetView()
+                if (this.cells.size > 0) return;
+                this.sendData = true;
+                this.bulletsleft = 3
+                this.golden = false;
+                this.resetView()
+                var name = msg.name || ""
+                if (!msg.skin) name = this.skinHandler.setSkin(name);
+                else if (msg.skin > 0)
+                    this.skinHandler.skin = msg.skin
+                this.setName(name);
+                this.socket.emit('mes', {
+                    type: "clearNodes"
+                })
+                this.server.spawn(this)
+                this.resetView()
 
-            break;
-        case "chat":
-            servers.chat(msg.chat, this.server)
-            break;
-        case "key":
-            this.pressKey(msg.id)
-            break;
+                break;
+            case "chat":
+                servers.chat(msg.chat, this.server)
+                break;
+            case "key":
+                this.pressKey(msg.id)
+                break;
 
         }
 
@@ -335,7 +335,7 @@ module.exports = class Player extends Template {
         this.view.y = this.center.y - this.sightRangeY;
         this.view.height = this.sightRangeY * 2
         this.view.width = this.sightRangeX * 2
-            //  console.log({x:this.view.x,y:this.view.y,width: this.view.width,height:this.view.height})
+        //  console.log({x:this.view.x,y:this.view.y,width: this.view.width,height:this.view.height})
     }
     doesFit(node) {
         var posX = node.position.x
@@ -361,25 +361,6 @@ module.exports = class Player extends Template {
             return false;
         }
         return true
-    }
-    sendNode(node, main) {
-
-        var n = main.formatNode(node, this);
-        this.buflen += 16 + n.name.length + (n.skin.length / 2);
-
-        // this.visSimple.push(n)
-
-        //  if (this.lastVis.indexOf(JSON.stringify(n)) == -1)
-
-        this.toSend.push(n)
-
-    }
-    sendDelNode(node) {
-        this.toSend.push({
-            _type: 2,
-            id: node.id
-        })
-        this.buflen += 2.5;
     }
     onDisconnect() {
 
@@ -409,121 +390,108 @@ module.exports = class Player extends Template {
 
         }.bind(this), 10000)
     }
-    send() {
+    send(toBeAdded, toBeMoved, toBeRemoved) {
 
-        if (this.toSend.length == 0) return;
-        this.socket.sendNodes(BinaryNodes(this.toSend, this.buflen))
-        this.toSend = [];
-        this.buflen = 0;
-    }
-    sendMoveUpt(node) {
+        if (toBeAdded.length === 0 && toBeMoved.length === 0 && toBeRemoved.length === 0) return;
 
-        this.toSend.push({
-            _type: 1,
-            id: node.id,
-            x: node.position.x,
-            y: node.position.y
-        })
-        this.buflen += 6.5;
+        this.socket.sendNodes(BinaryNodes(toBeAdded, toBeMoved, toBeRemoved));
+
+
     }
-    update(main) { // every 0.02 sec
+    update(main) { // every 0.1 sec
+
 
         if (!this.sendData) return;
 
-        if (main.toBeDeleted.length > 0) this.deleteNodes(main);
-
-        if (this.timer.view >= 5) { // 0.1 sec update clients (6 fps)
-            this.checkKeys(main)
-            this.calcView()
-            var hash = this.server.getWorld().getNodes('hash');
+        //   main.toBeDeleted
 
 
-
-            this.timer.view = 0;
-
-
-            if (!this.view) return;
-            this.visible = [];
-            this.toSend = [];
+        var toBeRemoved = [], // remove from screen
+            newVisible = [],
+            toBeAdded = [],
+            toBeMoved = [],
+            diffHash = {};
 
 
 
-            var hashtable = {};
-            hash.forEach(this.view, (node) => {
-                if (node.dead) return;
-                if (!this.doesFit(node)) return;
-                this.visible.push(node)
-                hashtable[node.id] = true;
-                if (node.moving && !this.moveHash[node.id] && !this.cells.get(node.id)) {
-                    this.moveView.push(node)
-                    this.moveHash[node.id] = true;
+        this.calcView()
 
+        this.server.getWorld().getNodes('hash').forEach(this.view, (node) => {
+            if (node.dead) return;
+
+            if (!this.doesFit(node)) return;
+
+
+            diffHash[node.id] = true;
+
+            newVisible.push(node)
+
+            if (this.nodeHash[node.id] !== node.updateCode) { // add node
+                toBeAdded.push(main.formatNode(node, this));
+                this.nodeHash[node.id] = node.updateCode;
+
+                if (node.moving && node.updateCode !== node.savedUpdateCode) {
+                    node.savedUpdateCode = node.updateCode;
+                    node.position.oldX = node.position.x;
+                    node.position.oldY = node.position.y;
                 }
+                return;
+            }
 
 
-                if (this.nodeHash[node.id] == node.updateCode) {
-                    if (this.upmoveHash[node.id] != node.moveCode) {
-                        this.sendMoveUpt(node);
+            if (node.moving) { // update movement
+                if (node.moveCode !== node.savedOut) {
 
+
+                    if (node.position.x === node.position.oldX && node.position.y === node.position.oldY) {
+                        node.savedOut = node.moveCode;
                         return;
                     }
-                    return;
+
+                    node.moveCode = main.timer.update;
+                    node.savedOut = node.moveCode;
+
+                    node.position.dx = node.position.x - node.position.oldX;
+
+
+                    node.position.dy = node.position.y - node.position.oldY;
+
+                    node.position.oldX = node.position.x;
+                    node.position.oldY = node.position.y;
+
+                    node.calcDelta()
+
+
+                    //console.log(node.position, node.out)
+                    toBeMoved.push(node)
+
+                } else if (node.savedOut === main.timer.update) {
+                    toBeMoved.push(node)
                 }
-                this.upmoveHash[node.id] = node.moveCode;
-                this.nodeHash[node.id] = node.updateCode;
-                this.sendNode(node, main)
-
-            });
-            /*
-        this.cells.forEach((node)=>{
-            if (!this.doesFit(node) || this.visible.indexOf(node) != -1) return;
-         this.sendNode(node,main)
-            this.visible.push(node)
-        })
-       
-        */
-            var splist = [];
-            this.moveView.forEach((node, id) => {
-                if (node.dead || !node.moving) {
-                    splist.push(id)
-                    this.moveHash[node.id] = false;
-                    this.upmoveHash[node.id] = false;
-                    //  this.nodeHash[node.id] = node.updateCode;
-                } else if (this.doesFit(node)) {
-
-
-                } else {
-
-                    splist.push(id)
-                    this.moveHash[node.id] = false;
-                    this.sendDelNode(node)
-                        //  console.log("del",node.id)
-                    this.upmoveHash[node.id] = false;
-                    //      this.nodeHash[node.id] = false;
-                }
-
-            })
-            var buf = 0;
-            splist.forEach((id) => {
-                this.moveView.splice(id - buf, 1)
-                buf++;
-            })
-            if (this.killer && this.killer.cells.size > 0) {
-                if (this.killer.isBot) {
-                    var a = this.killer.cells.peek().position;
-                } else {
-                    var a = this.killer.center;
-
-                }
-                this.socket.emit('killer', a)
             }
-            this.lastVis = this.visSimple;
-            this.visSimple = [];
 
-            this.send();
-        } else {
-            this.timer.view++;
+        });
+
+        this.visible.forEach((node) => {
+            if (!diffHash[node.id] && !this.cells.get(node.id)) { // remove from screen
+                this.nodeHash[node.id] = 0;
+                toBeRemoved.push(node);
+            }
+        });
+
+        if (this.killer && this.killer.cells.size > 0) {
+            if (this.killer.isBot) {
+                var a = this.killer.cells.peek().position;
+            } else {
+                var a = this.killer.center;
+
+            }
+            this.socket.emit('killer', a)
         }
+        this.visible = newVisible;
+
+        this.send(toBeAdded, toBeMoved, toBeRemoved);
+
     }
 
     deleteNodes(main) {

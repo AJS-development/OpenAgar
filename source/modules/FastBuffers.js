@@ -11,7 +11,7 @@ module.exports = {
             this.buffer = Buffer.alloc(size);
         }
         writeString8(string) {
-     
+
             for (var i = 0; i < string.length; i++) {
                 var c = string.charCodeAt(i);
                 this.writeUInt8(c);
@@ -19,24 +19,49 @@ module.exports = {
             this.writeUInt8(0)
         }
         writeString16(string) {
-       
+
             for (var i = 0; i < string.length; i++) {
                 var c = string.charCodeAt(i);
-            
-               this.writeUInt16BE(c);
+
+                this.writeUInt16BE(c);
             }
-      
+
             this.writeUInt16BE(0);
-            
+
         }
         writeString32(string) {
-  
+
             for (var i = 0; i < string.length; i++) {
                 var c = string.charCodeAt(i)
                 if (c) this.writeUInt32BE(c)
             }
             this.writeUInt32BE(0);
         }
+        writeDynamic(a) {
+            var i;
+            if (a > 270549119) {
+                throw "ERR: OUT OF BOUNDS"
+            } else if (a > 2113663) {
+                a = a - 2113664;
+                i = 3;
+            } else if (a > 16511) {
+                a = a - 16512;
+                i = 2;
+            } else if (a > 127) {
+                a = a - 128;
+                i = 1;
+            } else {
+                i = 0;
+            }
+
+            for (var j = 0; j < i; j++) {
+
+                this.writeUInt8((a & 127) | 128);
+                a = a >> 7;
+            }
+            this.writeUInt8(a);
+        }
+
         writeInt8(n) {
             this.buffer.writeInt8(n, this.index++)
         }
@@ -79,6 +104,19 @@ module.exports = {
             return this.buffer;
         }
     },
+    getDynamicSize: function (a) {
+        if (a > 270549119) {
+            throw "ERR: OUT OF BOUNDS"
+        } else if (a > 2113663) {
+            return 4;
+        } else if (a > 16511) {
+            return 3;
+        } else if (a > 127) {
+            return 2;
+        } else {
+            return 1;
+        }
+    },
     reader: class Reader {
         constructor(buf) {
             this.index = 0;
@@ -110,6 +148,27 @@ module.exports = {
                 data += String.fromCharCode(d);
             }
             return data;
+        }
+        readDynamic() {
+            var num = 0;
+
+            for (var i = 0; i < 4; i++) {
+
+                var n = this.readUInt8();
+
+                num += (n & 127) << (i * 7);
+
+
+                if (n < 127) {
+                    break;
+                }
+            }
+
+            if (i === 2) num += 128;
+            else if (i === 3) num += 16512;
+            else if (i === 4) num += 2113664;
+
+            return num;
         }
         readInt8() {
             return this.buffer.readInt8(this.index++);

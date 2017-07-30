@@ -70,56 +70,56 @@ function install() {
 
 function callback() {
     fs.writeFileSync("modules.json", JSON.stringify(toCheck), "utf8")
-var main = require('./source/core/controller.js')
+    var main = require('./source/core/controller.js')
     //require('./cpu.js').init('./data')
     //require('./heap.js').init('./data')
 
 
-Map.prototype.every = function (c) {
-    var a = this.entries()
-    var b;
-    while (b = a.next().value) {
-        if (!c(b[1], b[0])) return false;
+    Map.prototype.every = function (c) {
+        var a = this.entries()
+        var b;
+        while (b = a.next().value) {
+            if (!c(b[1], b[0])) return false;
+        }
+
+        return true;
+    }
+    Map.prototype.toArray = function () {
+        var array = [];
+        this.forEach(function (a) {
+            array.push(a)
+        })
+        return array
     }
 
-    return true;
-}
-Map.prototype.toArray = function () {
-    var array = [];
-    this.forEach(function (a) {
-        array.push(a)
-    })
-    return array
-}
+    Map.prototype.map = function (c) {
+        var f = new Map();
+        var a = this.entries()
+        var b;
+        while (b = a.next().value) {
+            f.set(b[0], c(b[1], b[0]))
+        }
+        return f;
 
-Map.prototype.map = function (c) {
-    var f = new Map();
-    var a = this.entries()
-    var b;
-    while (b = a.next().value) {
-        f.set(b[0], c(b[1], b[0]))
     }
-    return f;
+    Map.prototype.filter = function (c) {
+        var f = new Map();
+        var a = this.entries()
+        var b;
+        while (b = a.next().value) {
+            if (c(b[1], b[0])) f.set(b[0], b[1])
+        }
+        return f;
 
-}
-Map.prototype.filter = function (c) {
-    var f = new Map();
-    var a = this.entries()
-    var b;
-    while (b = a.next().value) {
-        if (c(b[1], b[0])) f.set(b[0], b[1])
     }
-    return f;
-
-}
-Map.prototype.peek = function () {
-    var a = this.entries();
-    var b = a.next().value;
-    return (b) ? b[1] : false;
-}
+    Map.prototype.peek = function () {
+        var a = this.entries();
+        var b = a.next().value;
+        return (b) ? b[1] : false;
+    }
 
 
-    
-var m = new main()
-m.start()
+
+    main()
+
 }

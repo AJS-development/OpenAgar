@@ -38,47 +38,46 @@ module.exports = class WorldModel {
 
     getNodes(s) {
         switch (s) {
-        case "all":
-            return this.nodes.allnodes;
-            break;
-        case "map":
-            return this.mapnodes;
-            break;
-        case "hash":
-            return this.nodes;
-            break;
-        case "moving":
-            return this.movingNodes;
-            break;
-        case "player":
-            return this.playerNodes;
-            break;
-        case "virus":
-            return this.virusNodes;
-        case "ejected":
-            return this.ejectedNodes;
-        case "merge":
-            return this.mergeNodes;
-            break;
-        case "bullet":
-            return this.bulletNodes;
-            break;
-        case "wormhole":
-            return this.wormHoleNodes;
-            break;
-        default:
-            if (!s) return this.nodes.allnodes;
-            if (!this.entities[s]) return false;
-            return this.entities[s];
-            break;
+            case "all":
+                return this.nodes.allnodes;
+                break;
+            case "map":
+                return this.mapnodes;
+                break;
+            case "hash":
+                return this.nodes;
+                break;
+            case "moving":
+                return this.movingNodes;
+                break;
+            case "player":
+                return this.playerNodes;
+                break;
+            case "virus":
+                return this.virusNodes;
+            case "ejected":
+                return this.ejectedNodes;
+            case "merge":
+                return this.mergeNodes;
+                break;
+            case "bullet":
+                return this.bulletNodes;
+                break;
+            case "wormhole":
+                return this.wormHoleNodes;
+                break;
+            default:
+                if (!s) return this.nodes.allnodes;
+                if (!this.entities[s]) return false;
+                return this.entities[s];
+                break;
 
         }
     }
 
     getNextID() {
-        if (this.lastID > 1000000) {
+        if (this.lastID >= 4294967295) {
             this.lastID = 0;
-
         }
 
         return this.lastID++;
@@ -106,36 +105,36 @@ module.exports = class WorldModel {
 
         this.mapnodes.set(id, node);
         this.main.gameMode.event('onAllAdd', {
-                cell: node
-            })
-            // add specified nodes
+            cell: node
+        })
+        // add specified nodes
         switch (type) {
-        case 0: // player
-            this.playerNodes.set(id, node);
-            this.main.gameMode.event('onCellAdd', {
-                cell: node
-            })
-            break;
-        case 1: // cell
-            break;
-        case 2: // virus
-            this.virusNodes.set(id, node);
-            break;
-        case 3: // ejected
-            this.ejectedNodes.set(id, node);
-            break;
-        case 4: // food
-            break;
-        case 5: // bullets
-            this.bulletNodes.set(id, node)
-            break;
-        case 6: // wormhole
-            this.wormHoleNodes.set(id, node)
-            break;
-        default:
-            if (!this.entMap[type]) return false;
-            this.entities[this.entMap[type]].set(id, node)
-            break;
+            case 0: // player
+                this.playerNodes.set(id, node);
+                this.main.gameMode.event('onCellAdd', {
+                    cell: node
+                })
+                break;
+            case 1: // cell
+                break;
+            case 2: // virus
+                this.virusNodes.set(id, node);
+                break;
+            case 3: // ejected
+                this.ejectedNodes.set(id, node);
+                break;
+            case 4: // food
+                break;
+            case 5: // bullets
+                this.bulletNodes.set(id, node)
+                break;
+            case 6: // wormhole
+                this.wormHoleNodes.set(id, node)
+                break;
+            default:
+                if (!this.entMap[type]) return false;
+                this.entities[this.entMap[type]].set(id, node)
+                break;
         }
 
         // set node as moving
@@ -147,20 +146,20 @@ module.exports = class WorldModel {
         flags.forEach((flag) => {
             if (!flag) return;
             switch (flag) {
-            case "m": // moving
+                case "m": // moving
 
-                this.movingNodes.set(node.id, node);
-                node.moving = true;
-                break;
-            case "r": // rainbow
-                this.rainbowNodes.set(node.id, node)
-                break;
-            case "merge": // merge
-                this.mergeNodes.set(node.id, node)
-                break;
-            default:
-                return;
-                break;
+                    this.movingNodes.set(node.id, node);
+                    node.moving = true;
+                    break;
+                case "r": // rainbow
+                    this.rainbowNodes.set(node.id, node)
+                    break;
+                case "merge": // merge
+                    this.mergeNodes.set(node.id, node)
+                    break;
+                default:
+                    return;
+                    break;
             }
 
         });
@@ -173,20 +172,20 @@ module.exports = class WorldModel {
         flags.forEach((flag) => {
             if (!flag) return;
             switch (flag) {
-            case "m": // moving
-                this.movingNodes.delete(node.id);
-                if (node.type != 0) node.moving = false;
-                this.main.childService.sendMove(node)
-                break;
-            case "r": // rainbow
-                this.rainbowNodes.delete(node.id)
-                break;
-            case "merge":
-                this.mergeNodes.delete(node.id)
-                break;
-            default:
-                return;
-                break;
+                case "m": // moving
+                    this.movingNodes.delete(node.id);
+                    if (node.type != 0) node.moving = false;
+                    this.main.childService.sendMove(node)
+                    break;
+                case "r": // rainbow
+                    this.rainbowNodes.delete(node.id)
+                    break;
+                case "merge":
+                    this.mergeNodes.delete(node.id)
+                    break;
+                default:
+                    return;
+                    break;
             }
 
         });

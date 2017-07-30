@@ -75,13 +75,15 @@ module.exports = class PlayerCell extends template {
 
     }
     updateMass(mass) {
+
+        if (this.mass === mass) return;
+
         var add = Math.max(mass, 10)
         var dif = add - this.mass
         this.owner.mass += dif
         this.mass = add
 
         this.getSize()
-
         this.speed = Math.pow(this.mass, -0.222) * 1.25;
         this.updCode()
     }
