@@ -15,7 +15,7 @@
         "pem": "^1.9.7",
         "quickmap": "^1.2.9",
         "rson": "^1.5.8",
-        "simplesockets": "1.0.2",
+        "simplesockets": "1.0.3",
         "styleme": "^2.5.4",
         "toobusy-js": "^0.5.1"
     },
