@@ -111,6 +111,31 @@ module.exports = {
 
         })
         return servers;
+    },
+    loadBotNames: function () {
+        try {
+            var file = fs.readFileSync(__dirname + "/../settings/botnames.txt", "utf8");
+
+            file = file.split("\n");
+
+
+            var out = [];
+            for (var i = 0; i < file.length; i++) {
+                var b = file[i].trim();
+                if (b && b.length > 0) out.push(b)
+            }
+
+            fs.writeFileSync(__dirname + "/../settings/botnames.txt", out.join("\n"));
+
+            console.log("gre{[OpenAgar]} Retrieved ".styleMe() + out.length + " botnames");
+            return out;
+
+        } catch (e) {
+
+            fs.writeFileSync(__dirname + "/../settings/botnames.txt", "")
+            console.log("yel{[OpenAgar]} Created botnames.txt".styleMe())
+            return [];
+        }
     }
 
 

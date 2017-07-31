@@ -458,7 +458,7 @@ class Main {
     addBot() {
         var id = this.getGlobal().getNextId()
         var botid = this.botid++;
-        var bot = new Bot(this, id, "Bot: " + botid, botid)
+        var bot = new Bot(this, id, this.getGlobal().getRandomName(), botid)
         this.gameMode.event('onAllInit', {
             player: bot
         })

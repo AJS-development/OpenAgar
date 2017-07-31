@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 module.exports = class GlobalData {
-    constructor(config, ban, skins) {
+    constructor(config, ban, skins, botnames) {
         this.data = {};
         var fin = {};
         var id = -1
@@ -35,12 +35,25 @@ module.exports = class GlobalData {
         this.config = config;
         this.id = 1;
         this.ban = ban
+        this.botnames = botnames;
+        this.nameList = botnames.slice(0)
     }
     getNextId() {
 
         if (this.id >= 4294967295) this.id = 0;
 
         return this.id++;
+    }
+    getRandomName() {
+
+        if (this.nameList.length === 0) this.nameList = this.botnames.slice(0)
+        var index = Math.floor(Math.random() * this.nameList.length);
+
+        var name = this.nameList[index];
+
+        this.nameList.splice(index, 1);
+
+        return name;
     }
 
     getData() {

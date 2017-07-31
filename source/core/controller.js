@@ -62,8 +62,9 @@ module.exports = function () {
         this.config = Config.loadSConfig(true)
         var ban = Config.loadBan()
         var skins = Config.loadSkins(true)
+        var botnames = Config.loadBotNames();
 
-        this.globalData = new GlobalData(this.config, ban, skins);
+        this.globalData = new GlobalData(this.config, ban, skins, botnames);
         this.shellService = new ShellService(this)
         this.serverService = new ServerService(this, this.globalData);
 
