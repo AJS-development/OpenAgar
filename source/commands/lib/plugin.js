@@ -84,7 +84,7 @@ module.exports = function(str,ss,log) {
                 if (!library) return;
                 count ++;
                 am ++;
-                request(library + Math.floor(Math.random() * 1000),(e,r,b)=>{
+                request(library + "?" +  Math.floor(Math.random() * 1000),(e,r,b)=>{
                  
                     if (!e && r.statusCode == 200 && b) {
                        var plugins = JSON.parse(b)
