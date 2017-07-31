@@ -84,7 +84,7 @@ module.exports = function(str,ss,log) {
                 if (!library) return;
                 count ++;
                 am ++;
-                request(library,(e,r,b)=>{
+                request(library + Math.floor(Math.random() * 1000),(e,r,b)=>{
                  
                     if (!e && r.statusCode == 200 && b) {
                        var plugins = JSON.parse(b)
@@ -93,7 +93,7 @@ module.exports = function(str,ss,log) {
                          if (!plugin.name || !plugin.src || str[2] != plugin.name) return true;
                        done = true;
                          log("Found plugin. Downloading...")
-                         request(plugin.src,(e,r,b)=>{
+                         request(plugin.src + Math.floor(Math.random() * 1000),(e,r,b)=>{
                                 if (!e && r.statusCode == 200 && b) {
                               fs.writeFileSync(__dirname + '/../../plugins/' + plugin.name + '.ajs',b)
                    log("Plugin succesfully downloaded. Reloading plugins")
@@ -146,7 +146,7 @@ module.exports = function(str,ss,log) {
                 library = library.replace(/\s/g,"")
                 if (!library) return;
                 count ++;
-                request(library,(e,r,b)=>{
+                request(library + "?" + Math.floor(Math.random() * 1000),(e,r,b)=>{
                     
                     if (!e && r.statusCode == 200 && b) {
                        list = list.concat(JSON.parse(b))
