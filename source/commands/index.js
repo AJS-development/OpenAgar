@@ -22,7 +22,7 @@ module.exports = {
             log("| Restart                  | Schedule restarts        |")
             log("| Kickbots                 | Kick bots                |");
 
-            if (_lvl() == 1) {
+            if (_lvl() != 0) {
                 log("| Mod                      | OpenAgar Sys Moderation  |");
             }
             main.pluginService.addToHelp.forEach((cmd) => {
