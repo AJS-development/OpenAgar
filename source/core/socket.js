@@ -23,10 +23,9 @@ module.exports = class Socket {
         this.player = player;
         this.socket = socket
 
-        var idx = socket._remoteAddress.lastIndexOf(':');
-        if (~idx && ~socket._remoteAddress.indexOf('.'))
-            this.remoteAddress = socket._remoteAddress.slice(idx + 1);
-        this.IPv6 = socket._remoteAddress
+
+        this.remoteAddress = socket.IP;
+        this.IPv6 = socket.IPv6;
     }
     sendNodes(dt) {
 

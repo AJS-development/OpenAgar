@@ -37,6 +37,7 @@ module.exports = class GlobalData {
         this.ban = ban
         this.botnames = botnames;
         this.nameList = botnames.slice(0)
+        this.globalBan = {};
     }
     getNextId() {
 
@@ -64,5 +65,12 @@ module.exports = class GlobalData {
     }
     removeData(name) {
         this.data[name] = null;
+    }
+    updateGlobalBan(data) {
+        this.globalBan = {};
+        for (var i = 0; i < data.length; i++) {
+            this.globalBan[data[i].ip] = data[i];
+        }
+
     }
 };

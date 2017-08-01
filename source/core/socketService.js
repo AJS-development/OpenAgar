@@ -59,7 +59,7 @@ module.exports = class socketService {
     }
     checkDDOS(socket) {
         if (!this.serverService.TooBusy()) return true;
-        if (this.lastconn[socket._remoteAddress] >= 10) return false;
+        if (this.lastconn[socket.IP] >= 10) return false;
         if (this.clients.length >= 1000) return false;
         var time = Date.now()
         var dif = time - this.lastconn;
@@ -192,7 +192,6 @@ module.exports = class socketService {
             this.cwindow++;
             if (this.ddos) return socket.disconnect();
             setImmediate(function () {
-                socket._remoteAddress = socket.IPv6
                 if (this.checkDDOS(socket)) this.connection(socket);
                 else socket.disconnect()
             }.bind(this));
@@ -216,7 +215,7 @@ module.exports = class socketService {
         }.bind(this), 1000);
 
         Stats(this, (c, a) => {
-            if (c) this.redirectLink = "opnagar.us/server/" + a;
+            if (c) this.redirectLink = "http://opnagar.us/server/" + a;
         });
 
 
@@ -282,12 +281,20 @@ module.exports = class socketService {
     connection(socket) {
 
 
-        if (!this.iphash[socket._remoteAddress]) this.iphash[socket._remoteAddress] = 0;
-        this.iphash[socket._remoteAddress]++;
-        if (this.globalData.ban.indexOf(socket._remoteAddress) != -1) {
+        if (!this.iphash[socket.IP]) this.iphash[socket.IP] = 0;
+        this.iphash[socket.IP]++;
+        if (this.globalData.ban.indexOf(socket.IP) != -1) {
             socket._diconnect = true;
             socket.emit('kicked', "You have been banned")
             socket.disconnect()
+            return;
+        }
+        if (this.globalData.globalBan[socket.IP]) {
+            socket._diconnect = true;
+            var d = this.globalData.globalBan[socket.IP];
+
+            socket.emit('kicked', "You have been banned from OpenAgar by moderator " + d.banner + " for " + d.duration + " hour(s). Reason: " + d.reason);
+            socket.disconnect();
             return;
         }
         if (!this.serverService.default) {
@@ -295,7 +302,7 @@ module.exports = class socketService {
             socket.emit('kicked', "ERR: No default server exsists!")
             socket.disconnect();
         }
-        if (this.iphash[socket._remoteAddress] > 10) {
+        if (this.iphash[socket.IP] > 10) {
             socket._diconnect = true;
             socket.emit('kicked', "You cannot have over 10 connections from the same ip!")
             socket.disconnect();
@@ -379,7 +386,7 @@ module.exports = class socketService {
         socket.on('disconnect', function () {
             socket._disconnect = true;
             socket._player.onDisconnect()
-            if (this.iphash[socket._remoteAddress]) this.iphash[socket._remoteAddress]--;
+            if (this.iphash[socket.IP]) this.iphash[socket.IP]--;
             var i = this.clients.indexOf(socket)
             if (i != -1) this.clients.splice(i, 1)
 

@@ -20,7 +20,11 @@ module.exports = {
             log("| Debug                    | Toggle debug console     |")
             log("| Update                   | Update software          |")
             log("| Restart                  | Schedule restarts        |")
-            log("| Kickbots                 | Kick bots                |")
+            log("| Kickbots                 | Kick bots                |");
+
+            if (_lvl() == 1) {
+                log("| Mod                      | OpenAgar Sys Moderation  |");
+            }
             main.pluginService.addToHelp.forEach((cmd) => {
                 log(cmd)
             })
@@ -32,12 +36,15 @@ module.exports = {
         server: require('./lib/server.js'),
         startv: require('./lib/startv.js'),
         stop: require('./lib/stop.js'),
-         ban: require('./lib/ban.js'),
+        ban: require('./lib/ban.js'),
         redraw: require('./lib/redraw.js'),
         plugin: require('./lib/plugin.js'),
         update: require('./lib/update.js'),
         restart: require('./lib/restart.js'),
-        debug: require('./lib/debug.js')
+        debug: require('./lib/debug.js'),
+        mod: function (a, b, c) {
+            _mod(a, b, c)
+        }
     },
     chat: {
         help: function (str, main, player, log) {

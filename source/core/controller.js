@@ -34,7 +34,7 @@ Sounds.add('start', 'start.mp3')
 Sounds.add('alert', 'alert.mp3')
 Sounds.add('tone', 'tone.mp3')
 
-_version = "5.0.0"
+_version = "5.0.5"
 _key = ""
 exit = function (a) {
     process.exit(a)
@@ -51,6 +51,20 @@ module.exports = function () {
             }, 1000);
 
         }
+
+        if (_lvl() == 1) {
+            setTimeout(function () {
+                console.log("gre{[OpenAgar]} rai{Welcome} back, system moderator.".styleMe());
+            }, 1000);
+
+        } else if (_lvl() == 2) {
+            setTimeout(function () {
+                console.log("gre{[OpenAgar]} rai{Welcome} back, system administrator.".styleMe());
+            }, 1000);
+        }
+
+        require("./errorManager.js");
+
         var main = new Controller();
         main.start();
     });
@@ -58,6 +72,7 @@ module.exports = function () {
 
 
     function Controller() {
+
         console.log("gre{[OpenAgar]} Starting OpenAgar V".styleMe() + _version)
         this.config = Config.loadSConfig(true)
         var ban = Config.loadBan()
