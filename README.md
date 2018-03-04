@@ -1,3 +1,9 @@
+# CLOSED!!!
+
+This project has been closed. Please do not go to opnagar.us, it is a scam.
+
+
+
 <p align="center">
   <img src="http://opnagar.us/OpenAgar.png">
 </p>
